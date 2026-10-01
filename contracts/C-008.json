@@ -1,0 +1,13 @@
+{
+  "id": "C-008",
+  "file": "tools/skica.py",
+  "role": "coder",
+  "title": "Z fotky linková skica (kreslí se před fotkou)",
+  "interface": "Python 3.11, standardní knihovna + Pillow (Image, ImageFilter, ImageOps,\nImageChops). Modul jde naimportovat bez vedlejších účinků.\n\nCíl: z fotky udělat světlou kresbu — bílé pozadí, tmavé čáry na hranách — která se dá\nna webu „nakreslit\" před tím, než se objeví fotka.\n\ndef sede(img: Image.Image) -> Image.Image\n    Převod do režimu \"L\".\n\ndef rozdil_rozmazani(img: Image.Image, polomer: float) -> Image.Image\n    Rozdíl dvou gaussovských rozmazání (polomer a polomer * 2.5) obrazu v \"L\"\n    (ImageChops.difference). Výsledek je \"L\", tmavý tam, kde se nic neděje.\n\ndef skica(img, polomer=1.6, zesileni=4.0, prah=14) -> Image.Image\n    Pořadí: sede -> rozdil_rozmazani(polomer) -> násobení `zesileni` a ořez na 0..255\n    -> hodnoty menší než `prah` na 0 -> INVERZE (ImageOps.invert), takže výsledek má\n    bílé pozadí (255) a tmavé čáry. Režim \"L\", stejný rozměr jako vstup.\n\ndef hustota(img: Image.Image) -> float\n    Podíl pixelů s hodnotou < 128 ze všech, zaokrouhlený na 4 desetinná místa.\n\ndef uloz_skicu(cesta, vystup, **kw) -> dict\n    Načte obrázek z `cesta`, udělá skica(**kw), uloží jako PNG do `vystup` (adresář se\n    v případě potřeby vytvoří). Soubor se jmenuje jako zdroj, jen s příponou .png\n    (\"foto.jpg\" -> \"foto.png\"). Vrátí { \"soubor\": to jméno bez cesty,\n    \"sirka\": …, \"vyska\": …, \"hustota\": hustota(výsledku) }.\n\nChování, které test ověřuje:\n  - jednobarevný obrázek (bez hran) -> skica je celá bílá, hustota == 0.0;\n  - bílý obrázek s černým obdélníkem -> rohy daleko od obdélníku zůstanou bílé (255)\n    a podél jeho hrany je aspoň jeden pixel tmavší než 128;\n  - hustota je mezi 0.0 a 1.0 a vyšší `prah` nikdy nedá vyšší hustotu než nižší `prah`.",
+  "uses": {},
+  "acceptance": "tests/test_skica.py",
+  "notes": "Žádné numpy, žádné scipy — jen Pillow. Test si obrázky vyrábí sám.",
+  "budget": {
+    "iterations": 14
+  }
+}

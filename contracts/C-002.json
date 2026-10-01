@@ -1,0 +1,13 @@
+{
+  "id": "C-002",
+  "file": "src/lib/odkryti.mjs",
+  "role": "coder",
+  "title": "Co je ve výřezu a co se má začít psát",
+  "interface": "ES modul, čistý JavaScript bez závislostí a bez DOM (souřadnice se předávají\njako čísla, prvky se neměří uvnitř). Žádný kód na úrovni modulu kromě definic.\n\nVýřez i prvek jsou objekty { vrchol, vyska } v pixelech od začátku dokumentu.\n\nexport function prunik(a, b)\n  Délka průniku dvou svislých intervalů; nepřekrývají-li se, 0. Záporná výška -> 0.\n\nexport function viditelnost(ramec, prvek)\n  prunik(ramec, prvek) / prvek.vyska, oříznuto do <0, 1> a zaokrouhleno na 4 desetinná\n  místa (Math.round(x * 1e4) / 1e4). Je-li prvek.vyska <= 0 nebo chybí, vrať 0.\n\nexport function minulo(ramec, prvek)\n  true, když je prvek celý nad výřezem: prvek.vrchol + prvek.vyska <= ramec.vrchol.\n\nexport function kSpusteni(prvky, ramec, hotove, prah = 0.35)\n  prvky: [{ id, vrchol, vyska }], hotove: pole id, která už jsou hotová (může být i Set).\n  Vrací id prvků v pořadí vstupu, které NEJSOU v hotove, NEprošly minulo() a jejichž\n  viditelnost je >= prah.\n\nexport function dopsat(prvky, ramec, hotove)\n  Vrací id prvků v pořadí vstupu, které NEJSOU v hotove a prošly minulo() — uživatel je\n  přeroloval, mají se dokreslit naráz.\n\nexport function postup(ramec, vyskaDokumentu)\n  Podíl přečteného dokumentu: ramec.vrchol / (vyskaDokumentu - ramec.vyska), oříznuto\n  do <0, 1> a zaokrouhleno na 4 desetinná místa. Je-li jmenovatel <= 0, vrať 1.",
+  "uses": {},
+  "acceptance": "tests/test_odkryti.py",
+  "notes": "Funkce musí snést i Set v parametru `hotove` (ne jen pole). Nic se nesmí měnit na vstupních polích.",
+  "budget": {
+    "iterations": 10
+  }
+}

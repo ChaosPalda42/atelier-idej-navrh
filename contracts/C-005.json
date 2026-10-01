@@ -1,0 +1,13 @@
+{
+  "id": "C-005",
+  "file": "src/lib/poptavka.mjs",
+  "role": "coder",
+  "title": "Větvený poptávkový formulář",
+  "interface": "ES modul, čistý JavaScript bez závislostí a bez DOM. Kroky i odpovědi\nchodí parametrem.\n\nkrok = { id, otazka, typ: \"volba\"|\"text\"|\"soubory\", moznosti?: [{ id, popis }],\n         podminka?: { pole, je: [hodnoty] }, povinny?: boolean }\nodpovedi = { \"<id kroku>\": hodnota }   // u typu \"volba\" je hodnota id možnosti\n\nexport function splnuje(podminka, odpovedi)\n  Bez podmínky (undefined/null) true. Jinak true, právě když je odpovedi[podminka.pole]\n  obsažena v poli podminka.je.\n\nexport function viditelneKroky(kroky, odpovedi)\n  Kroky, jejichž podmínka je splněná, v pořadí vstupu.\n\nexport function dalsi(kroky, odpovedi, aktualniId)\n  Id následujícího viditelného kroku; za posledním null. Není-li `aktualniId`\n  mezi viditelnými, vrať id prvního viditelného kroku (nebo null).\n\nexport function predchozi(kroky, odpovedi, aktualniId)\n  Zrcadlově: id předchozího viditelného kroku, před prvním null.\n\nexport function chybejici(kroky, odpovedi)\n  Id viditelných kroků s povinny === true, které nemají odpověď. Za „bez odpovědi\"\n  se počítá undefined, null, prázdný řetězec, řetězec jen z mezer a prázdné pole.\n\nexport function hotovo(kroky, odpovedi)\n  chybejici() je prázdné.\n\nexport function shrnuti(kroky, odpovedi)\n  [{ id, otazka, odpoved }] pro viditelné kroky, které mají odpověď (prázdnota se\n  posuzuje stejně jako v chybejici() — prázdný řetězec, jen mezery i prázdné pole se\n  berou jako bez odpovědi, a to u všech typů kroků). U typu \"volba\"\n  je `odpoved` POPIS zvolené možnosti (ne její id); u neznámé možnosti samotná hodnota.\n  U typu \"soubory\" je `odpoved` počet souborů jako číslo. Jinak hodnota tak, jak je.\n\nexport function postup(kroky, odpovedi, aktualniId)\n  { index, celkem } — `index` je pozice aktuálního kroku mezi viditelnými počítaná\n  od 1, `celkem` je jejich počet. Neznámý krok -> index 0.",
+  "uses": {},
+  "acceptance": "tests/test_poptavka.py",
+  "notes": "Žádná mutace vstupů. Funkce musí fungovat i pro prázdné pole kroků.",
+  "budget": {
+    "iterations": 12
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "C-004",
+  "file": "src/lib/validace.mjs",
+  "role": "coder",
+  "title": "Validace poptávky a příloh",
+  "interface": "ES modul, čistý JavaScript bez závislostí a bez DOM.\n\nexport const PRIPONY = [\"pdf\",\"jpg\",\"jpeg\",\"png\",\"heic\",\"webp\",\"dwg\",\"dxf\",\"doc\",\"docx\",\"xls\",\"xlsx\"];\nexport const LIMIT_SOUBOR = 15 * 1024 * 1024;\nexport const LIMIT_CELKEM = 40 * 1024 * 1024;\n\nexport function pripona(nazev)\n  Přípona malými písmeny bez tečky; není-li tečka nebo je název prázdný/neřetězec, \"\".\n  \"A.Foto.JPG\" -> \"jpg\", \".gitignore\" -> \"\" (tečka na začátku se nepočítá).\n\nexport function jeEmail(x)\n  true pro neprázdný řetězec bez mezer, který má právě jedno \"@\", před ním aspoň jeden\n  znak, za ním doménu s aspoň jednou tečkou a koncovkou aspoň dvou písmen.\n\nexport function normalizujTelefon(x)\n  Odstraní mezery, závorky, pomlčky a lomítka; vrátí zbytek (včetně případného\n  vedoucího \"+\"). Neřetězec/prázdné -> \"\".\n\nexport function jeTelefon(x)\n  Po normalizaci: buď 9 číslic, nebo \"+\" a 12 číslic (např. +420735541757),\n  nebo \"00\" a 12 číslic. Nic jiného neprojde.\n\nexport function souborChyba(soubor)\n  soubor = { nazev, velikost }. Vrátí null, nebo text chyby:\n    - přípona není v PRIPONY:\n      \"Soubor \" + nazev + \" nemůžu přijmout (povolené: \" + PRIPONY.join(\", \") + \").\"\n      (tedy celý seznam přípon v pořadí PRIPONY, oddělený čárkou a mezerou)\n    - velikost > LIMIT_SOUBOR: `Soubor <nazev> je větší než 15 MB.`\n  Kontroluje se nejdřív přípona, pak velikost.\n\nexport function souboryChyby(soubory)\n  Pole textů: chyby jednotlivých souborů v pořadí, a je-li součet velikostí\n  > LIMIT_CELKEM, navíc na konci `Přílohy dohromady přesahují 40 MB.`\n  Prázdné/neplatné pole -> [].\n\nexport function zkontroluj(data)\n  data = { jmeno, email, telefon, zprava, souhlas, soubory }.\n  Vrátí { platny, chyby }, kde `chyby` je objekt pole -> text. Pravidla:\n    - jmeno: po trim kratší než 2 znaky -> \"Napište prosím jméno.\"\n    - email: neprázdný a !jeEmail -> \"Zkontrolujte e-mail.\"\n    - telefon: neprázdný a !jeTelefon -> \"Zkontrolujte telefon.\"\n    - oba (email i telefon) po trim prázdné -> chyba na klíči `email`:\n      \"Nechte na sebe e-mail nebo telefon.\"\n    - zprava: po trim kratší než 10 znaků -> \"Napište pár vět o tom, co řešíte.\"\n    - souhlas: není přesně true -> \"Bez souhlasu se zpracováním to nemůžu odeslat.\"\n    - soubory: souboryChyby() neprázdné -> chyby.soubory = ty texty spojené mezerou.\n  platny = v `chyby` není žádný klíč.",
+  "uses": {},
+  "acceptance": "tests/test_validace.py",
+  "notes": "Texty chyb musí sedět znak po znaku včetně diakritiky a tečky na konci.",
+  "budget": {
+    "iterations": 12
+  }
+}

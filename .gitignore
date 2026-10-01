@@ -1,6 +1,8 @@
 .venv/
 __pycache__/
-*.pyc
 .pytest_cache/
 .factory-runtime/
-*.db
+.factory-run-*.log
+out/
+_balicek/
+.DS_Store

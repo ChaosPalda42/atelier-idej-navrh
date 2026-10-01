@@ -1,0 +1,13 @@
+{
+  "id": "C-007",
+  "file": "tools/fotky.py",
+  "role": "coder",
+  "title": "Příprava fotek — ořez, varianty, manifest",
+  "interface": "Python 3.11, jen standardní knihovna + Pillow (from PIL import Image).\nModul jde naimportovat bez vedlejších účinků (žádný kód na úrovni modulu kromě definic\na konstant; případné CLI jen pod `if __name__ == \"__main__\":`).\n\nPOMERY = {\"siroky\": (3, 2), \"navysku\": (2, 3), \"ctverec\": (1, 1)}\nSIRKY = (480, 960, 1600)\n\ndef orez_na_pomer(img: Image.Image, pomer: str) -> Image.Image\n    Středový ořez na daný poměr stran z POMERY. Ořezává se vždy jen jeden rozměr\n    (ten, kterého je přebytek), druhý zůstane celý. Neznámý poměr -> ValueError.\n    Výsledek musí mít sirka/vyska co nejblíž poměru (odchylka do 1 px kvůli zaokrouhlení).\n\ndef zmensi(img: Image.Image, sirka: int) -> Image.Image\n    Zmenší na danou šířku se zachováním poměru (výška se zaokrouhlí, minimálně 1).\n    Je-li obrázek užší nebo stejně široký, vrátí ho beze změny (NIKDY nezvětšuje).\n\ndef prumerna_barva(img: Image.Image) -> str\n    Průměrná barva v \"#rrggbb\" malými písmeny (obrázek se převede na RGB).\n\ndef nazev_varianty(zaklad: str, sirka: int) -> str\n    f\"{zaklad}-{sirka}.jpg\"\n\ndef srcset(varianty: list[dict]) -> str\n    Z [{\"soubor\": ..., \"sirka\": ...}, …] udělá \"soubor 480w, soubor 960w\" v pořadí\n    vstupu. Prázdný seznam -> \"\".\n\ndef zpracuj(cesta, vystup, zaklad, pomer=\"siroky\", sirky=SIRKY) -> dict\n    Načte obrázek z `cesta`, ořízne na poměr a uloží JPEG varianty do adresáře `vystup`\n    (vytvoří ho, když neexistuje; quality=82, optimize=True, RGB). Vrátí\n    { \"zaklad\": zaklad, \"pomer\": pomer, \"sirka\": šířka po ořezu, \"vyska\": výška po ořezu,\n      \"barva\": prumerna_barva(ořezaného), \"varianty\": [ {\"soubor\": nazev_varianty(...),\n      \"sirka\": skutečná šířka uloženého souboru}, … ], \"srcset\": srcset(varianty) }\n    Varianty se dělají jen pro šířky, které nejsou větší než šířka po ořezu; je-li\n    obrázek menší než nejmenší šířka, uloží se jedna varianta v jeho vlastní šířce.\n    Seznam variant je vzestupně podle šířky a bez duplicit.",
+  "uses": {},
+  "acceptance": "tests/test_fotky.py",
+  "notes": "Žádné síťové volání, žádné čtení podkladů mimo cestu v parametru. Test si obrázky vyrábí sám přes Image.new.",
+  "budget": {
+    "iterations": 14
+  }
+}

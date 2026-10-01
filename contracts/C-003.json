@@ -1,0 +1,15 @@
+{
+  "id": "C-003",
+  "file": "src/lib/prace.mjs",
+  "role": "coder",
+  "title": "Práce ateliéru — řazení, filtr, sousedé, slug",
+  "interface": "ES modul, čistý JavaScript bez závislostí a bez DOM.\nPracuje se seznamem prací ve tvaru { slug, nazev, typ, misto, rok, stav, anotace }.\n\nexport function slug(nazev)\n  Z názvu udělá ASCII slug: odstraní diakritiku (normalize(\"NFD\") a zahození znaků\n  \\p{Diacritic}), převede na malá písmena, každý úsek znaků mimo [a-z0-9] nahradí\n  jedinou pomlčkou a pomlčky na začátku i na konci ořízne. Neřetězec -> \"\".\n\nexport function serad(prace)\n  NOVÉ pole seřazené podle `rok` sestupně; při shodě roku podle `nazev` vzestupně\n  přes localeCompare(\"cs\"). Vstupní pole se nesmí změnit.\n\nexport function filtr(prace, typ)\n  Je-li `typ` prázdný nebo \"vse\", vrať kopii celého pole. Jinak jen prvky s odpovídajícím\n  `typ`. Pořadí vstupu se zachová.\n\nexport function podleSlugu(prace, slug)\n  Práce s daným slugem, jinak null.\n\nexport function sousedi(prace, slug)\n  { predchozi, dalsi } — sousedé v pořadí předaného pole, dokola (první má za\n  předchozího posledního). Neznámý slug nebo pole kratší než 2 -> { predchozi: null, dalsi: null }.\n  Vracejí se celé objekty prací, ne slugy.\n\nexport function pocty(prace)\n  { vse: počet všech, \"<typ>\": počet prací daného typu } — klíče jen pro typy,\n  které se v poli opravdu vyskytly.",
+  "uses": {
+    "data/site.json": "pole `prace` s poli slug, nazev, typ (domy|komercni|rekonstrukce|studie), misto, rok, stav, anotace"
+  },
+  "acceptance": "tests/test_prace.py",
+  "notes": "Žádné čtení souborů — data chodí parametrem. Modul nesmí importovat nic.",
+  "budget": {
+    "iterations": 10
+  }
+}
