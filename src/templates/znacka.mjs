@@ -29,18 +29,20 @@ export function znacka({ varianta = "horizontalni", barva = "plna", trida = "", 
   }
 
   if (varianta === "stohovana") {
-    const F = 26;
+    const F = 23;
     const m = F / 100;
     const sirkaA = ZNACKA["ateliér"].sirka * m;
     const sirkaI = ZNACKA.idej.sirka * m;
-    const mezera = 11;
+    const mezera = 10;
     const celkem = sirkaA + mezera + sirkaI;
-    const x0 = (100 - celkem) / 2;
-    return `<svg class="znacka znacka--stohovana ${trida}" viewBox="0 0 100 136" role="img" aria-label="${popis}">
-<g class="znacka-kruh" fill="none" stroke="${oranz}" stroke-linecap="round" stroke-linejoin="round">${tahy(1, 2.6)}</g>
+    const W = Math.max(100, Math.ceil(celkem) + 6);
+    const x0 = (W - celkem) / 2;
+    const posunKruhu = (W - 100) / 2;
+    return `<svg class="znacka znacka--stohovana ${trida}" viewBox="0 0 ${W} 132" role="img" aria-label="${popis}">
+<g class="znacka-kruh" fill="none" stroke="${oranz}" stroke-linecap="round" stroke-linejoin="round" transform="translate(${posunKruhu.toFixed(2)} 0)">${tahy(1, 2.6)}</g>
 <g class="znacka-text" fill="${tuha}">
-<path class="znacka-slovo" transform="translate(${x0.toFixed(2)} 128) scale(${m})" d="${ZNACKA["ateliér"].d}"/>
-<path class="znacka-slovo" transform="translate(${(x0 + sirkaA + mezera).toFixed(2)} 128) scale(${m})" d="${ZNACKA.idej.d}"/>
+<path class="znacka-slovo" transform="translate(${x0.toFixed(2)} 126) scale(${m})" d="${ZNACKA["ateliér"].d}"/>
+<path class="znacka-slovo" transform="translate(${(x0 + sirkaA + mezera).toFixed(2)} 126) scale(${m})" d="${ZNACKA.idej.d}"/>
 </g>
 </svg>`;
   }

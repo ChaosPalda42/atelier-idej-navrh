@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "idej",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["-m", "http.server", "4390", "--directory", "/Users/AI/Weby/Atelier Idej/out"],
+      "port": 4390
+    }
+  ]
+}

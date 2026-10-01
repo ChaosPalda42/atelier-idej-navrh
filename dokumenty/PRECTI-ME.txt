@@ -1,0 +1,65 @@
+ateliér IDEJ — návrh webu (ukázka)
+==================================
+
+Co to je
+--------
+Klikací ukázka nového webu pro Ateliér Idej s.r.o. Není to hotový web
+v provozu — je to návrh, na kterém se dá rozhodnout, jestli jdeme touhle cestou.
+
+Jak to spustit
+--------------
+Rozbalte složku a otevřete soubor index.html v prohlížeči (Chrome, Safari, Edge).
+Žádný internet ani instalace nejsou potřeba, všechno běží z disku.
+
+Nápad, na kterém to stojí
+-------------------------
+Celý web je jeden list papíru a obsah se na něj píše a rýsuje před očima:
+značka se nakreslí tahem, nadpisy se píšou, odstavce se odkrývají rychlostí
+čtení, kresby se narýsují. Je to schválně — ateliér prodává to, že vzniká
+něco rukou, a web to má ukázat dřív, než si člověk přečte první větu.
+
+Pojistky, aby to neotravovalo:
+ - text je na stránce celý od začátku (Google i čtečky ho vidí),
+ - kdo klikne nebo rychle roluje, tomu se obsah okamžitě dopíše,
+ - při druhé návštěvě v témž okně se píše jen svižně,
+ - kdo má v systému zapnuté omezení pohybu, nevidí animaci vůbec.
+
+Co si na ukázce projít
+----------------------
+ - index.html .............. celá jednostránka (úvod, co dělám, práce,
+                             postup, o mně, kontakt)
+ - práce ................... každá karta se dá rozkliknout na detail
+ - formulář v kontaktu ..... vyzkoušejte ho i prázdný, hlídá si chyby
+ - administrace.html ....... demo administrace; co tam změníte (texty,
+                             kontakty, práce), objeví se na webu.
+                             Odeslaná poptávka se objeví v záložce Poptávky.
+
+Značka
+------
+Logo bylo k dispozici jen jako obrázek, proto je překreslené do čistého
+vektoru: zachovány tři tahy kruhu i myšlenka, doplněn vysázený logotyp
+„ateliér IDEJ" a varianty (stohovaná, horizontální, samotná značka, favicon).
+Kruh je udělaný tak, aby se dal nakreslit tahem — proto ta animace v záhlaví.
+
+CO JE V UKÁZCE VYMYŠLENÉ
+------------------------
+ - všech 6 prací včetně názvů, míst, let, čísel i popisů,
+ - obě věty v sekci „Kdo to kreslí",
+ - čísla 24 staveb / 4 roky / 7 měsíců,
+ - skici místo fotek — skutečné fotky dodá ateliér.
+
+Skutečné je: název firmy, IČO, sídlo, jméno architekta, telefon a e-mail
+(z veřejného rejstříku a z loga) a popis toho, co ateliér dělá.
+
+Co je potřeba doplnit
+---------------------
+ 1. fotky a podklady skutečných staveb (klidně i rozpracované),
+ 2. dvě tři věty o sobě — kde jste studoval a co vás na tom drží,
+ 3. doménu a e-mail, kam mají chodit poptávky,
+ 4. potvrdit, jestli se značka má držet předlohy, nebo se smí dál čistit.
+
+Technicky
+---------
+Statické HTML, žádný redakční systém, žádná databáze. Jde to provozovat
+za pár korun měsíčně. Fonty jsou v balíčku (Inter, Caveat, JetBrains Mono),
+nic se nenačítá z cizích serverů, takže web nic nesleduje a neposílá ven.

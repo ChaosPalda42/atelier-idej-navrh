@@ -45,3 +45,14 @@ Kresby: tenká tuš 1,25 px, žádné stíny v kresbě.
 - `podklady/logo/` — zatím nic, k dispozici jen rastrový obrázek loga z přílohy chatu.
 - `podklady/prace/` — čeká na fotky prací od klienta. Do té doby jsou práce v ukázce
   **smyšlené** a bude je třeba přemapovat.
+
+## Postup (2. 10. 2026)
+- Factory: **9 kontraktů z 9 zelených na první pokus**, 26 iterací, 13 minut,
+  70 testů. Nula balíčků k rozhodnutí. Dělba podle ~/factory/docs vyšla přesně:
+  modely psaly logiku a nástroje, operátor značku, kresby, šablony a DOM.
+- Hotovo: jednostránka, 6 detailů prací, demo administrace, balíček
+  `_balicek/atelier-IDEJ-ukazka.zip`, `PRECTI-ME.txt`.
+- Náhled: `.claude/launch.json` → `idej` (port 4390), build `node build.mjs`,
+  kontrola `uv run python -m tools.kontrola_webu out`.
+- Značka překreslena generátorem `tools/znacka.py` (tři tahy kruhu jako data,
+  logotyp z Inter v křivkách) → `src/templates/znacka-cesty.mjs`.

@@ -1,0 +1,84 @@
+{
+  "web": {
+    "titulek": "ateliér IDEJ — architektonický ateliér, Praha",
+    "popis": "Architektonický ateliér Ing. arch. Martina Jiráska. Rodinné domy, komerční stavby, rekonstrukce a studie — od první schůzky na pozemku po dozor na stavbě.",
+    "preskocit": "Přeskočit na obsah"
+  },
+  "uvod": {
+    "stitek": "Architektonický ateliér · Praha",
+    "claim": "Nejdřív se ptám, jak chcete žít. Teprve potom kreslím.",
+    "text": "Jsem Martin Jirásko a vedu ateliér IDEJ. Navrhuju rodinné domy, komerční stavby a rekonstrukce — od prvního náčrtu na pozemku po dozor na stavbě. Ateliér je malý schválně: s vámi mluví ten, kdo to kreslí.",
+    "poznamka": "Tenhle list se píše sám. Kdyby to trvalo, klikněte a dopíše se.",
+    "cil": "Chci se poradit",
+    "druhy": "Prohlédnout práce"
+  },
+  "sluzby": {
+    "nadpis": "Co dělám",
+    "cislo": "01",
+    "perex": "Čtyři věci, a všechny začínají stejně — obhlídkou místa a otázkami. Nic z toho nedělám od stolu na dálku.",
+    "poznamka": "Na malou zakázku není malý architekt. Jen menší papírování."
+  },
+  "prace": {
+    "nadpis": "Vybrané práce",
+    "cislo": "02",
+    "perex": "Šest staveb, na kterých je vidět, jak uvažuju: nejdřív co místo unese, pak teprve tvar. U každé je napsané, co bylo zadání a co se ukázalo jako skutečný problém.",
+    "vse": "Vše",
+    "poznamka": "Fotky dodá ateliér. Do té doby tu kreslím místo nich.",
+    "detail": "Celý projekt"
+  },
+  "postup": {
+    "nadpis": "Jak to probíhá",
+    "cislo": "03",
+    "perex": "Od schůzky po hotovou stavbu to trvá dva až tři roky. Vypadá to dlouho, dokud nezjistíte, kde všude se dá ušetřit čas — a kde se to nevyplácí.",
+    "poznamka": "Nejdražší je změna, která přijde pozdě. Proto se nejvíc času tráví na začátku."
+  },
+  "oMne": {
+    "nadpis": "Kdo to kreslí",
+    "cislo": "04",
+    "text": [
+      "Vystudoval jsem architekturu a pozemní stavby a několik let kreslil v cizích ateliérech, než jsem si založil vlastní. Bavilo mě vždycky víc to, co se dá postavit, než to, co se dá vyfotit.",
+      "Pracuju sám a spolupracuju se stálým okruhem statiků, profesistů a řemeslníků, které znám z dokončených staveb. Na stavbu chodím — detail vymyšlený u stolu se tam stejně musí uhlídat."
+    ],
+    "poznamka": "Tahle dvě odstavce jsou v ukázce vymyšlené. Napište mi je po svém a nahradím je.",
+    "cisla": [
+      { "popisek": "Dokončené stavby", "hodnota": "24" },
+      { "popisek": "Nejdelší stavba", "hodnota": "4 roky" },
+      { "popisek": "Nejkratší", "hodnota": "7 měsíců" }
+    ]
+  },
+  "kontakt": {
+    "nadpis": "Napište mi",
+    "cislo": "05",
+    "perex": "Napište pár vět o tom, co řešíte. Ozvu se do dvou pracovních dnů a domluvíme schůzku na místě — ta je zdarma a nezavazuje k ničemu.",
+    "jmeno": "Jméno",
+    "email": "E-mail",
+    "telefon": "Telefon",
+    "zprava": "Co řešíte?",
+    "zpravaNapoveda": "Pozemek, dům, provozovna — a co je na tom pro vás teď nejtěžší.",
+    "prilohy": "Přílohy (katastr, fotky, stará dokumentace)",
+    "prilohyNapoveda": "pdf, jpg, png, dwg, dxf, doc, xls — do 15 MB na soubor",
+    "souhlas": "Souhlasím s tím, aby ateliér moje údaje použil k odpovědi na tuhle poptávku.",
+    "odeslat": "Odeslat poptávku",
+    "hotovo": "Děkuju. Poptávka je přijatá a ozvu se do dvou pracovních dnů.",
+    "poznamka": "Nejradši se potkám přímo na pozemku. Z fotek se pozná zlomek toho, co z místa."
+  },
+  "paticka": {
+    "ukazka": "Tohle je návrh webu, ne ostrý provoz. Práce, čísla i texty v ukázce jsou vymyšlené.",
+    "administrace": "Demo administrace",
+    "nahoru": "Zpátky nahoru"
+  },
+  "navigace": {
+    "prace": "Práce",
+    "sluzby": "Co dělám",
+    "postup": "Postup",
+    "oMne": "O mně",
+    "kontakt": "Kontakt"
+  },
+  "detail": {
+    "zpet": "Zpátky na výpis",
+    "zadani": "Zadání a řešení",
+    "predchozi": "Předchozí",
+    "dalsi": "Další",
+    "fotky": "Fotografie dodá ateliér — tady jsou zatím kresby."
+  }
+}

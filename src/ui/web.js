@@ -269,8 +269,6 @@
     schovejHrotKdyzDopsano();
   }
 
-  function smyckа() {}
-
   function rozjed() {
     var tik = function (cas) {
       obnov(cas);
@@ -421,12 +419,60 @@
     document.addEventListener("keydown", function (e) { if (e.key === "Escape") zavri(); });
   }
 
+  /* ------------------------------------- co se změnilo v demo administraci */
+  function prepisy() {
+    var stav = null;
+    try { stav = JSON.parse(localStorage.getItem("idej-admin") || "null"); } catch (e) { stav = null; }
+    if (!stav) return;
+
+    if (stav.texty) {
+      Object.keys(stav.texty).forEach(function (klic) {
+        var zapis = stav.texty[klic];
+        if (!zapis || typeof zapis.hodnota !== "string") return;
+        $$('[data-text="' + klic + '"]').forEach(function (el) { el.textContent = zapis.hodnota; });
+      });
+    }
+
+    if (stav.kontakt) {
+      Object.keys(stav.kontakt).forEach(function (klic) {
+        $$('[data-udaj="' + klic + '"]').forEach(function (el) {
+          el.textContent = stav.kontakt[klic];
+          if (klic === "telefon" && el.tagName === "A") el.href = "tel:" + (stav.kontakt.telefonHref || stav.kontakt.telefon);
+          if (klic === "email" && el.tagName === "A") el.href = "mailto:" + stav.kontakt.email;
+        });
+      });
+    }
+
+    var mrizka = $("[data-prace]");
+    if (mrizka && Array.isArray(stav.prace)) {
+      var zive = {};
+      stav.prace.forEach(function (p) { zive[p.slug] = p; });
+      $$("[data-slug]", mrizka).forEach(function (karta) {
+        var p = zive[karta.dataset.slug];
+        if (!p) { karta.remove(); return; }
+        var nazev = $('[data-pole="nazev"]', karta);
+        var anotace = $('[data-pole="anotace"]', karta);
+        var meta = $('[data-pole="meta"]', karta);
+        if (nazev) nazev.textContent = p.nazev || "";
+        if (anotace) anotace.textContent = p.anotace || "";
+        if (meta) meta.textContent = [p.misto, p.rok, p.stav].filter(Boolean).join(" \u00b7 ");
+        if (p.typ) karta.dataset.typ = p.typ;
+      });
+      stav.prace.forEach(function (p) {
+        var karta = $('[data-slug="' + p.slug + '"]', mrizka);
+        if (karta) mrizka.appendChild(karta);
+      });
+    }
+  }
+
   /* ------------------------------------------------------------------ start */
   function start() {
     hrot = $(".hrot");
     pravitko = $(".pravitko");
     pravitkoCislo = $(".pravitko-cislo");
     navigace = $(".navigace");
+
+    prepisy();
 
     filtrPraci();
     vyvolavani();
