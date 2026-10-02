@@ -1,0 +1,13 @@
+{
+  "id": "C-011",
+  "file": "src/lib/kresleni.mjs",
+  "role": "coder",
+  "title": "Kreslení od ruky — rozhození čar",
+  "interface": "ES modul, čistý JavaScript bez závislostí a bez DOM. Z přesné polyčáry\nudělá takovou, jako by ji táhla ruka. Všechno deterministické.\n\nexport function nahodnik(seed)\n  Vrátí funkci bez argumentů vracející čísla v <0, 1). Uvnitř drží stav\n  z = seed * 7919 + 13 a při každém volání udělá\n  z = (z * 1103515245 + 12345) % 2147483648 a vrátí z / 2147483648.\n  Dvě volání nahodnik(x) musí dát stejnou posloupnost.\n\nexport function rozhozeni(body, nahoda, nastaveni = {})\n  body: [[x, y], …]; `nahoda`: funkce vracející 0..1 (typicky z nahodnik).\n  nastaveni: { rozhod = 0.7, krok = 16, zavrit = false }.\n  Je-li `zavrit`, připojí se na konec kopie prvního bodu (a dál se počítá\n  s tímto delším seznamem). Pro každý úsek i (od 0):\n    delka = vzdálenost krajů, dilu = max(1, Math.round(delka / krok)),\n    normála (nx, ny) = (-(y2-y1)/delka, (x2-x1)/delka) — pro nulovou délku (0, 0),\n    k běží od (i === 0 ? 0 : 1) do dilu včetně, t = k / dilu,\n    o = (nahoda() - 0.5) * 2 * rozhod * (0.35 + 0.65 * Math.sin(Math.PI * t)),\n    bod = [x1 + (x2-x1)*t + nx*o, y1 + (y2-y1)*t + ny*o].\n  POZOR na pořadí: `nahoda()` se volá právě jednou pro každý vkládaný bod,\n  v pořadí, v jakém body vznikají. Vrací pole bodů (nezaokrouhlené).\n  Méně než dva body na vstupu -> vrať kopii vstupu.\n\nexport function cesta(body, desetinna = 1)\n  \"M x y L x y L …\" se souřadnicemi zaokrouhlenými na `desetinna` desetinných\n  míst (toFixed). Prázdné pole -> \"\".\n\nexport function delka(body)\n  Součet délek úseků; méně než dva body -> 0.",
+  "uses": {},
+  "acceptance": "tests/test_kresleni.py",
+  "notes": "Testuje se přes tests/jsmod.py v Node. Žádné Math.random — jen předaná funkce.",
+  "budget": {
+    "iterations": 14
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "id": "C-010",
+  "file": "tools/geometrie.py",
+  "role": "coder",
+  "title": "Geometrie pro převod výkresů na kresby",
+  "interface": "Python 3.11, JEN standardní knihovna (math). Modul jde naimportovat bez\nvedlejších účinků: žádný kód na úrovni modulu kromě definic a konstant.\n\nČára je seznam bodů [(x, y), …]. „Čáry\" je seznam takových čar.\nNic se nesmí měnit na vstupu — všechny funkce vracejí nové seznamy.\n\ndef delka(cara) -> float\n    Součet délek úseků. Méně než dva body -> 0.0.\n\ndef ramecek(cary) -> tuple[float, float, float, float]\n    (x_min, y_min, x_max, y_max) přes všechny body všech čar.\n    Prázdný vstup (nebo samé prázdné čáry) -> (0.0, 0.0, 0.0, 0.0).\n\ndef zjednodus(cara, tolerance) -> list\n    Ramer–Douglas–Peucker. Zachová první a poslední bod. Pro tolerance <= 0\n    nebo čáru kratší než 3 body vrať kopii vstupu. Vzdálenost bodu od úsečky\n    se měří kolmo; je-li úsečka nulové délky, měří se vzdálenost od jejího bodu.\n\ndef zahod_kratke(cary, minimum) -> list\n    Vyhodí čáry, jejichž delka() je MENŠÍ než `minimum`, a čáry kratší než dva body.\n\ndef spoj(cary, mezera) -> list\n    Slévá čáry, které na sebe navazují: konec jedné je od začátku (nebo konce)\n    druhé blíž než `mezera`. Postup: vezme se první dosud nepoužitá čára, pak se\n    opakovaně hledá mezi zbývajícími v pořadí vstupu první, která navazuje na její\n    konec — buď svým začátkem (připojí se tak, jak je), nebo svým koncem (připojí\n    se obrácená). Navazující bod se nevkládá dvakrát. Když nic nenavazuje, čára se\n    uzavře a začíná se znovu. Vrací čáry v pořadí, v jakém vznikly.\n\ndef vmestnej(cary, sirka, vyska, okraj=0.0, obratit_y=True) -> list\n    Zmenší/zvětší všechny čáry jedním měřítkem tak, aby se vešly do obdélníku\n    (sirka × vyska) zmenšeného o `okraj` na každé straně, a výsledek v tomto\n    obdélníku vycentruje. Měřítko = min(dostupná šířka / šířka kresby,\n    dostupná výška / výška kresby); je-li některý rozměr kresby nulový, počítá\n    se jen z druhého; jsou-li oba nulové, měřítko je 1.\n    `obratit_y=True` otočí osu y (CAD kreslí y nahoru, SVG dolů).\n    Souřadnice se zaokrouhlí na 2 desetinná místa.",
+  "uses": {},
+  "acceptance": "tests/test_geometrie.py",
+  "notes": "Žádné numpy. Funkce musí snést i prázdný seznam čar.",
+  "budget": {
+    "iterations": 16
+  }
+}
