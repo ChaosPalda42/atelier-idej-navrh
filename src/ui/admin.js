@@ -161,7 +161,7 @@
     var kam = $("#admin-skici");
     if (!kam) return;
     kam.innerHTML = "";
-    var skupiny = D.site.sluzby.map(function (s) { return { id: s.id, nazev: s.nazev }; });
+    var skupiny = D.site.skupiny.map(function (s) { return { id: s.id, nazev: s.nazev }; });
 
     stav.prace.forEach(function (p, i) {
       var karta = prvek("article", "admin-karta" + (p.skryta ? " admin-karta--skryta" : ""));

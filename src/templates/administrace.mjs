@@ -42,7 +42,8 @@ const POPISKY = {
   "postup.perex": "Úvodní odstavec", "postup.poznamka": "Poznámka na okraji",
   "oMne.nadpis": "Nadpis sekce", "oMne.cislo": "Číslo sekce",
   "oMne.poznamka": "Poznámka na okraji",
-  "oMne.text.0": "První odstavec o vás", "oMne.text.1": "Druhý odstavec o vás",
+  "oMne.claim": "Věta nad textem o ateliéru",
+  "oMne.zaver": "Závěrečný odstavec",
   "kontakt.nadpis": "Nadpis sekce", "kontakt.cislo": "Číslo sekce",
   "kontakt.perex": "Úvodní odstavec", "kontakt.poznamka": "Poznámka na okraji",
   "kontakt.jmeno": "Formulář — jméno", "kontakt.email": "Formulář — e-mail",
@@ -59,8 +60,19 @@ const POPISKY = {
 
 const DLOUHE = /perex|text|popis|poznamka|hotovo|napoveda|souhlas|claim|titulek|odkazy/i;
 
+const VZORY = [
+  [/^oMne\.bloky\.\d+\.nadpis$/, "Nadpis bloku"],
+  [/^oMne\.bloky\.\d+\.text$/, "Text bloku"],
+  [/^site\.vystavka\.\d+\.poznamka$/, "Popisek u skici"],
+];
+
 function poleTextu(klic, popisek) {
-  return { klic, popisek: popisek || POPISKY[klic] || klic, dlouhe: DLOUHE.test(klic) };
+  const podleVzoru = VZORY.find(([v]) => v.test(klic));
+  return {
+    klic,
+    popisek: popisek || POPISKY[klic] || (podleVzoru ? podleVzoru[1] : klic),
+    dlouhe: DLOUHE.test(klic),
+  };
 }
 
 /** Z dat se složí seznam toho, co jde na kterém listu přepsat. */
@@ -73,8 +85,9 @@ export function schema(site, t, skici) {
       skupinaTextu("Představení", ["uvod.text", "uvod.poznamka", "uvod.cil", "uvod.druhy"]),
       skupinaTextu("Co dělám", ["sluzby.cislo", "sluzby.nadpis", "sluzby.perex", "sluzby.poznamka"]),
       skupinaTextu("Jak to probíhá", ["postup.cislo", "postup.nadpis", "postup.perex", "postup.poznamka"]),
-      skupinaTextu("Kdo to kreslí", ["oMne.cislo", "oMne.nadpis", "oMne.text.0", "oMne.text.1", "oMne.poznamka",
-        ...t.oMne.cisla.flatMap((_, i) => [`oMne.cisla.${i}.hodnota`, `oMne.cisla.${i}.popisek`])]),
+      skupinaTextu("O nás", ["oMne.cislo", "oMne.nadpis", "oMne.claim",
+        ...t.oMne.bloky.flatMap((_, i) => [`oMne.bloky.${i}.nadpis`, `oMne.bloky.${i}.text`]),
+        "oMne.zaver", "oMne.poznamka"]),
       skupinaTextu("Kontakt", ["kontakt.cislo", "kontakt.nadpis", "kontakt.perex", "kontakt.poznamka",
         "kontakt.podpis", "kontakt.hotovo"]),
       skupinaTextu("Formulář", ["kontakt.jmeno", "kontakt.email", "kontakt.telefon", "kontakt.zprava",
@@ -116,7 +129,7 @@ function adminList({ site, t, skici, aktivni, telo, k }) {
   const list = LISTY.find((l) => l.id === aktivni);
   const data = {
     firma: site.firma,
-    site: { sluzby: site.sluzby, postup: site.postup, skupiny: site.skupiny },
+    site: { sluzby: site.sluzby, postup: site.postup, skupiny: site.skupiny, vystavka: site.vystavka },
     skici: skici.map((s) => ({ slug: s.zaklad, nazev: s.popis, typ: s.skupina })),
     texty: t,
     schema: schema(site, t, skici),

@@ -1,72 +1,66 @@
 {
   "web": {
     "titulek": "ateliér IDEJ — architektonický ateliér, Praha",
-    "popis": "Architektonický ateliér Ing. arch. Martina Jiráska. Rodinné domy, komerční stavby, rekonstrukce a studie — od první schůzky na pozemku po dozor na stavbě.",
+    "popis": "Ateliér Idej je pražský architektonický ateliér. Navrhujeme rekonstrukce, novostavby i veřejné prostory — od prvotní myšlenky až po realizaci.",
     "preskocit": "Přeskočit na obsah"
   },
   "uvod": {
     "stitek": "Architektonický ateliér · Praha",
-    "claim": "Nejdřív se ptám, jak chcete žít. Teprve potom kreslím.",
-    "text": "Jsem Martin Jirásko a vedu ateliér IDEJ. Navrhuju rodinné domy, komerční stavby a rekonstrukce — od prvního náčrtu na pozemku po dozor na stavbě. Ateliér je malý schválně: s vámi mluví ten, kdo to kreslí.",
-    "poznamka": "Tenhle list se píše sám. Kdyby to trvalo, klikněte a dopíše se.",
+    "claim": "Společně přetváříme Vaše ideje v realitu",
+    "text": "Ateliér Idej je pražský architektonický ateliér, který navrhuje rekonstrukce, novostavby i veřejné prostory. Každý projekt rozvíjíme od prvotní myšlenky a studie až po povolení a realizaci – s důrazem na funkční řešení, silný koncept a nadčasový výraz.",
+    "poznamka": "",
     "cil": "Chci se poradit",
-    "druhy": "Prohlédnout práce",
-    "dolu": "rolujte, dopíše se to"
+    "druhy": "Jak pracujeme",
+    "dolu": "Rolujte…"
   },
   "sluzby": {
-    "nadpis": "Co dělám",
+    "nadpis": "Co děláme",
     "cislo": "01",
-    "perex": "Čtyři věci, a všechny začínají stejně — obhlídkou místa a otázkami. Nic z toho nedělám od stolu na dálku.",
-    "poznamka": "Na malou zakázku není malý architekt. Jen menší papírování."
+    "perex": "Každý prostor si zaslouží jasnou ideu a promyšlené řešení.",
+    "poznamka": "Koexistence, kontrast, udržitelnost"
   },
   "postup": {
     "nadpis": "Jak to probíhá",
     "cislo": "02",
-    "perex": "Od schůzky po hotovou stavbu to trvá dva až tři roky. Vypadá to dlouho, dokud nezjistíte, kde všude se dá ušetřit čas — a kde se to nevyplácí.",
-    "poznamka": "Nejdražší je změna, která přijde pozdě. Proto se nejvíc času tráví na začátku."
+    "perex": "",
+    "poznamka": ""
   },
   "oMne": {
-    "nadpis": "Kdo to kreslí",
+    "nadpis": "O nás",
     "cislo": "03",
-    "text": [
-      "Vystudoval jsem architekturu a pozemní stavby a několik let kreslil v cizích ateliérech, než jsem si založil vlastní. Bavilo mě vždycky víc to, co se dá postavit, než to, co se dá vyfotit.",
-      "Pracuju sám a spolupracuju se stálým okruhem statiků, profesistů a řemeslníků, které znám z dokončených staveb. Na stavbu chodím — detail vymyšlený u stolu se tam stejně musí uhlídat."
-    ],
-    "poznamka": "Tyhle dva odstavce jsou v ukázce vymyšlené. Napište mi je po svém a nahradím je.",
-    "cisla": [
+    "claim": "Ateliér Idej je nástroj stavebníka",
+    "poznamka": "",
+    "bloky": [
       {
-        "popisek": "Skic na jeden dům",
-        "hodnota": "desítky"
+        "nadpis": "Idej",
+        "text": "Ateliér Idej s.r.o. založil Ing. arch. Martin Jirásko na začátku roku 2026. Vznikl z dlouhodobé spolupráce okruhu architektů, inženýrů a specialistů jednotlivých profesí. Díky tomu dokážeme vést projekt v jasné návaznosti od prvního náčrtu až po realizaci a kolaudaci."
       },
       {
-        "popisek": "Nejradši kreslím",
-        "hodnota": "propiskou"
-      },
-      {
-        "popisek": "Ateliér má",
-        "hodnota": "1 člověka"
+        "nadpis": "Ing. arch. Martin Jirásko",
+        "text": "Vystudoval architekturu a stavitelství na ČVUT v Praze. Již během studií spolupracoval s několika architekty a inženýry; významnou zkušeností pro něj byla možnost podílet se na projektování Masarykovy nemocnice v Ústí nad Labem. Od roku 2021 působí samostatně jako architekt."
       }
-    ]
+    ],
+    "zaver": "Stavba domu není jen krásná vize, ale také složitý proces. Dobrý návrh proto musí spojovat architektonickou ideu, funkční řešení, technickou proveditelnost i schopnost celý proces koordinovat."
   },
   "kontakt": {
-    "nadpis": "Napište mi",
+    "nadpis": "Napište nám",
     "cislo": "04",
-    "perex": "Napište pár vět o tom, co řešíte. Ozvu se do dvou pracovních dnů a domluvíme schůzku na místě — ta je zdarma a nezavazuje k ničemu.",
+    "perex": "Napište pár vět o tom, co chystáte za projekt. Pro lepší odpověď nezapomeňte uvést i parcelační číslo či adresu záměru. Odpovídáme do druhého dne.",
     "jmeno": "Jméno",
     "email": "E-mail",
     "telefon": "Telefon",
-    "zprava": "Co řešíte?",
-    "zpravaNapoveda": "Pozemek, dům, provozovna — a co je na tom pro vás teď nejtěžší.",
+    "zprava": "Co chystáte?",
+    "zpravaNapoveda": "Co se chystá, kde to je — ideálně i parcelní číslo nebo adresa.",
     "prilohy": "Přílohy (katastr, fotky, stará dokumentace)",
     "prilohyNapoveda": "pdf, jpg, png, dwg, dxf, doc, xls — do 15 MB na soubor",
     "souhlas": "Souhlasím s tím, aby ateliér moje údaje použil k odpovědi na tuhle poptávku.",
     "odeslat": "Odeslat poptávku",
-    "hotovo": "Děkuju. Poptávka je přijatá a ozvu se do dvou pracovních dnů.",
-    "poznamka": "Nejradši se potkám přímo na pozemku. Z fotek se pozná zlomek toho, co z místa.",
+    "hotovo": "Děkujeme. Poptávku máme a ozveme se do druhého dne.",
+    "poznamka": "Pošlete, co máte k dispozici. I jediná čára může říct mnohé.",
     "podpis": "Ing. arch. Martin Jirásko"
   },
   "paticka": {
-    "ukazka": "Tohle je návrh webu, ne ostrý provoz. Skici jsou skutečné, texty o ateliéru zatím ne.",
+    "ukazka": "Tohle je návrh webu, ne ostrý provoz.",
     "administrace": "Demo administrace",
     "nahoru": "Zpátky nahoru"
   },

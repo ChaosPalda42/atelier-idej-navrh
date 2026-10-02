@@ -16,58 +16,58 @@
       "id": "rodinne-domy",
       "nazev": "Rodinné domy",
       "kresba": "dum",
-      "popis": "Od prvního náčrtu na pozemku po klíče v ruce. Novostavby i domy, které se musí vejít mezi sousedy, do svahu nebo do pravidel obce.",
-      "vykres": "ukazka-pudorys"
+      "vykres": "ukazka-pudorys",
+      "popis": "Dům vzniká z rozhovoru, náčrtu a jasné představy o životě jeho obyvatel. Provázíme projekt od prvního návrhu až po kolaudaci."
+    },
+    {
+      "id": "komercni",
+      "nazev": "Komerční stavby",
+      "kresba": "hala",
+      "popis": "Navrhujeme stavby pro podnikání, služby i veřejnost s důrazem na vyvážený vztah architektonického výrazu, funkčnosti a ekonomiky provozu."
+    },
+    {
+      "id": "rekonstrukce",
+      "nazev": "Rekonstrukce a přestavby",
+      "kresba": "rekonstrukce",
+      "popis": "Každý stávající dům v sobě nese vlastní příběh i omezení. Při rekonstrukci hledáme jeho silné stránky a převádíme je do podoby odpovídající dnešnímu využití."
     },
     {
       "id": "bytove-domy",
       "nazev": "Bytové domy",
       "kresba": "bytovy",
-      "popis": "Domy, kde se bydlí po patrech. Řeší se v nich úplně jiné věci než u rodinného domu: hluk, vstupy, parkování a to, aby byty nebyly chodbami."
-    },
-    {
-      "id": "interiery",
-      "nazev": "Interiéry",
-      "kresba": "interier",
-      "popis": "Vnitřek domu i samotný byt. Když je dobře rozmyšlený nábytek a světlo, obejde se spousta věcí bez bourání."
-    },
-    {
-      "id": "garaze",
-      "nazev": "Garáže a přístavby",
-      "kresba": "garaz",
-      "popis": "Drobné stavby, u kterých se nejčastěji chybuje — garáž, přístřešek, přístavba. Musí sednout k domu, který už stojí, a projít přes úřad."
+      "popis": "Navrhujeme bydlení, které obstojí v čase – funkční v každodenním provozu, přirozeně začleněné do okolí a odpovídající současným nárokům na kvalitu bydlení."
     }
   ],
   "postup": [
     {
       "id": "schuzka",
       "nazev": "Schůzka na místě",
-      "popis": "Projdeme pozemek nebo dům. Poslouchám, jak chcete žít, ne co jste viděli na Pinterestu.",
-      "trvani": "1 den"
+      "trvani": "",
+      "popis": "Společně projdeme pozemek nebo stavbu, vyslechneme vaše přání, nápady i představu o projektu a položíme důležité otázky. Seznámíme vás s možnostmi záměru vzhledem k územnímu plánu a dalším platným regulativům."
     },
     {
       "id": "studie",
       "nazev": "Studie",
-      "popis": "Dvě až tři varianty v půdorysech a hmotě. Tady se rozhoduje všechno podstatné a tady je změna nejlevnější.",
-      "trvani": "3–6 týdnů"
+      "trvani": "",
+      "popis": "Na základě zadání připravíme architektonickou studii a prověříme vhodné varianty řešení. Každý návrh posuzujeme v kontextu místa, finančních možností a potřeb budoucích uživatelů."
     },
     {
       "id": "povoleni",
-      "nazev": "Dokumentace pro povolení",
-      "popis": "Projekt pro stavební úřad včetně profesí a vyjádření dotčených orgánů.",
-      "trvani": "2–4 měsíce"
+      "nazev": "Dokumentace pro povolení stavby",
+      "trvani": "",
+      "popis": "Zpracujeme kompletní projektovou dokumentaci v rozsahu vyžadovaném platnými předpisy. Zajistíme potřebné průzkumy a koordinaci profesí, dokumentaci následně podáme a projednáme s příslušnými úřady."
     },
     {
       "id": "provadeci",
       "nazev": "Prováděcí dokumentace",
-      "popis": "Výkresy, ze kterých se opravdu staví, a výkaz výměr pro poptávku firem.",
-      "trvani": "1–3 měsíce"
+      "trvani": "",
+      "popis": "V návaznosti na povolení stavby koordinujeme dopracování projektu do podrobnosti potřebné pro realizaci. Spolupracujeme s ověřenými projektanty jednotlivých profesí a dbáme na návaznost všech částí projektu."
     },
     {
-      "id": "stavba",
+      "id": "dozor",
       "nazev": "Autorský dozor",
-      "popis": "Na stavbě pravidelně. Detail, který se vymyslí u stolu, se na place stejně musí uhlídat.",
-      "trvani": "po dobu stavby"
+      "trvani": "",
+      "popis": "V průběhu stavby se účastníme kontrolních dnů a dohlížíme na soulad realizace s architektonickým a projektovým řešením. Případné změny koordinujeme s klientem, zhotovitelem i dotčenými úřady."
     }
   ],
   "skupiny": [
@@ -75,29 +75,29 @@
       "id": "rodinne-domy",
       "nazev": "Rodinné domy",
       "text": [
-        "Dům se nekreslí od fasády. Nejdřív se ptám, jak chcete žít — kde se ráno potkáte, kde se dá zavřít dveře, co uvidíte z kuchyně. Teprve pak má smysl kreslit hmotu.",
-        "Tyhle skici jsou z té úplně první fáze. Dělám jich na každý dům desítky a většina z nich skončí v koši; právě proto se v nich dá tak levně hledat."
+        "Dům vzniká z rozhovoru, náčrtu a jasné představy o životě jeho obyvatel. Než se začne kreslit hmota, musí být jasné, jak se v domě bude žít.",
+        "Tyhle skici jsou z té úplně první fáze. Je jich na každý dům desítky a většina skončí v koši — právě proto se v nich dá tak levně hledat."
       ]
     },
     {
       "id": "bytove-domy",
       "nazev": "Bytové domy",
       "text": [
-        "U bytového domu rozhoduje skladba bytů a přístup k nim dřív než vzhled. Když se trefí, dům se dobře prodává i dobře žije; když ne, nezachrání ho žádná fasáda.",
-        "Na skicách hledám hmotu, odskoky, balkony a to, kudy do domu lidé chodí."
+        "U bytového domu rozhoduje skladba bytů a přístup k nim dřív než vzhled. Když se trefí, dům se dobře prodává i dobře žije.",
+        "Na skicách hledáme hmotu, odskoky, balkony a to, kudy do domu lidé chodí."
       ]
     },
     {
       "id": "interiery",
       "nazev": "Interiéry",
       "text": [
-        "Interiér řeším nejradši zároveň s domem. Když se o nábytku a světle rozhodne až po kolaudaci, je spousta věcí zbytečně složitá.",
-        "Kreslí se to stejně jako dům — od toho, co se v místnosti doopravdy dělá."
+        "Interiér řešíme nejradši zároveň s domem. Když se o nábytku a světle rozhoduje až po kolaudaci, je spousta věcí zbytečně složitá.",
+        "Kreslí se stejně jako dům — od toho, co se v místnosti doopravdy dělá."
       ]
     },
     {
       "id": "garaze",
-      "nazev": "Garáže a přístavby",
+      "nazev": "Garáže a drobné stavby",
       "text": [
         "Malá stavba není jednodušší stavba. Musí sednout k domu, který už stojí, vejít se do odstupů a projít přes úřad.",
         "Většinou se to rozhodne na jedné dobré skice — kudy se vjíždí a kam padá stín."

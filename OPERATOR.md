@@ -284,3 +284,28 @@ exponát by se měl pod myší i zvětšit.
   (74 % × 32 % se středem u levé hrany), takže kresba v pásu, kudy jde claim,
   měkce zmizí a nad ním i pod ním zůstane celá. Žádná viditelná hrana.
   Na úzkém okně je text nad kruhem, tam se maska vypíná.
+
+## Dvanácté kolo (3. 10. 2026) — texty od architekta
+Michael poslal `web_proces.docx`: architekt prošel web a **napsal vlastní texty**
+(dokument vznikl před přestavbou, takže platí jen textová část).
+Vytaženo z docx (text i obrázky s šipkami) a namapováno podle toho, u kterého
+snímku která poznámka stála.
+
+Co se změnilo:
+- **Claim**: „Společně přetváříme Vaše ideje v realitu"; pobídka zkrácena na „Rolujte…".
+- **Představení, čtyři služby, pět kroků postupu, celé „O nás", text u kontaktu** —
+  všechno jeho slovy. Služby se přeskládaly: rodinné domy / komerční stavby /
+  rekonstrukce a přestavby / **bytové domy** (místo interiérů a garáží, které
+  zůstávají jako sbírky skic).
+- **„O nás"** má novou stavbu: claim „Ateliér Idej je nástroj stavebníka",
+  dva bloky s nadpisy (Idej, Ing. arch. Martin Jirásko) a závěrečný odstavec.
+- **Dvě volné věty z dokumentu** zařazeny tam, kam tónem patří:
+  „Každý prostor si zaslouží jasnou ideu a promyšlené řešení." jako perex
+  sekce Co děláme, „Koexistence, kontrast, udržitelnost" jako poznámka na okraji.
+- **Vymyšlené texty pryč**: čísla 24/4 roky/7 měsíců, délky kroků postupu,
+  poznámky na okraji, které jsem psal já, a odstavce o architektovi.
+- **Hlas sjednocen na množné číslo** („navrhujeme, odpovídáme"), jak píše on.
+- **Razítko** z dokumentu (`podklady/razitko/`) prošlo stejnou cestou jako skici
+  a sedí u podpisu v kontaktu.
+- „Tady je nějaký divný ořez" u úvodní obrazovky — to byla ta maska, opravená
+  už v jedenáctém kole.

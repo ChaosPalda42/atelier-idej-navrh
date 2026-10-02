@@ -175,6 +175,23 @@ def zpracuj(cesta: Path, poradi: int) -> dict:
     }
 
 
+RAZITKO = KOREN / "podklady" / "razitko"
+
+
+def zpracuj_razitko() -> str:
+    """Razítko ateliéru projde stejnou cestou jako skici — zbude jen tuš."""
+    zdroje = sorted(RAZITKO.glob("*.jp*g")) + sorted(RAZITKO.glob("*.png")) if RAZITKO.exists() else []
+    if not zdroje:
+        return ""
+    with Image.open(zdroje[0]) as nactene:
+        rovne = ImageOps.exif_transpose(nactene).convert("RGB")
+    kresba = pruhledne(vybel_papir(rovne))
+    VEN.mkdir(parents=True, exist_ok=True)
+    zmensene = zmensi(kresba, min(600, kresba.size[0]))
+    zmensene.quantize(colors=48, method=Image.Quantize.FASTOCTREE).save(VEN / "razitko.png", optimize=True)
+    return "razitko.png"
+
+
 def main(argv=None) -> int:
     soubory = sorted(p for p in ZDROJ.iterdir() if p.suffix.lower() in (".jpg", ".jpeg", ".png"))
     if not soubory:
@@ -184,6 +201,9 @@ def main(argv=None) -> int:
         for stary in list(VEN.glob("*.jpg")) + list(VEN.glob("*.png")):
             stary.unlink()
     seznam = [zpracuj(p, i + 1) for i, p in enumerate(soubory)]
+    razitko = zpracuj_razitko()
+    if razitko:
+        print("razítko ->", razitko)
     (VEN / "seznam.json").write_text(
         json.dumps(seznam, ensure_ascii=False, indent=1), encoding="utf-8")
     skupiny: dict[str, int] = {}

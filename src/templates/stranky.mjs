@@ -78,7 +78,7 @@ ${poznamka ? `<p class="poznamka pise vystava-poznamka"${klicPoznamky ? ` data-t
 </section>`;
 }
 
-export function index(site, t, kresby = {}, skici = []) {
+export function index(site, t, kresby = {}, skici = [], razitkoAtelieru = "") {
   const { firma, sluzby, postup } = site;
   const p = pocty(skici.map((s) => ({ typ: s.skupina })));
   const kam = rozmisti(site, skici);
@@ -105,7 +105,7 @@ ${((kam.predstaveni || {}).okraj || []).join("\n")}
 <p class="vedouci" data-text="uvod.text">${esc(t.uvod.text)}</p>
 <div class="hlavicka-pod">
 <a class="tlacitko" href="#kontakt" data-text="uvod.cil">${esc(t.uvod.cil)}</a>
-<a class="tlacitko lehke" href="#prace" data-text="uvod.druhy">${esc(t.uvod.druhy)}</a>
+<a class="tlacitko lehke" href="#postup" data-text="uvod.druhy">${esc(t.uvod.druhy)}</a>
 </div>
 </div>
 <div class="hero-kresba kresba" aria-hidden="true">${kresbaHero()}</div>
@@ -124,15 +124,17 @@ ${site.skupiny.filter((g) => p[g.id]).map((g) => `<a href="prace/${g.id}.html">$
 
   const postupTelo = `<ol class="postup-osa">
 ${postup.map((krok, i) => `<li class="postup-krok">
-<h3 class="rukou" data-text="site.postup.${i}.nazev">${esc(krok.nazev)}</h3><span class="postup-trvani" data-text="site.postup.${i}.trvani">${esc(krok.trvani)}</span>
+<h3 class="rukou" data-text="site.postup.${i}.nazev">${esc(krok.nazev)}</h3>${krok.trvani ? `<span class="postup-trvani" data-text="site.postup.${i}.trvani">${esc(krok.trvani)}</span>` : ""}
 <p data-text="site.postup.${i}.popis">${esc(krok.popis)}</p>
 </li>`).join("\n")}
 </ol>`;
 
-  const oMneTelo = `${t.oMne.text.map((o, i) => `<p data-text="oMne.text.${i}">${esc(o)}</p>`).join("\n")}
-<div class="detail-cisla">
-${t.oMne.cisla.map((c, i) => `<div class="detail-cislo"><strong class="rukou" data-text="oMne.cisla.${i}.hodnota">${esc(c.hodnota)}</strong><span data-text="oMne.cisla.${i}.popisek">${esc(c.popisek)}</span></div>`).join("\n")}
-</div>`;
+  const oMneTelo = `<p class="vedouci claim-sekce" data-text="oMne.claim">${esc(t.oMne.claim)}</p>
+${t.oMne.bloky.map((b, i) => `<div class="o-nas-blok">
+<h3 class="rukou" data-text="oMne.bloky.${i}.nadpis">${esc(b.nadpis)}</h3>
+<p data-text="oMne.bloky.${i}.text">${esc(b.text)}</p>
+</div>`).join("\n")}
+<p class="o-nas-zaver" data-text="oMne.zaver">${esc(t.oMne.zaver)}</p>`;
 
   const kontaktTelo = `<form class="formular" id="poptavka" novalidate>
 <div class="pole" data-pole="jmeno">
@@ -169,7 +171,10 @@ ${t.oMne.cisla.map((c, i) => `<div class="detail-cislo"><strong class="rukou" da
 <button class="tlacitko" type="submit" data-text="kontakt.odeslat">${esc(t.kontakt.odeslat)}</button>
 </form>
 <p class="vedouci" id="poptavka-hotovo" data-text="kontakt.hotovo" hidden>${esc(t.kontakt.hotovo)}</p>
+<div class="podpis-rada">
 <p class="podpis pise">${esc(firma.architekt.replace("Ing. arch. ", ""))}<small data-text="kontakt.podpis">${esc(t.kontakt.podpis)}</small></p>
+${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" alt="Razítko ateliéru" width="300" height="337" loading="lazy">` : ""}
+</div>
 <div class="kontakt-udaje">
 <p class="stitek">Nebo rovnou</p>
 <p><a href="tel:${firma.telefonHref}" data-udaj="telefon">${esc(firma.telefon)}</a><br><a href="mailto:${firma.email}" data-udaj="email">${esc(firma.email)}</a></p>

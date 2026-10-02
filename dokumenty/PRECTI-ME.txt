@@ -61,31 +61,24 @@ je v ukázce vypnutý — čeká na rozhodnutí, jestli ho chcete používat.
 
 CO JE SKUTEČNÉ A CO NE
 ----------------------
-Skutečné:
- - všech 11 skic — jsou vaše. Odstranil se jim papír (zůstal jen inkoust
-   i s barvou), srovnalo se otočení z fotoaparátu a web je používá jako
-   součást stránky. Původní sken se ukáže po kliknutí.,
- - rozdělení práce na rodinné domy, bytové domy, interiéry a garáže,
+Skutečné (od vás):
+ - všechny texty na webu — úvodní věta, představení ateliéru, čtyři skupiny
+   práce, pět kroků postupu, celé „O nás" i text u kontaktu,
+ - všech 11 skic. Odstranil se jim papír (zůstal jen inkoust i s barvou)
+   a srovnalo se otočení z fotoaparátu; původní sken se ukáže po kliknutí,
+ - razítko u podpisu,
  - údaje z rejstříku, jméno a telefon.
 
-Vymyšlené (a čeká to na vás):
- - oba odstavce v sekci „Kdo to kreslí" a tři čísla pod nimi,
- - popisky u čtyř skupin prací — napsal jsem je obecně, podle toho,
-   co na skicách je; klidně je přepište po svém,
- - půdorys na listu „Rodinné domy" je z ukázkového výkresu, ne z vaší
-   zakázky — je tam proto, aby bylo vidět, jak na webu vypadá
-   skutečný výkres převedený do kresby.
+Ode mě (klidně přepište, všechno jde v administraci):
+ - popisky u jednotlivých skic („první nápad, jak dům posadit" a podobně) —
+   psal jsem je podle toho, co na papíře je,
+ - texty na čtyřech listech sbírek skic,
+ - popisky polí ve formuláři,
+ - půdorys na listu „Rodinné domy" je z ukázkového výkresu, ne z vaší zakázky —
+   je tam proto, aby bylo vidět, jak na webu vypadá skutečný výkres.
 
 E-mail info@atelieridej.cz se teprve zakládá — dokud doména nepoběží,
 pošta na něj nechodí.
-
-Co je potřeba doplnit
----------------------
- 1. fotky dokončených staveb — skici ukazují přemýšlení, fotky ukážou výsledek;
-    a výkresy v DXF nebo vektorovém PDF — viz JAK-DODAT-VYKRESY.txt,
- 2. dvě tři věty o sobě — kde jste studoval a co vás na tom drží,
- 3. doménu a e-mail, kam mají chodit poptávky,
- 4. rozhodnout o svislém nápisu v aurebeshu (nechat, nebo ne).
 
 Co jde spravovat bez programátora
 ---------------------------------
