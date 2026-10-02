@@ -56,9 +56,9 @@ def test_podil_vyrezu(js):
 def test_k_spusteni_vysoky_prvek(js):
     """Prvek vyšší než pár obrazovek vyplní výřez, ale sám je vidět jen z malé části."""
     vysoky = {"id": "dlouha", "vrchol": 1000, "vyska": 6000}
-    assert js("out(m.viditelnost(A.r, A.v));", v=vysoky) == 0.15
+    assert js("out(m.viditelnost(A.r, A.v));", v=vysoky) == 0.1333
     assert js("out(m.kSpusteni([A.v], A.r, [], 0.18));", v=vysoky) == ["dlouha"], \
-        "vysoká sekce se musí spustit, i když je vidět jen její patnáctina"
+        "vysoká sekce se musí spustit, i když je vidět jen její osmina"
     nad = {"id": "nad", "vrchol": 2000, "vyska": 6000}
     assert js("out(m.kSpusteni([A.n], A.r, [], 0.18));", n=nad) == [], \
         "co je celé pod výřezem, se nespouští"

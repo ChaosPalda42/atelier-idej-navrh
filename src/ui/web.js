@@ -116,12 +116,10 @@
   var poradi = 0;
 
   function bloky(sekce) {
-    return $$(".pise, .zjevit, .kresba, .polozit", sekce).map(function (el) {
+    return $$(".pise, .kresba", sekce).map(function (el) {
       if (!el.id) el.id = "blok-" + ++poradi;
       var typ = "odstavec";
       if (el.classList.contains("kresba")) typ = "kresba";
-      else if (el.classList.contains("polozit")) typ = "foto";
-      else if (el.classList.contains("zjevit")) typ = "jev";
       else if (el.classList.contains("poznamka")) typ = "poznamka";
       else if (/^H[1-6]$/.test(el.tagName)) typ = "nadpis";
 
@@ -129,12 +127,6 @@
       if (typ === "kresba") {
         pripravKresbu(el);
         polozka.trvani = Math.min(2400, Math.max(650, Number(el.dataset.delka) * 1.1));
-      } else if (typ === "foto") {
-        polozka.trvani = 700;
-      } else if (typ === "jev") {
-        // vysázený text se nepíše — jen se položí, úměrně tomu, co se dá přečíst
-        el.classList.add("ceka");
-        polozka.trvani = Math.min(900, Math.max(260, el.textContent.trim().length * 7));
       } else {
         rozdel(el);
         el.classList.add("ceka");
@@ -147,16 +139,13 @@
   function dopisBlok(el) {
     if (!el) return;
     if (el.classList.contains("kresba")) { el.classList.remove("ceka"); el.classList.add("hotovo"); return; }
-    if (el.classList.contains("polozit")) { el.classList.add("lezi"); return; }
-    if (el.classList.contains("zjevit")) { el.classList.add("videt"); return; }
     $$(".s", el).forEach(function (s) { s.classList.add("napsano"); });
     el.classList.add("dopsano");
   }
 
   function pisBlok(el, podil) {
     if (!el) return null;
-    if (el.classList.contains("kresba") || el.classList.contains("polozit")) return null;
-    if (el.classList.contains("zjevit")) { el.classList.add("videt"); return null; }
+    if (el.classList.contains("kresba")) return null;
     var spany = el.__spany || (el.__spany = $$(".s", el));
     var kolik = Math.min(spany.length, Math.ceil(podil * spany.length));
     for (var i = 0; i < spany.length; i++) {
@@ -223,8 +212,6 @@
           }
           return;
         }
-        if (el.classList.contains("polozit")) { el.classList.add("lezi"); return; }
-        if (el.classList.contains("zjevit")) { el.classList.add("videt"); return; }
         var span = pisBlok(el, p.podil);
         if (span && !el.classList.contains("poznamka")) posledni = span;
       });
@@ -312,6 +299,35 @@
     });
   }
 
+  /* --------------- načítání: kruh se nakreslí a odletí na své místo ------ */
+  function nacitani() {
+    var vrstva = $(".nacitani");
+    if (!vrstva) return;
+    var hotovo = function () {
+      vrstva.classList.add("pryc");
+      setTimeout(function () { vrstva.remove(); }, 800);
+    };
+    if (!psaniZapnuto) { vrstva.remove(); return; }
+
+    var zdroj = $(".nacitani-znacka .znacka");
+    var cil = $(".uvod-znacka .znacka");
+    if (!zdroj || !cil) { setTimeout(hotovo, 1600); return; }
+
+    setTimeout(function () {
+      var a = zdroj.getBoundingClientRect();
+      var b = cil.getBoundingClientRect();
+      if (!a.width || !b.width) { hotovo(); return; }
+      var mer = b.width / a.width;
+      var dx = (b.left + b.width / 2) - (a.left + a.width / 2);
+      var dy = (b.top + b.height / 2) - (a.top + a.height / 2);
+      vrstva.classList.add("odlet");
+      zdroj.style.transition = "transform 1s cubic-bezier(0.6, 0, 0.2, 1)";
+      zdroj.style.transform = "translate(" + Math.round(dx) + "px," + Math.round(dy) +
+                              "px) scale(" + mer.toFixed(3) + ")";
+      setTimeout(hotovo, 620);
+    }, 1750);
+  }
+
   /* ------------------------------- exponát: okolí ztmavne, kresba zůstane */
   function exponaty() {
     var kusy = $$(".exponat");
@@ -328,9 +344,30 @@
       return uzel && uzel.parentElement ? uzel : null;
     }
 
+    /* Kolik zvětšit: tak, aby kresba vyplnila rozumný kus okna — malé skici
+       se zvětší víc, velké skoro vůbec. Pak se dorovná, aby zůstala v okně. */
+    function nastavZvetseni(el) {
+      var r = el.getBoundingClientRect();
+      if (!r.width || !r.height) return;
+      var k = Math.min(window.innerWidth * 0.52 / r.width,
+                       window.innerHeight * 0.74 / r.height);
+      k = Math.max(1.02, Math.min(k, 3.2));
+      var sirka = r.width * k, vyska = r.height * k;
+      var stredX = r.left + r.width / 2, stredY = r.top + r.height / 2;
+      var okraj = 24, dx = 0, dy = 0;
+      if (stredX - sirka / 2 < okraj) dx = okraj - (stredX - sirka / 2);
+      if (stredX + sirka / 2 > window.innerWidth - okraj) dx = (window.innerWidth - okraj) - (stredX + sirka / 2);
+      if (stredY - vyska / 2 < okraj) dy = okraj - (stredY - vyska / 2);
+      if (stredY + vyska / 2 > window.innerHeight - okraj) dy = (window.innerHeight - okraj) - (stredY + vyska / 2);
+      el.style.setProperty("--zvetseni", k.toFixed(3));
+      el.style.setProperty("--posunX", Math.round(dx) + "px");
+      el.style.setProperty("--posunY", Math.round(dy) + "px");
+    }
+
     kusy.forEach(function (el) {
       var obal = obalVListu(el);
       var rozsvit = function () {
+        nastavZvetseni(el);
         clearTimeout(zhasnuto);
         document.body.classList.add("exponat-aktivni");
         if (obal) obal.classList.add("nad-setmenim");
@@ -555,7 +592,6 @@
     }
 
     $$(".pise").forEach(function (el) { rozdel(el); el.classList.add("ceka"); });
-    $$(".zjevit").forEach(function (el) { el.classList.add("ceka"); });
     $$(".kresba").forEach(pripravKresbu);
 
     ["click", "keydown"].forEach(function (jmeno) {
@@ -572,13 +608,7 @@
       if (rychlost > 90) dopisVse();
     }, { passive: true });
 
-    var zavoj = $(".zavoj");
-    if (zavoj) {
-      requestAnimationFrame(function () {
-        zavoj.classList.add("pryc");
-        setTimeout(function () { zavoj.remove(); }, 900);
-      });
-    }
+    nacitani();
 
     rozjed();
   }

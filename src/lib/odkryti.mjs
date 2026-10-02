@@ -10,11 +10,12 @@ function orecni(x) {
   return Math.min(1, Math.max(0, x));
 }
 
-/** Délka průniku dvou svislých intervalů; nepřekrývají-li se, 0. */
+/** Délka průniku dvou svislých intervalů; nepřekrývají-li se, 0. Záporná výška -> 0. */
 export function prunik(a, b) {
   const dolni = Math.max(a.vrchol, b.vrchol);
   const horni = Math.min(a.vrchol + a.vyska, b.vrchol + b.vyska);
-  return Math.max(0, horni - dolni);
+  const p = horni - dolni;
+  return p > 0 ? p : 0;
 }
 
 /** Podíl prvku ve výřezu, oříznutý do <0, 1> a zaokrouhlený na 4 desetinná místa. */
@@ -30,7 +31,18 @@ export function minulo(ramec, prvek) {
   return prvek.vrchol + prvek.vyska <= ramec.vrchol;
 }
 
-/** Id prvků, která se mají spustit: nehotová, neminulá a viditelná >= prah. */
+/** Kolik z výřezu prvek zabírá, oříznutý do <0, 1> a zaokrouhlený na 4 desetinná místa. */
+export function podilVyrezu(ramec, prvek) {
+  if (!(ramec.vyska > 0)) {
+    return 0;
+  }
+  return zaokrouhli(orecni(prunik(ramec, prvek) / ramec.vyska));
+}
+
+/**
+ * Id prvků v pořadí vstupu, která se mají spustit: nejsou v hotove, neprošla
+ * minulo() a platí viditelnost >= prah NEBO podilVyrezu >= prah.
+ */
 export function kSpusteni(prvky, ramec, hotove, prah = 0.35) {
   const hotoveMnozina = new Set(hotove);
   const vysledek = [];
@@ -41,14 +53,14 @@ export function kSpusteni(prvky, ramec, hotove, prah = 0.35) {
     if (minulo(ramec, prvek)) {
       continue;
     }
-    if (viditelnost(ramec, prvek) >= prah) {
+    if (viditelnost(ramec, prvek) >= prah || podilVyrezu(ramec, prvek) >= prah) {
       vysledek.push(prvek.id);
     }
   }
   return vysledek;
 }
 
-/** Id prvků, které uživatel přeroloval a mají se dokreslit naráz. */
+/** Id prvků v pořadí vstupu, které nejsou v hotove a prošly minulo(). */
 export function dopsat(prvky, ramec, hotove) {
   const hotoveMnozina = new Set(hotove);
   const vysledek = [];

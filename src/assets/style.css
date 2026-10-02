@@ -1,5 +1,5 @@
 /* ateliér IDEJ — blok s kroužkovou vazbou.
-   Každá sekce je vlastní list, listy drží pohromadě drátěná vazba.
+   Každá sekce je vlastní list; každý druhý je pauzák.
    Ručně psané se píše, vysázené se jen pokládá, kresby se rýsují. */
 
 /* ------------------------------------------------------------------ písma */
@@ -45,7 +45,7 @@
   --sloupec: 66ch;
   --okraj: 230px;
   --mezera: clamp(66px, 8vw, 112px);
-  --vazba-vyska: 72px;
+  --hrana-vyska: 58px;
 }
 
 /* ------------------------------------------------------------------ reset */
@@ -146,45 +146,7 @@ button { font: inherit; color: inherit; }
     0 24px 46px -30px rgba(52, 40, 24, 0.6);
 }
 
-/* ------------------------------------------------- kroužková vazba mezi listy */
 .list + .list { margin-top: 0; }
-
-.vazba {
-  position: absolute;
-  top: -20px;
-  left: 0;
-  right: 0;
-  height: var(--vazba-vyska);
-  z-index: 3;
-  pointer-events: none;
-  background-repeat: repeat-x;
-  background-position: 28px top;
-  background-size: 56px var(--vazba-vyska);
-  background-image: url("vazba.svg");
-}
-
-/* řez listu, který leží nahoře, a stín, který vrhá na list pod sebou */
-.vazba::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 19px;
-  height: 2px;
-  background:
-    linear-gradient(to bottom, rgba(255, 253, 248, 0.9), rgba(132, 112, 82, 0.34) 55%);
-  opacity: 0.9;
-}
-.vazba::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  top: 21px;
-  height: 20px;
-  background: linear-gradient(to bottom,
-    rgba(74, 58, 36, 0.17), rgba(74, 58, 36, 0.05) 45%, transparent);
-}
 
 /* ------------------------------------------------------------- typografie */
 h1, h2, h3, h4 { margin: 0; }
@@ -458,7 +420,7 @@ p:last-child { margin-bottom: 0; }
 
 /* ------------------------------------------------------------------ sekce */
 .sekce {
-  padding: calc(var(--vazba-vyska) + 4px) clamp(22px, 5vw, 60px) var(--mezera);
+  padding: calc(var(--hrana-vyska) + 4px) clamp(22px, 5vw, 60px) var(--mezera);
   display: grid;
   grid-template-columns: var(--okraj) minmax(0, 1fr);
   gap: 0 clamp(26px, 4vw, 54px);
@@ -639,7 +601,7 @@ p:last-child { margin-bottom: 0; }
 
 /* --------------------------------------------------------------- patička */
 .paticka {
-  padding: calc(var(--vazba-vyska) + 4px) clamp(22px, 5vw, 60px) clamp(32px, 4vw, 50px);
+  padding: calc(var(--hrana-vyska) + 4px) clamp(22px, 5vw, 60px) clamp(32px, 4vw, 50px);
   display: grid;
   grid-template-columns: var(--okraj) minmax(0, 1fr) auto;
   gap: 22px clamp(26px, 4vw, 54px);
@@ -720,9 +682,6 @@ p:last-child { margin-bottom: 0; }
   cursor: pointer;
 }
 
-/* -------------------------------------------------------------- zavoj */
-.zavoj { position: fixed; inset: 0; z-index: 90; background: var(--papir); pointer-events: none; }
-.zavoj.pryc { opacity: 0; transition: opacity 0.55s ease 0.1s; }
 
 /* -------------------------------------------------------------- administrace */
 .admin-hlava {
@@ -843,7 +802,7 @@ p:last-child { margin-bottom: 0; }
 
 /* ------------------------------------------------------------ responzivita */
 @media (max-width: 920px) {
-  :root { --okraj: 0px; --vazba-vyska: 64px; }
+  :root { --okraj: 0px; --hrana-vyska: 48px; }
   .hlavicka,
   .sekce,
   .detail-hlava,
@@ -875,7 +834,7 @@ p:last-child { margin-bottom: 0; }
   .zjevit.ceka { opacity: 1; transform: none; }
   .kresba.ceka [data-delka] { stroke-dasharray: none; stroke-dashoffset: 0; }
   .polozit { opacity: 1; transform: none; }
-  .hrot, .zavoj { display: none; }
+  .hrot, .nacitani { display: none; }
   .setmeni { display: none; }
   .exponat-ram { opacity: 1; filter: none; }
   .znacka-objezd { animation: none; stroke-dashoffset: 0; }
@@ -885,10 +844,10 @@ p:last-child { margin-bottom: 0; }
 
 /* ------------------------------------------------------------------- tisk */
 @media print {
-  .navigace, .pravitko, .hrot, .zavoj { display: none !important; }
+  .navigace, .pravitko, .hrot, .nacitani, .setmeni { display: none !important; }
   body { background: #fff; }
   .list { box-shadow: none; }
-  .list::before, .list::after, .vazba { display: none; }
+  .list::before, .list::after, .hrana { display: none; }
   .pise .s { clip-path: none !important; opacity: 1 !important; }
   .zjevit.ceka { opacity: 1 !important; transform: none !important; }
 }
@@ -1098,7 +1057,12 @@ body.exponat-aktivni .setmeni { opacity: 1; }
   transform: rotate(var(--natoceni));
   transition: color 0.3s ease;
 }
-.exponat:hover .exponat-popis { color: var(--oranz); }
+.exponat:hover .exponat-popis,
+.exponat:focus-within .exponat-popis {
+  /* při zvětšení by popisek ležel přes kresbu — ustoupí jí */
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
 
 /* v okraji listu, vedle nadpisu sekce */
 .exponat--okraj { margin-top: 2.6em; --natoceni: -1.4deg; }
@@ -1129,7 +1093,7 @@ body.exponat-aktivni .setmeni { opacity: 1; }
 
 /* vlastní list jen pro jednu skicu */
 .vystava {
-  padding: calc(var(--vazba-vyska) + 6px) clamp(22px, 5vw, 60px) clamp(38px, 5vw, 66px);
+  padding: calc(var(--hrana-vyska) + 6px) clamp(22px, 5vw, 60px) clamp(38px, 5vw, 66px);
   display: grid;
   grid-template-columns: var(--okraj) minmax(0, 1fr);
   gap: 0 clamp(26px, 4vw, 54px);
@@ -1171,4 +1135,103 @@ body.exponat-aktivni .setmeni { opacity: 1; }
   .vystava { grid-template-columns: minmax(0, 1fr); }
   .vystava-telo, .vystava-poznamka { grid-column: 1; }
   .vystava-poznamka { grid-row: auto; margin-top: 1.4em; }
+}
+
+/* ------------------------------------------------- přechod mezi listy */
+/* Místo kroužkové vazby: list leží na předchozím, je vidět jeho řez
+   a stín, který vrhá. Každý druhý list je pauzák — průsvitný, chladnější. */
+.hrana {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 34px;
+  z-index: 3;
+  pointer-events: none;
+}
+.hrana::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right,
+    rgba(132, 118, 92, 0.12), rgba(132, 118, 92, 0.4) 9%,
+    rgba(132, 118, 92, 0.4) 91%, rgba(132, 118, 92, 0.12));
+}
+.hrana::after {
+  content: "";
+  position: absolute;
+  top: 1px;
+  left: 0;
+  right: 0;
+  height: 24px;
+  background: linear-gradient(to bottom, rgba(74, 58, 36, 0.15), transparent);
+}
+
+/* pauzák — průsvitný list s chladnějším tónem a hladším povrchem */
+.list--pauzak {
+  background-color: rgba(233, 236, 230, 0.76);
+  color: var(--tuha);
+}
+.list--pauzak::before { opacity: 0.26; }
+.list--pauzak::after {
+  background:
+    linear-gradient(to bottom, rgba(255, 255, 255, 0.42), transparent 120px),
+    linear-gradient(105deg, rgba(255, 255, 255, 0.3) 18%, transparent 42%),
+    radial-gradient(80% 50% at 85% 100%, rgba(120, 136, 124, 0.08), transparent 62%);
+}
+.list--pauzak .hrana::before {
+  background: linear-gradient(to right,
+    rgba(120, 132, 120, 0.12), rgba(120, 132, 120, 0.36) 9%,
+    rgba(120, 132, 120, 0.36) 91%, rgba(120, 132, 120, 0.12));
+}
+
+/* ------------------------------------------------------------ načítání */
+/* Na prázdném papíře se nakreslí kruh, pak odletí na své místo v záhlaví. */
+.nacitani {
+  position: fixed;
+  inset: 0;
+  z-index: 95;
+  background: var(--papir);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  pointer-events: none;
+}
+.nacitani-znacka { width: clamp(180px, 30vw, 330px); }
+.nacitani-znacka .znacka { width: 100%; height: auto; }
+.nacitani-logotyp {
+  width: clamp(150px, 24vw, 260px);
+  opacity: 0;
+  animation: logotyp-se-objevi 0.9s ease 1.15s forwards;
+}
+.nacitani-logotyp svg { width: 100%; height: auto; }
+@keyframes logotyp-se-objevi { to { opacity: 1; } }
+
+.nacitani.odlet .nacitani-logotyp { opacity: 0; transition: opacity 0.4s ease; }
+.nacitani.pryc { opacity: 0; transition: opacity 0.7s ease; }
+
+/* --------------------------------------- zvětšení exponátu pod myší */
+.exponat:hover .exponat-ram,
+.exponat:focus-within .exponat-ram {
+  transform: translate(var(--posunX, 0px), var(--posunY, 0px))
+             scale(var(--zvetseni, 1.015))
+             rotate(calc(var(--natoceni) * 0.3));
+}
+/* zvětšená kresba se nesmí oříznout hranou listu */
+.presahy.nad-setmenim { overflow: visible; }
+
+/* ------------------------------------------------- dotyk místo myši */
+@media (hover: none) {
+  /* bez kurzoru není co zvýrazňovat — kresby jsou rovnou plné a klepnutím
+     se otevře původní sken */
+  .exponat-ram { opacity: 1; filter: none; }
+  .exponat-ram::before { display: none; }
+  .setmeni { display: none; }
+  .exponat:hover .exponat-ram,
+  .exponat:focus-within .exponat-ram { transform: rotate(var(--natoceni)); }
 }

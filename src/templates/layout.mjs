@@ -43,7 +43,7 @@ ${odkaz("index.html#kontakt", t.navigace.kontakt, "cil")}
 
 export function paticka(firma, t, k = "") {
   return `<footer class="list paticka">
-<span class="vazba" aria-hidden="true"></span>
+<span class="hrana" aria-hidden="true"></span>
 <div>
 <p class="stitek" data-udaj="pravni">${firma.pravni}</p>
 <p><span data-udaj="ulice">${firma.ulice}</span><br><span data-udaj="mesto">${firma.mesto}</span><br>IČO <span data-udaj="ico">${firma.ico}</span></p>
@@ -57,7 +57,19 @@ export function paticka(firma, t, k = "") {
 </footer>`;
 }
 
+/** Každý druhý list je pauzák — přechod je změna materiálu, ne hrana. */
+function prostridejPapiry(telo) {
+  let poradi = 0;
+  return telo.replace(/<(section|article|header|footer) class="list /g, (cely, znacka) => {
+    poradi += 1;
+    return poradi % 2 === 0
+      ? `<${znacka} class="list list--pauzak `
+      : cely;
+  });
+}
+
 export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", aktivni = "", skripty = [] }) {
+  telo = prostridejPapiry(telo);
   return `<!doctype html>
 <html lang="cs">
 <head>
@@ -75,7 +87,10 @@ export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", ak
 </head>
 <body class="${trida}">
 <a class="jen-pro-ctecku" href="#zacatek">${t.web.preskocit}</a>
-<div class="zavoj" aria-hidden="true"></div>
+<div class="nacitani" aria-hidden="true">
+<div class="nacitani-znacka">${znacka({ varianta: "samotna", kresli: true, trida: "znacka--velka" })}</div>
+<div class="nacitani-logotyp">${znacka({ varianta: "stohovana" }).replace(/<g class="znacka-kruh"[\s\S]*?<\/g>/, "")}</div>
+</div>
 <div class="setmeni" aria-hidden="true"></div>
 ${navigace(t, aktivni, k)}
 ${pravitko()}

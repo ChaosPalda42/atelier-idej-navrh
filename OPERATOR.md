@@ -244,3 +244,30 @@ některé kresby nesedí, přesah nemá pokračovat na stole, zvýraznění obr�
   Kvůli tomu zrušena `isolation: isolate` na `.list`.
 - Na užších oknech (do 1100 px) se přesahy zařadí do textu, ale jen do 360 px
   a až na konec sekce (`order: 2`), jinak zabraly celou šířku listu.
+
+## Desáté kolo (3. 10. 2026) — odkrývání ven, pauzák, načítání, zvětšení
+Michael: sekce „Jak to probíhá" se nenačetla, dokud na ni neklikl; vypnout
+tenhle způsob odkrývání; kroužková vazba se nelíbí; chybí načítací animace;
+exponát by se měl pod myší i zvětšit.
+
+- **Chyba v odkrývání (C-002)**: `kSpusteni` startovalo jen podle toho, jakou
+  část má prvek vidět. Sekce vyšší než ~5 obrazovek vyplní celý výřez, ale její
+  vlastní viditelnost zůstane pod prahem (800 px ze 6000 = 0,13) — nespustila se
+  nikdy. Kontrakt doplněn o `podilVyrezu` a pravidlo „viditelnost >= prah **nebo**
+  podilVyrezu >= prah". **Pozor, past, do které jsem spadl podruhé:** první běh
+  Factory se tloukl o můj špatný test (napsal jsem 0.15 místo 0.1333 — spočítal
+  jsem to pro jiný výřez). Model psal správný kód a padalo to na mém tvrzení.
+  Po opravě testu prošly brány napoprvé (`factory gates C-002` → green, 91 testů).
+- **Odkrývání textu zrušeno úplně** — `zjevit` i `polozit` pryč ze šablon i z motoru.
+  Plán teď řeší jen psaní rukou a rýsování kreseb.
+- **Pauzák místo kroužků**: každý druhý list je průsvitný, chladnější
+  (`list--pauzak`, přiřazuje se při sestavení). Přechod je řez listu + stín,
+  který vrhá na list pod sebou (`.hrana`).
+- **Načítání**: na prázdném papíře se objezdem nakreslí kruh, dopíše se logotyp
+  a pak kruh **přeletí na své místo** v záhlaví (FLIP: změří se cíl a dopočítá
+  měřítko i posun). Jen při prvním otevření v relaci.
+- **Zvětšení pod myší**: měřítko se **nepočítá podle velikosti kresby, ale podle
+  okna** — malá skica se zvětší až 3,2×, velká skoro vůbec, a pak se dorovná
+  posunem, aby zůstala celá v okně. Popisek při zvětšení ustoupí.
+- **Dotyk**: `@media (hover: none)` — kresby jsou rovnou plné, nic se neztmavuje,
+  klepnutí otevře původní sken.
