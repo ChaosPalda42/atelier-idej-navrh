@@ -175,3 +175,18 @@ Michael: administrace má umět hlavně texty, přehledně, ne všechno na jedn�
 - Skici: pořadí, název, skupina, skrytí (skrytá se na webu nevykreslí).
 - Pořád to stojí na jediném testovaném modulu `src/lib/administrace.mjs` —
   přibyla jen data, ne nová logika.
+
+## Oprava (2. 10. 2026): starý uložený stav mazal skicák
+Michael: „sekce vybrané práce přestaly fungovat". Příčina: `prepisy()` v `web.js`
+mazalo z mřížky každou kartu, kterou nenašlo v uloženém stavu administrace
+(`karta.remove()`). Kdo si prohlédl administraci před přestavbou na skici, měl
+v prohlížeči uložené staré slugy (`01-obrazek`, `dum-nad-sadem`) — a protože se
+žádný neshodoval s novými, zmizely **všechny** skici.
+
+Pravidlo, které z toho plyne: **uložený stav z prohlížeče nesmí nikdy nic
+odstranit.** Smí jen přejmenovat, přeřadit a skrýt to, co na stránce opravdu je;
+pořadí se použije jen tehdy, když stav aspoň něco z téhle stránky zná.
+V administraci se uložený stav navíc při načtení srovná se skutečným seznamem
+skic (`srovnejSeSkicami`) — co zmizelo, se zahodí, co přibylo, se doplní.
+Ověřeno: starý stav → všech 11 skic zůstane; skrytí a přejmenování z administrace
+pořád fungují; filtr taky.

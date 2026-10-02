@@ -18,12 +18,24 @@
     return A.vychoziStav({ firma: D.firma, prace: D.skici });
   }
 
+  /** Uložený stav může být starší než web — srovná se se skutečným seznamem skic. */
+  function srovnejSeSkicami(ulozeny) {
+    var zname = {};
+    D.skici.forEach(function (s) { zname[s.slug] = s; });
+    var mam = {};
+    (ulozeny.prace || []).forEach(function (p) { if (p && p.slug) mam[p.slug] = true; });
+
+    var prace = (ulozeny.prace || []).filter(function (p) { return p && zname[p.slug]; });
+    D.skici.forEach(function (s) { if (!mam[s.slug]) prace.push(s); });
+    return Object.assign({}, ulozeny, { prace: prace });
+  }
+
   function nacti() {
     try {
       var ulozene = localStorage.getItem(KLIC);
       if (ulozene) {
         var v = A.importuj(ulozene);
-        if (v.stav) return v.stav;
+        if (v.stav) return srovnejSeSkicami(v.stav);
       }
     } catch (e) { /* soukromé okno */ }
     return vychozi();

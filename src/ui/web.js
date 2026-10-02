@@ -455,25 +455,33 @@
     var mrizka = $("[data-prace]");
     if (mrizka && Array.isArray(stav.prace)) {
       var zive = {};
-      stav.prace.forEach(function (p) { zive[p.slug] = p; });
+      stav.prace.forEach(function (p) { if (p && p.slug) zive[p.slug] = p; });
+
+      // Uložený stav může být starší než web. Pak o některých položkách neví —
+      // a to NESMÍ znamenat, že zmizí; smí se jen přejmenovat, přeřadit a skrýt.
+      var znamych = 0;
       $$("[data-slug]", mrizka).forEach(function (karta) {
         var p = zive[karta.dataset.slug];
-        if (!p) { karta.remove(); return; }
-        var nazev = $('[data-pole="nazev"]', karta);
-        var anotace = $('[data-pole="anotace"]', karta);
-        var meta = $('[data-pole="meta"]', karta);
-        if (nazev) nazev.textContent = p.nazev || "";
-        if (anotace) anotace.textContent = p.anotace || "";
-        if (meta) meta.textContent = [p.misto, p.rok, p.stav].filter(Boolean).join(" \u00b7 ");
+        if (!p) return;
+        znamych += 1;
+        karta.hidden = !!p.skryta;
         if (p.typ) karta.dataset.typ = p.typ;
-      });
-      stav.prace.forEach(function (p) {
-        var karta = $('[data-slug="' + p.slug + '"]', mrizka);
-        if (karta) {
-          karta.hidden = !!p.skryta;
-          mrizka.appendChild(karta);
+        var nazev = $('[data-pole="nazev"]', karta);
+        if (nazev && p.nazev) nazev.textContent = p.nazev;
+        var anotace = $('[data-pole="anotace"]', karta);
+        if (anotace && typeof p.anotace === "string") anotace.textContent = p.anotace;
+        var meta = $('[data-pole="meta"]', karta);
+        if (meta && (p.misto || p.rok)) {
+          meta.textContent = [p.misto, p.rok, p.stav].filter(Boolean).join(" \u00b7 ");
         }
       });
+
+      if (znamych) {
+        stav.prace.forEach(function (p) {
+          var karta = $('[data-slug="' + p.slug + '"]', mrizka);
+          if (karta) mrizka.appendChild(karta);
+        });
+      }
     }
   }
 
