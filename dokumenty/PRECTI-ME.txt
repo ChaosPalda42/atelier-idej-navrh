@@ -34,9 +34,11 @@ Co si na ukázce projít
  - skupiny ................. Rodinné domy, Bytové domy, Interiéry, Garáže —
                              každá má vlastní list
  - formulář v kontaktu ..... vyzkoušejte ho i prázdný, hlídá si chyby
- - administrace.html ....... demo administrace; co tam změníte (texty,
-                             kontakty, práce), objeví se na webu.
-                             Odeslaná poptávka se objeví v záložce Poptávky.
+ - administrace.html ....... demo administrace. Není to jedna dlouhá stránka:
+                             má vlastní list na texty, na skupiny práce,
+                             na postup, na skici, na poptávky, na kontakt
+                             a na zálohu. Co kde změníte, objeví se na webu.
+                             Odeslaná poptávka se objeví v Poptávkách.
 
 Značka
 ------
@@ -75,6 +77,15 @@ Co je potřeba doplnit
  2. dvě tři věty o sobě — kde jste studoval a co vás na tom drží,
  3. doménu a e-mail, kam mají chodit poptávky,
  4. rozhodnout o svislém nápisu v aurebeshu (nechat, nebo ne).
+
+Co jde spravovat bez programátora
+---------------------------------
+V administraci se dá přepsat **každý text, který na webu je** — od úvodní věty
+po popisek tlačítka ve formuláři. U každého pole je vidět, jestli jste ho
+změnili, a jedním kliknutím se vrátí původní znění.
+Dál: názvy a popisy čtyř skupin práce, texty na jejich listech, kroky postupu,
+pořadí a názvy skic (i jejich skrytí), kontaktní údaje a došlé poptávky.
+Celý obsah se dá vyvézt do souboru a zase načíst.
 
 Technicky
 ---------

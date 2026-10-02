@@ -50,7 +50,7 @@ export function paticka(firma, t, k = "") {
 </div>
 <div>
 <p><a href="tel:${firma.telefonHref}" data-udaj="telefon">${firma.telefon}</a> · <a href="mailto:${firma.email}" data-udaj="email">${firma.email}</a></p>
-<p class="rukou tuzkou">${t.paticka.ukazka}</p>
+<p class="rukou tuzkou" data-text="paticka.ukazka">${t.paticka.ukazka}</p>
 <p><a href="${k}administrace.html">${t.paticka.administrace}</a> · <a href="#zacatek">${t.paticka.nahoru}</a></p>
 </div>
 <div class="razitko">${razitko(firma)}</div>

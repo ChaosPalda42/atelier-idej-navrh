@@ -437,6 +437,7 @@
       Object.keys(stav.texty).forEach(function (klic) {
         var zapis = stav.texty[klic];
         if (!zapis || typeof zapis.hodnota !== "string") return;
+        if (klic === "web.titulek") document.title = zapis.hodnota;
         $$('[data-text="' + klic + '"]').forEach(function (el) { el.textContent = zapis.hodnota; });
       });
     }
@@ -468,7 +469,10 @@
       });
       stav.prace.forEach(function (p) {
         var karta = $('[data-slug="' + p.slug + '"]', mrizka);
-        if (karta) mrizka.appendChild(karta);
+        if (karta) {
+          karta.hidden = !!p.skryta;
+          mrizka.appendChild(karta);
+        }
       });
     }
   }

@@ -53,6 +53,14 @@ def slug(text: str) -> str:
 # dvě skici mají v názvu jen „obrazek"; zařazení podle toho, co je na nich
 RUCNE = {"01": "bytove-domy", "02": "rodinne-domy"}
 
+NAZVY = {
+    "rodinne-domy": "Rodinný dům",
+    "bytove-domy": "Bytový dům",
+    "interiery": "Interiér",
+    "garaze": "Garáž",
+    "studie": "Studie",
+}
+
 
 def skupina_ze_jmena(jmeno: str) -> str:
     zaklad = jmeno.lower()
@@ -102,9 +110,9 @@ def vybel_papir(img: Image.Image, mekkost: float = 48.0, dotah: float = 0.06) ->
 
 def zpracuj(cesta: Path, poradi: int) -> dict:
     jmeno = cesta.stem
-    popis = re.sub(r"^\d+[-_]\s*", "", jmeno).strip()
     skupina = skupina_ze_jmena(jmeno)
-    zaklad = f"{poradi:02d}-{slug(popis) or skupina}"
+    popis = NAZVY.get(skupina, re.sub(r"^\d+[-_]\s*", "", jmeno).strip())
+    zaklad = f"{poradi:02d}-{skupina}"
 
     with Image.open(cesta) as puvodni:
         obraz = vybel_papir(puvodni)
@@ -137,6 +145,9 @@ def main(argv=None) -> int:
     if not soubory:
         print(f"v {ZDROJ} nic není")
         return 1
+    if VEN.exists():
+        for stary in VEN.glob("*.jpg"):
+            stary.unlink()
     seznam = [zpracuj(p, i + 1) for i, p in enumerate(soubory)]
     (VEN / "seznam.json").write_text(
         json.dumps(seznam, ensure_ascii=False, indent=1), encoding="utf-8")

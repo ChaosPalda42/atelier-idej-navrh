@@ -98,7 +98,10 @@ async function main() {
     if (!skici.some((s) => s.skupina === skupina.id)) continue;
     await writeFile(path.join(VEN, "prace", `${skupina.id}.html`), detail(site, t, skupina.id, kresby, skici));
   }
-  await writeFile(path.join(VEN, "administrace.html"), administrace(site, t, skici));
+  await mkdir(path.join(VEN, "administrace"), { recursive: true });
+  for (const list of administrace(site, t, skici)) {
+    await writeFile(path.join(VEN, list.soubor), list.html);
+  }
 
   const otisk = createHash("sha1").update(await readFile(path.join(VEN, "index.html"))).digest("hex").slice(0, 8);
   console.log(`hotovo: ${site.skupiny.length + 2} stránek, ${skici.length} skic, otisk ${otisk}`);

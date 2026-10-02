@@ -14,8 +14,8 @@ function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", 
 <span class="vazba" aria-hidden="true"></span>
 ${pozadi}
 <div class="sekce-hlava">
-<span class="sekce-cislo">${cislo}</span>
-<h2 class="nadpis rukou pise" data-znaky>${esc(nadpis)}</h2>
+<span class="sekce-cislo"${klic ? ` data-text="${klic}.cislo"` : ""}>${cislo}</span>
+<h2 class="nadpis rukou pise" data-znaky${klic ? ` data-text="${klic}.nadpis"` : ""}>${esc(nadpis)}</h2>
 ${poznamka ? `<p class="poznamka pise"${kPozn}>${esc(poznamka)}</p>` : ""}
 </div>
 <div class="sekce-telo">
@@ -30,11 +30,12 @@ function skica(s, { k = "", velka = false } = {}) {
   const cesta = (jmeno) => `${k}obrazky/${jmeno}`;
   const nejvetsi = s.varianty[s.varianty.length - 1];
   const srcset = s.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ");
-  return `<figure class="skica-list polozit" data-skupina="${esc(s.skupina)}">
+  return `<figure class="skica-list polozit" data-slug="${esc(s.zaklad)}" data-typ="${esc(s.skupina)}">
 <img src="${cesta(s.varianty[0].soubor)}" srcset="${srcset}"
  sizes="${velka ? "(max-width: 920px) 92vw, 44vw" : "(max-width: 920px) 46vw, 23vw"}"
  width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(s.popis)}" loading="lazy"
  data-lightbox="${cesta(nejvetsi.soubor)}">
+<figcaption class="skica-popis" data-pole="nazev">${esc(s.popis)}</figcaption>
 </figure>`;
 }
 
@@ -46,10 +47,10 @@ export function index(site, t, kresby = {}, skici = []) {
   const hlavicka = `<header class="list uvod" data-psat>
 <div class="uvod-znacka" aria-hidden="true">${znacka({ varianta: "samotna", kresli: true, trida: "znacka--velka" })}</div>
 <div class="uvod-text">
-<span class="stitek zjevit">${esc(t.uvod.stitek)}</span>
+<span class="stitek zjevit" data-text="uvod.stitek">${esc(t.uvod.stitek)}</span>
 <h1 class="claim rukou pise" data-znaky data-text="uvod.claim">${esc(t.uvod.claim)}</h1>
 </div>
-<a class="uvod-dolu rukou pise" href="#predstaveni">${esc(t.uvod.dolu)}
+<a class="uvod-dolu rukou pise" href="#predstaveni"><span data-text="uvod.dolu">${esc(t.uvod.dolu)}</span>
 <svg viewBox="0 0 26 34" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2c-1 9 1 18 0 28"/><path d="M6 23l7 9 7-9"/></svg>
 </a>
 </header>
@@ -63,23 +64,23 @@ export function index(site, t, kresby = {}, skici = []) {
 <div class="sekce-telo">
 <p class="vedouci zjevit" data-text="uvod.text">${esc(t.uvod.text)}</p>
 <div class="hlavicka-pod polozit">
-<a class="tlacitko" href="#kontakt">${esc(t.uvod.cil)}</a>
-<a class="tlacitko lehke" href="#prace">${esc(t.uvod.druhy)}</a>
+<a class="tlacitko" href="#kontakt" data-text="uvod.cil">${esc(t.uvod.cil)}</a>
+<a class="tlacitko lehke" href="#prace" data-text="uvod.druhy">${esc(t.uvod.druhy)}</a>
 </div>
 </div>
 <div class="hero-kresba kresba" aria-hidden="true">${kresbaHero()}</div>
 </section>`;
 
   const sluzbyTelo = `<div class="sluzby">
-${sluzby.map((s) => `<article class="sluzba">
+${sluzby.map((s, i) => `<article class="sluzba">
 <div class="sluzba-kresba kresba">${(KRESBY[s.kresba] || KRESBY.dum)()}</div>
-<h3 class="rukou pise">${esc(s.nazev)}</h3>
-<p class="zjevit">${esc(s.popis)}</p>
+<h3 class="rukou pise" data-text="site.sluzby.${i}.nazev">${esc(s.nazev)}</h3>
+<p class="zjevit" data-text="site.sluzby.${i}.popis">${esc(s.popis)}</p>
 </article>`).join("\n")}
 </div>`;
 
   const filtry = `<div class="filtry polozit" role="group" aria-label="Filtr skic">
-<button class="filtr" data-filtr="vse" aria-pressed="true">${esc(t.prace.vse)}<span class="filtr-pocet">${p.vse}</span></button>
+<button class="filtr" data-filtr="vse" aria-pressed="true"><span data-text="prace.vse">${esc(t.prace.vse)}</span><span class="filtr-pocet">${p.vse}</span></button>
 ${sluzby.filter((s) => p[s.id]).map((s) =>
     `<button class="filtr" data-filtr="${s.id}" aria-pressed="false">${esc(s.nazev)}<span class="filtr-pocet">${p[s.id]}</span></button>`).join("\n")}
 </div>`;
@@ -92,53 +93,53 @@ ${skici.map((s) => skica(s)).join("\n")}
 ${site.skupiny.filter((g) => p[g.id]).map((g) => `<a href="prace/${g.id}.html">${esc(g.nazev)}</a>`).join(" · ")}</p>`;
 
   const postupTelo = `<ol class="postup-osa">
-${postup.map((krok) => `<li class="postup-krok zjevit">
-<h3 class="rukou pise">${esc(krok.nazev)}</h3><span class="postup-trvani">${esc(krok.trvani)}</span>
-<p>${esc(krok.popis)}</p>
+${postup.map((krok, i) => `<li class="postup-krok zjevit">
+<h3 class="rukou pise" data-text="site.postup.${i}.nazev">${esc(krok.nazev)}</h3><span class="postup-trvani" data-text="site.postup.${i}.trvani">${esc(krok.trvani)}</span>
+<p data-text="site.postup.${i}.popis">${esc(krok.popis)}</p>
 </li>`).join("\n")}
 </ol>`;
 
-  const oMneTelo = `${t.oMne.text.map((o) => `<p class="zjevit">${esc(o)}</p>`).join("\n")}
+  const oMneTelo = `${t.oMne.text.map((o, i) => `<p class="zjevit" data-text="oMne.text.${i}">${esc(o)}</p>`).join("\n")}
 <div class="detail-cisla zjevit">
-${t.oMne.cisla.map((c) => `<div class="detail-cislo"><strong class="rukou pise">${esc(c.hodnota)}</strong><span>${esc(c.popisek)}</span></div>`).join("\n")}
+${t.oMne.cisla.map((c, i) => `<div class="detail-cislo"><strong class="rukou pise" data-text="oMne.cisla.${i}.hodnota">${esc(c.hodnota)}</strong><span data-text="oMne.cisla.${i}.popisek">${esc(c.popisek)}</span></div>`).join("\n")}
 </div>`;
 
   const kontaktTelo = `<form class="formular zjevit" id="poptavka" novalidate>
 <div class="pole" data-pole="jmeno">
-<label for="jmeno">${esc(t.kontakt.jmeno)}</label>
+<label for="jmeno" data-text="kontakt.jmeno">${esc(t.kontakt.jmeno)}</label>
 <input id="jmeno" name="jmeno" type="text" autocomplete="name">
 <span class="pole-chyba"></span>
 </div>
 <div class="pole" data-pole="email">
-<label for="email">${esc(t.kontakt.email)}</label>
+<label for="email" data-text="kontakt.email">${esc(t.kontakt.email)}</label>
 <input id="email" name="email" type="email" autocomplete="email">
 <span class="pole-chyba"></span>
 </div>
 <div class="pole" data-pole="telefon">
-<label for="telefon">${esc(t.kontakt.telefon)}</label>
+<label for="telefon" data-text="kontakt.telefon">${esc(t.kontakt.telefon)}</label>
 <input id="telefon" name="telefon" type="tel" autocomplete="tel">
 <span class="pole-chyba"></span>
 </div>
 <div class="pole" data-pole="zprava">
-<label for="zprava">${esc(t.kontakt.zprava)}</label>
+<label for="zprava" data-text="kontakt.zprava">${esc(t.kontakt.zprava)}</label>
 <textarea id="zprava" name="zprava" placeholder="${esc(t.kontakt.zpravaNapoveda)}"></textarea>
 <span class="pole-chyba"></span>
 </div>
 <div class="pole" data-pole="soubory">
-<label for="prilohy">${esc(t.kontakt.prilohy)}</label>
+<label for="prilohy" data-text="kontakt.prilohy">${esc(t.kontakt.prilohy)}</label>
 <input id="prilohy" name="prilohy" type="file" multiple>
-<span class="stitek">${esc(t.kontakt.prilohyNapoveda)}</span>
+<span class="stitek" data-text="kontakt.prilohyNapoveda">${esc(t.kontakt.prilohyNapoveda)}</span>
 <span id="prilohy-vypis" class="prace-meta"></span>
 <span class="pole-chyba"></span>
 </div>
 <div class="pole" data-pole="souhlas">
-<label class="souhlas"><input id="souhlas" name="souhlas" type="checkbox"> <span>${esc(t.kontakt.souhlas)}</span></label>
+<label class="souhlas"><input id="souhlas" name="souhlas" type="checkbox"> <span data-text="kontakt.souhlas">${esc(t.kontakt.souhlas)}</span></label>
 <span class="pole-chyba"></span>
 </div>
-<button class="tlacitko" type="submit">${esc(t.kontakt.odeslat)}</button>
+<button class="tlacitko" type="submit" data-text="kontakt.odeslat">${esc(t.kontakt.odeslat)}</button>
 </form>
 <p class="vedouci" id="poptavka-hotovo" data-text="kontakt.hotovo" hidden>${esc(t.kontakt.hotovo)}</p>
-<p class="podpis pise">${esc(firma.architekt.replace("Ing. arch. ", ""))}<small>${esc(t.kontakt.podpis)}</small></p>
+<p class="podpis pise">${esc(firma.architekt.replace("Ing. arch. ", ""))}<small data-text="kontakt.podpis">${esc(t.kontakt.podpis)}</small></p>
 <div class="kontakt-udaje zjevit">
 <p class="stitek">Nebo rovnou</p>
 <p><a href="tel:${firma.telefonHref}" data-udaj="telefon">${esc(firma.telefon)}</a><br><a href="mailto:${firma.email}" data-udaj="email">${esc(firma.email)}</a></p>
@@ -181,7 +182,7 @@ export function detail(site, t, id, kresby = {}, skici = []) {
 </div>
 <div>
 <h1 class="nadpis rukou pise" data-znaky>${esc(skupina.nazev)}</h1>
-${skupina.text.map((o) => `<p class="${o === skupina.text[0] ? "vedouci " : ""}zjevit">${esc(o)}</p>`).join("\n")}
+${skupina.text.map((o, j) => `<p class="${j === 0 ? "vedouci " : ""}zjevit" data-text="site.skupiny.${site.skupiny.indexOf(skupina)}.text.${j}">${esc(o)}</p>`).join("\n")}
 </div>
 </header>
 <div class="skicak skicak--velky">

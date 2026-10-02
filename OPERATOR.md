@@ -159,3 +159,19 @@ Chyba, která se našla až teď: `.svetelny-stul { display: flex }` přebíjelo
 
 V ukázce zůstává vymyšlené už jen: dva odstavce „Kdo to kreslí", tři čísla pod nimi
 a popisky čtyř skupin. Je to napsané v PRECTI-ME.
+
+## Sedmé kolo (2. 10. 2026) — administrace na víc listů
+Michael: administrace má umět hlavně texty, přehledně, ne všechno na jedné stránce.
+
+- **Osm listů** místo záložek: Přehled, Texty webu, Co dělám, Jak to probíhá,
+  Skici, Poptávky, Kontakt, Záloha. Vlevo postranní navigace s popiskem u každého.
+- **Editovatelné je všechno, co je na webu napsané** (49 polí jen na listu textů):
+  každý řetězec má klíč a na stránce mu odpovídá `data-text="<klíč>"`.
+  Klíče začínající `site.` míří do `data/site.json` (služby, postup, texty skupin),
+  ostatní do `data/texty.json`. Schéma se skládá **z dat při sestavení**, takže
+  když přibude služba nebo krok postupu, objeví se v administraci sama.
+- U každého pole je vidět, že je změněné, a je u něj „Vrátit původní" i původní
+  znění. Přehled vypisuje všechny změny na jednom místě.
+- Skici: pořadí, název, skupina, skrytí (skrytá se na webu nevykreslí).
+- Pořád to stojí na jediném testovaném modulu `src/lib/administrace.mjs` —
+  přibyla jen data, ne nová logika.

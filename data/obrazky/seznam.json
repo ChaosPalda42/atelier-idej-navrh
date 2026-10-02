@@ -1,45 +1,45 @@
 [
  {
-  "zaklad": "01-obrazek",
-  "popis": "obrazek",
+  "zaklad": "01-bytove-domy",
+  "popis": "Bytový dům",
   "skupina": "bytove-domy",
   "sirka": 1271,
   "vyska": 3212,
   "barva": "#f1ebeb",
   "varianty": [
    {
-    "soubor": "01-obrazek-520.jpg",
+    "soubor": "01-bytove-domy-520.jpg",
     "sirka": 520
    },
    {
-    "soubor": "01-obrazek-1040.jpg",
+    "soubor": "01-bytove-domy-1040.jpg",
     "sirka": 1040
    }
   ],
-  "srcset": "01-obrazek-520.jpg 520w, 01-obrazek-1040.jpg 1040w"
+  "srcset": "01-bytove-domy-520.jpg 520w, 01-bytove-domy-1040.jpg 1040w"
  },
  {
-  "zaklad": "02-obrazek",
-  "popis": "obrazek",
+  "zaklad": "02-rodinne-domy",
+  "popis": "Rodinný dům",
   "skupina": "rodinne-domy",
   "sirka": 1504,
   "vyska": 582,
   "barva": "#eef0f3",
   "varianty": [
    {
-    "soubor": "02-obrazek-520.jpg",
+    "soubor": "02-rodinne-domy-520.jpg",
     "sirka": 520
    },
    {
-    "soubor": "02-obrazek-1040.jpg",
+    "soubor": "02-rodinne-domy-1040.jpg",
     "sirka": 1040
    }
   ],
-  "srcset": "02-obrazek-520.jpg 520w, 02-obrazek-1040.jpg 1040w"
+  "srcset": "02-rodinne-domy-520.jpg 520w, 02-rodinne-domy-1040.jpg 1040w"
  },
  {
   "zaklad": "03-bytove-domy",
-  "popis": "bytové domy",
+  "popis": "Bytový dům",
   "skupina": "bytove-domy",
   "sirka": 1248,
   "vyska": 1590,
@@ -58,7 +58,7 @@
  },
  {
   "zaklad": "04-bytove-domy",
-  "popis": "bytové domy",
+  "popis": "Bytový dům",
   "skupina": "bytove-domy",
   "sirka": 2414,
   "vyska": 3004,
@@ -81,7 +81,7 @@
  },
  {
   "zaklad": "05-rodinne-domy",
-  "popis": "rodinné domy",
+  "popis": "Rodinný dům",
   "skupina": "rodinne-domy",
   "sirka": 893,
   "vyska": 2151,
@@ -95,27 +95,27 @@
   "srcset": "05-rodinne-domy-520.jpg 520w"
  },
  {
-  "zaklad": "06-bytovy-dum",
-  "popis": "bytový dům",
+  "zaklad": "06-bytove-domy",
+  "popis": "Bytový dům",
   "skupina": "bytove-domy",
   "sirka": 1335,
   "vyska": 2905,
   "barva": "#e6edee",
   "varianty": [
    {
-    "soubor": "06-bytovy-dum-520.jpg",
+    "soubor": "06-bytove-domy-520.jpg",
     "sirka": 520
    },
    {
-    "soubor": "06-bytovy-dum-1040.jpg",
+    "soubor": "06-bytove-domy-1040.jpg",
     "sirka": 1040
    }
   ],
-  "srcset": "06-bytovy-dum-520.jpg 520w, 06-bytovy-dum-1040.jpg 1040w"
+  "srcset": "06-bytove-domy-520.jpg 520w, 06-bytove-domy-1040.jpg 1040w"
  },
  {
   "zaklad": "07-rodinne-domy",
-  "popis": "rodinné domy",
+  "popis": "Rodinný dům",
   "skupina": "rodinne-domy",
   "sirka": 1032,
   "vyska": 2008,
@@ -130,7 +130,7 @@
  },
  {
   "zaklad": "08-garaze",
-  "popis": "garáže",
+  "popis": "Garáž",
   "skupina": "garaze",
   "sirka": 989,
   "vyska": 1546,
@@ -145,7 +145,7 @@
  },
  {
   "zaklad": "09-interiery",
-  "popis": "interiéry",
+  "popis": "Interiér",
   "skupina": "interiery",
   "sirka": 1204,
   "vyska": 1454,
@@ -164,7 +164,7 @@
  },
  {
   "zaklad": "10-rodinne-domy",
-  "popis": "rodinné domy",
+  "popis": "Rodinný dům",
   "skupina": "rodinne-domy",
   "sirka": 1522,
   "vyska": 3128,
@@ -182,22 +182,22 @@
   "srcset": "10-rodinne-domy-520.jpg 520w, 10-rodinne-domy-1040.jpg 1040w"
  },
  {
-  "zaklad": "11-bytovy-dum",
-  "popis": "bytový dům",
+  "zaklad": "11-bytove-domy",
+  "popis": "Bytový dům",
   "skupina": "bytove-domy",
   "sirka": 1136,
   "vyska": 1550,
   "barva": "#edebec",
   "varianty": [
    {
-    "soubor": "11-bytovy-dum-520.jpg",
+    "soubor": "11-bytove-domy-520.jpg",
     "sirka": 520
    },
    {
-    "soubor": "11-bytovy-dum-1040.jpg",
+    "soubor": "11-bytove-domy-1040.jpg",
     "sirka": 1040
    }
   ],
-  "srcset": "11-bytovy-dum-520.jpg 520w, 11-bytovy-dum-1040.jpg 1040w"
+  "srcset": "11-bytove-domy-520.jpg 520w, 11-bytove-domy-1040.jpg 1040w"
  }
 ]
