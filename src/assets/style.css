@@ -104,7 +104,6 @@ button { font: inherit; color: inherit; }
   box-shadow:
     -20px 0 36px -30px rgba(52, 40, 24, 0.55),
     20px 0 36px -30px rgba(52, 40, 24, 0.55);
-  isolation: isolate;
 }
 
 /* vlákno papíru a nerovnoměrnost tónu */
@@ -467,6 +466,8 @@ p:last-child { margin-bottom: 0; }
 }
 
 .sekce-hlava { grid-column: 1; position: sticky; top: 84px; }
+.predstaveni .sekce-hlava,
+.vystava .sekce-hlava { position: static; }
 .sekce-cislo {
   display: block;
   font-family: var(--mono);
@@ -875,6 +876,8 @@ p:last-child { margin-bottom: 0; }
   .kresba.ceka [data-delka] { stroke-dasharray: none; stroke-dashoffset: 0; }
   .polozit { opacity: 1; transform: none; }
   .hrot, .zavoj { display: none; }
+  .setmeni { display: none; }
+  .exponat-ram { opacity: 1; filter: none; }
   .znacka-objezd { animation: none; stroke-dashoffset: 0; }
   .znacka-kruh { animation: none; }
   * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
@@ -1047,25 +1050,43 @@ h3.rukou {
   transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1),
               filter 0.4s ease, opacity 0.4s ease;
 }
+/* měkké světlo pod kresbou — žádná hrana, jen rozplynutý papír */
 .exponat-ram::before {
   content: "";
   position: absolute;
-  inset: -16px -18px;
+  inset: -22% -18%;
   z-index: -1;
-  border-radius: 3px;
-  background: rgba(255, 253, 248, 0.8);
-  box-shadow: 0 18px 36px -24px rgba(52, 40, 24, 0.8);
+  background: radial-gradient(closest-side, var(--papir) 56%, rgba(250, 246, 238, 0) 100%);
   opacity: 0;
-  transition: opacity 0.35s ease;
+  transition: opacity 0.4s ease;
 }
+.exponat:hover,
+.exponat:focus-within { position: relative; z-index: 60; }
+.presahy .exponat:hover,
+.presahy .exponat:focus-within { position: absolute; z-index: 60; }
 .exponat:hover .exponat-ram,
 .exponat:focus-within .exponat-ram {
-  transform: rotate(0deg) translateY(-3px) scale(1.02);
+  transform: rotate(calc(var(--natoceni) * 0.3)) translateY(-2px) scale(1.015);
   filter: none;
   opacity: 1;
 }
 .exponat:hover .exponat-ram::before,
 .exponat:focus-within .exponat-ram::before { opacity: 1; }
+
+/* zbytek webu se stáhne do pozadí, aby vynikl exponát */
+.setmeni {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  background: rgba(30, 25, 18, 0.46);
+  opacity: 0;
+  transition: opacity 0.45s ease;
+}
+body.exponat-aktivni .setmeni { opacity: 1; }
+
+/* vrstva, ve které zrovna svítí exponát, se zvedne nad setmění */
+.list > .nad-setmenim { z-index: 60; }
 
 .exponat-popis {
   font-family: var(--rukou);
@@ -1083,12 +1104,21 @@ h3.rukou {
 .exponat--okraj { margin-top: 2.6em; --natoceni: -1.4deg; }
 
 /* přes pravou hranu listu — jako by tam ležela odložená */
+/* obálka, která uřízne, co přesahuje přes okraj listu */
+.presahy {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 2;
+}
+.presahy .exponat { pointer-events: auto; }
+
 .exponat--presah {
   position: absolute;
-  z-index: 2;
-  right: -10%;
+  right: -9%;
   top: var(--kde, 36%);
-  width: min(300px, 26%);
+  width: min(320px, 28%);
   --natoceni: 1.8deg;
 }
 
@@ -1118,8 +1148,24 @@ h3.rukou {
   padding: 0 clamp(22px, 5vw, 60px) var(--mezera);
 }
 
+/* na užších oknech se přesah zařadí do textu — ale rozumně velký a až na konec */
 @media (max-width: 1100px) {
-  .exponat--presah { position: static; width: 100%; margin-top: 2.4em; }
+  .presahy {
+    position: static;
+    overflow: visible;
+    grid-column: 1 / -1;
+    order: 2;
+    display: flex;
+    flex-wrap: wrap;
+    gap: clamp(22px, 4vw, 40px);
+  }
+  .exponat--presah {
+    position: static;
+    width: min(100%, 360px);
+    margin: 2.2em 0 0;
+  }
+  .presahy .exponat:hover,
+  .presahy .exponat:focus-within { position: relative; }
 }
 @media (max-width: 920px) {
   .vystava { grid-template-columns: minmax(0, 1fr); }

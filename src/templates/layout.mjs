@@ -76,6 +76,7 @@ export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", ak
 <body class="${trida}">
 <a class="jen-pro-ctecku" href="#zacatek">${t.web.preskocit}</a>
 <div class="zavoj" aria-hidden="true"></div>
+<div class="setmeni" aria-hidden="true"></div>
 ${navigace(t, aktivni, k)}
 ${pravitko()}
 ${defs()}

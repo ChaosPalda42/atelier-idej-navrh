@@ -312,6 +312,43 @@
     });
   }
 
+  /* ------------------------------- exponát: okolí ztmavne, kresba zůstane */
+  function exponaty() {
+    var kusy = $$(".exponat");
+    if (!kusy.length) return;
+    var zhasnuto = null;
+
+    /* Exponát sedí uvnitř vrstvy listu, která má vlastní pořadí vykreslování.
+       Kdyby se nezvedla i ona, leželo by setmění přes samotnou kresbu. */
+    function obalVListu(el) {
+      var uzel = el;
+      while (uzel && uzel.parentElement && !uzel.parentElement.classList.contains("list")) {
+        uzel = uzel.parentElement;
+      }
+      return uzel && uzel.parentElement ? uzel : null;
+    }
+
+    kusy.forEach(function (el) {
+      var obal = obalVListu(el);
+      var rozsvit = function () {
+        clearTimeout(zhasnuto);
+        document.body.classList.add("exponat-aktivni");
+        if (obal) obal.classList.add("nad-setmenim");
+      };
+      var zhasni = function () {
+        clearTimeout(zhasnuto);
+        zhasnuto = setTimeout(function () {
+          document.body.classList.remove("exponat-aktivni");
+          if (obal) obal.classList.remove("nad-setmenim");
+        }, 90);
+      };
+      el.addEventListener("mouseenter", rozsvit);
+      el.addEventListener("mouseleave", zhasni);
+      el.addEventListener("focusin", rozsvit);
+      el.addEventListener("focusout", zhasni);
+    });
+  }
+
   /* ----------------------------------------------- fotky: skica → fotografie */
   function vyvolavani() {
     var karty = $$(".prace-karta");
@@ -501,6 +538,7 @@
     prepisy();
 
     filtrPraci();
+    exponaty();
     vyvolavani();
     formular();
     svetelnyStul();

@@ -19,6 +19,9 @@ věta, nadpisy, poznámky na okraji); vysázený text se jen pokládá na papír
 kresby se rýsují čárou. Žádná čára není rovná — všechny jsou rozhozené jako
 od ruky.
 
+Píše se jen to, co je psané rukou — oranžové poznámky na okraji a podpis.
+Vysázený text se jen klidně objeví.
+
 Pojistky, aby to neotravovalo:
  - text je na stránce celý od začátku (Google i čtečky ho vidí),
  - kdo klikne nebo rychle roluje, tomu se obsah okamžitě dopíše,
@@ -33,7 +36,9 @@ Co si na ukázce projít
                              listu jako exponáty v muzeu — v okraji, přes hranu
                              listu, některé mají vlastní list. Mají odstraněný
                              papír, takže jsou součástí stránky; teprve pod myší
-                             se zvýrazní a kliknutím se ukáže původní sken
+                             se zvýrazní — ztmavne okolí a kresba zůstane
+                             nasvícená s měkkým okrajem; kliknutím se ukáže
+                             původní sken i s papírem
  - skupiny ................. Rodinné domy, Bytové domy, Interiéry, Garáže —
                              každá má vlastní list
  - formulář v kontaktu ..... vyzkoušejte ho i prázdný, hlídá si chyby

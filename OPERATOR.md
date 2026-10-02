@@ -221,3 +221,26 @@ kliknutím ukázat původní skicu. Plus hlásil špatné otočení.
 - Sekce s přesahem si uvolní 16 % šířky vpravo, aby skica neležela na textu
   (při 25 % se rozpadla mřížka služeb do jednoho sloupce).
 - Popisky exponátů jsou editovatelné v administraci (`site.vystavka.N.poznamka`).
+
+## Deváté kolo (2. 10. 2026) — psaní ven, exponáty jinak
+Michael: zrušit psaní u běžného textu (nechat jen oranžové poznámky a podpis),
+některé kresby nesedí, přesah nemá pokračovat na stole, zvýraznění obrátit
+(ztmavit okolí místo zesvětlení kresby) a dát kresbě měkké okraje.
+
+- **Psaní jen u ruky**: `pise` zůstalo na `.poznamka`, `.podpis` a pobídce
+  k rolování; nadpisy i claim (pořád Caveat) se teď jen klidně objeví (`zjevit`).
+- **Kresba domu v úvodu kolidovala** s exponátem v okraji — na vině byla lepkavá
+  `.sekce-hlava`, která se při rolování sunula přes kresbu pod sebou.
+  Na úvodním a výstavním listu je teď statická.
+- **Přesah se ořízne hranou listu**: exponáty s přesahem jsou v obalu `.presahy`
+  (`position: absolute; inset: 0; overflow: hidden`), takže na stole kresba
+  nepokračuje. Obal nesmí být na `.list` samotném, jinak by zmizely kroužky vazby.
+- **Obrácené zvýraznění**: `.setmeni` (fixní, 46 % tmavá) se rozsvítí, když je
+  kurzor na exponátu; kresba zůstane plná a dostane pod sebe **měkké světlo**
+  (radiální přechod z barvy papíru, žádná hrana).
+  Past, do které jsem spadl: exponát je uvnitř vrstvy listu s vlastním pořadím
+  vykreslování (`.list > * { z-index: 1 }`, `.presahy { z-index: 2 }`), takže
+  samotné `z-index: 60` na exponátu nestačí — JS zvedá i ten obal (`.nad-setmenim`).
+  Kvůli tomu zrušena `isolation: isolate` na `.list`.
+- Na užších oknech (do 1100 px) se přesahy zařadí do textu, ale jen do 360 px
+  a až na konec sekce (`order: 2`), jinak zabraly celou šířku listu.
