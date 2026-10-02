@@ -81,3 +81,20 @@ svislá linka vlevo překáží, oranžové ruční texty se povedly.
 Podklady prací: zatím dorazily jen dva soubory .rvt (Revit, 1 GB) z jedné
 zakázky — v nich není nic použitelného jako obrázek (náhled v souboru je list
 s textem). Je potřeba export JPG/PNG nebo PDF.
+
+## Třetí kolo (2. 10. 2026) + nasazení
+- **Kroužky se Michaelovi nezobrazily.** Příčina byla dvojí: textury i vazba byly
+  `data:image/svg+xml;utf8,…` (Safari takový data-URI odmítá) a hlavně `build.mjs`
+  kopíroval z `src/assets` jen `style.css` a fonty. Teď jsou z toho soubory
+  (`vazba.svg`, `vlakno.svg`, `stul.svg`) a build kopíruje celou složku assets.
+  Poučení: statiku kopírovat adresářem, ne výčtem souborů.
+- Úvodní obrazovka: velká rotující značka na pozadí, jen štítek a claim,
+  zbytek až po rolování (list „predstaveni").
+- Víc psaného: nadpisy služeb a kroků postupu, čísla v „o mně", pobídka k rolování
+  a podpis v kontaktu — všechno Caveat a všechno se píše.
+- Velké kresby na pozadí listů: půdorys (co dělám), řez (postup), situace (o mně).
+- **Podklady klienta ven z gitu:** dva soubory .rvt (1 GB) byly omylem zacommitované;
+  historie přepsána `git filter-branch`, `.git` z 994 MB na 328 kB, `podklady/`
+  v `.gitignore`. Do cloudu nesmí ani ony, ani Logo.pdf.
+- Nasazeno: https://chaospalda42.github.io/atelier-idej-navrh/
+  (repo ChaosPalda42/atelier-idej-navrh, workflow Pages jako u Fofrmontu).
