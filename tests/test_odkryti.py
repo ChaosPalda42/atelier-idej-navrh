@@ -45,6 +45,25 @@ def test_minulo(js):
     assert js("out(m.minulo(A.r, A.p[1]));") is False
 
 
+def test_podil_vyrezu(js):
+    assert js("out(m.podilVyrezu(A.r, A.p[1]));") == 0.5      # 400 z 800
+    assert js("out(m.podilVyrezu(A.r, A.p[2]));") == 0.125    # 100 z 800
+    assert js("out(m.podilVyrezu(A.r, A.p[4]));") == 0
+    assert js('out(m.podilVyrezu({vrchol: 0, vyska: 0}, A.p[1]));') == 0
+    assert js('out(m.podilVyrezu(A.r, {vrchol: 0, vyska: 6000}));') == 1
+
+
+def test_k_spusteni_vysoky_prvek(js):
+    """Prvek vyšší než pár obrazovek vyplní výřez, ale sám je vidět jen z malé části."""
+    vysoky = {"id": "dlouha", "vrchol": 1000, "vyska": 6000}
+    assert js("out(m.viditelnost(A.r, A.v));", v=vysoky) == 0.15
+    assert js("out(m.kSpusteni([A.v], A.r, [], 0.18));", v=vysoky) == ["dlouha"], \
+        "vysoká sekce se musí spustit, i když je vidět jen její patnáctina"
+    nad = {"id": "nad", "vrchol": 2000, "vyska": 6000}
+    assert js("out(m.kSpusteni([A.n], A.r, [], 0.18));", n=nad) == [], \
+        "co je celé pod výřezem, se nespouští"
+
+
 def test_k_spusteni(js):
     assert js("out(m.kSpusteni(A.p, A.r, []));") == ["b", "d"]
     assert js('out(m.kSpusteni(A.p, A.r, ["b"]));') == ["d"]
