@@ -96,7 +96,10 @@
           "hodnota": "31 měsíců"
         }
       ],
-      "fotky": []
+      "fotky": [],
+      "vykresy": [
+        "ukazka-pudorys"
+      ]
     },
     {
       "slug": "pekarna-v-podloubi",

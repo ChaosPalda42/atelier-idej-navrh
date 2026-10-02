@@ -2,7 +2,7 @@
    Ruční písmo dostane `pise` (píše se), vysázené `zjevit` (jen se položí). */
 import { stranka } from "./layout.mjs";
 import { znacka } from "./znacka.mjs";
-import { KRESBY, kresbaHero, kresbaPudorys, kresbaRez, kresbaSituace, zastupnaSkica } from "./kresby.mjs";
+import { KRESBY, kresbaHero, kresbaPudorys, kresbaRez, kresbaSituace, kresbaZDat, zastupnaSkica } from "./kresby.mjs";
 import { serad, pocty, sousedi } from "../lib/prace.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -25,7 +25,9 @@ ${telo}
 </section>`;
 }
 
-function obrazek(prace, i) {
+function obrazek(prace, i, kresby = {}) {
+  const vykres = (prace.vykresy || []).map((n) => kresby[n]).filter(Boolean)[0];
+  if (vykres) return `<span class="skica skica--sama">${kresbaZDat(vykres, { seed: i + 4 })}</span>`;
   const foto = (prace.fotky || [])[0];
   if (foto && foto.srcset) {
     return `<img src="fotky/${foto.varianty[0].soubor}" srcset="${foto.srcset}" sizes="(max-width: 920px) 92vw, 33vw" width="${foto.sirka}" height="${foto.vyska}" alt="${esc(prace.nazev)}" loading="lazy">
@@ -34,9 +36,9 @@ ${foto.skica ? `<span class="skica"><img src="skici/${foto.skica}" alt="" aria-h
   return `<span class="skica skica--sama">${zastupnaSkica(i + 1)}</span>`;
 }
 
-function karta(prace, i) {
+function karta(prace, i, kresby) {
   return `<a class="prace-karta polozit" data-typ="${esc(prace.typ)}" data-slug="${esc(prace.slug)}" href="prace/${esc(prace.slug)}.html">
-<span class="prace-obraz">${obrazek(prace, i)}</span>
+<span class="prace-obraz">${obrazek(prace, i, kresby)}</span>
 <span class="prace-popis">
 <span class="prace-meta" data-pole="meta">${esc(prace.misto)} · ${prace.rok} · ${esc(prace.stav)}</span>
 <h3 data-pole="nazev">${esc(prace.nazev)}</h3>
@@ -45,7 +47,7 @@ function karta(prace, i) {
 </a>`;
 }
 
-export function index(site, t) {
+export function index(site, t, kresby = {}) {
   const { firma, sluzby, postup, prace } = site;
   const serazene = serad(prace);
   const p = pocty(prace);
@@ -93,7 +95,7 @@ ${sluzby.filter((s) => p[s.id]).map((s) =>
 
   const praceTelo = `${filtry}
 <div class="prace-mrizka" data-prace>
-${serazene.map(karta).join("\n")}
+${serazene.map((x, i) => karta(x, i, kresby)).join("\n")}
 </div>`;
 
   const postupTelo = `<ol class="postup-osa">
@@ -161,13 +163,16 @@ ${t.oMne.cisla.map((c) => `<div class="detail-cislo"><strong class="rukou pise">
   return stranka({ titulek: t.web.titulek, popis: t.web.popis, telo, t, firma, aktivni: "prace" });
 }
 
-export function detail(site, t, slug) {
+export function detail(site, t, slug, kresby = {}) {
   const serazene = serad(site.prace);
   const prace = serazene.find((x) => x.slug === slug);
   const okolo = sousedi(serazene, slug);
   const i = serazene.indexOf(prace);
 
-  const fotky = (prace.fotky || []).length
+  const vykresy = (prace.vykresy || []).map((n) => kresby[n]).filter(Boolean);
+  const fotky = vykresy.length
+    ? vykresy.map((v, k) => `<figure class="kresba vykres">${kresbaZDat(v, { seed: k + 9 })}<figcaption>${esc(v.popis || "")}</figcaption></figure>`).join("\n")
+    : (prace.fotky || []).length
     ? prace.fotky.map((f) => `<figure class="polozit">
 <img src="../fotky/${f.varianty[0].soubor}" srcset="${(f.srcset || "").replace(/(^|, )/g, "$1../fotky/")}" sizes="(max-width: 920px) 92vw, 46vw" width="${f.sirka}" height="${f.vyska}" alt="${esc(f.popis || prace.nazev)}" data-lightbox="../fotky/${f.varianty[f.varianty.length - 1].soubor}" loading="lazy">
 ${f.popis ? `<figcaption>${esc(f.popis)}</figcaption>` : ""}

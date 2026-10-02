@@ -1,0 +1,47 @@
+Jak dodat podklady, aby z nich web udělal kresby
+================================================
+
+Soubory .rvt (Revit) bohužel nejde použít: Revit na Macu neběží a formát je
+uzavřený — uvnitř je všechno zabalené Autodeskem a nic se z toho nedá přečíst.
+Posílat je někam do cloudu na převod nechceme, jsou to data vašich zakázek.
+
+Stačí ale export, který Revit umí jedním kliknutím.
+
+NEJLEPŠÍ: DXF
+-------------
+V Revitu otevřete pohled, který chcete na web (půdorys, řez, pohled, situaci):
+    File → Export → CAD Formats → DWG/DXF
+    v dialogu nahoře přepnout „Files of type" na DXF
+    exportovat jen aktuální pohled (Export: Current view/sheet only)
+
+Z DXF se vytáhne přesná geometrie, takže kresba na webu je opravdu ten dům.
+
+TAKY DOBŘE: PDF
+---------------
+    File → Export → PDF  (nebo prostě Print do PDF)
+Důležité: musí to být **vektorové** PDF, ne obrázek. Když se v PDF dá text
+označit myší, je to v pořádku. Sken nebo fotka výkresu nestačí.
+
+K ČEMU JSOU FOTKY
+-----------------
+Fotky realizací jsou pořád nejdůležitější — kresby je nenahradí, doplňují je.
+Stačí JPG/PNG v plné velikosti, klidně i z mobilu.
+
+CO S TÍM DĚLÁME
+---------------
+Soubory patří do `podklady/vykresy/` a pak:
+
+    uv run python -m tools.vykres podklady/vykresy/pudorys.dxf dum-pudorys \
+        --slabe "A-ANNO-DIMS,KOTY" --tolerance 18 --nejkratsi 60 \
+        --popis "Půdorys přízemí 1:100"
+
+Nástroj výkres zjednoduší, vmestná do rámečku a uloží do `data/kresby/`.
+Web ho pak nakreslí stejnou „rukou" jako všechny ostatní kresby — čáry nejsou
+rovné, rohy se nepotkávají přesně, vypadá to jako skica v bloku.
+
+Přepínače, které se hodí:
+  --slabe        vrstvy, které mají být jen naznačené (kóty, osnova)
+  --tolerance    jak moc se smí čára zjednodušit (vyšší = méně detailu)
+  --nejkratsi    kratší čáry se zahodí (čistí drobty v půdorysu)
+  --max-car      nechat jen N nejdelších čar (když je výkres moc hustý)
+  --sirka/--vyska  rozměr rámečku kresby

@@ -53,6 +53,15 @@ async function main() {
   const site = JSON.parse(await readFile(path.join(KOREN, "data/site.json"), "utf8"));
   const t = JSON.parse(await readFile(path.join(KOREN, "data/texty.json"), "utf8"));
 
+  // kresby vytažené ze skutečných výkresů (tools/vykres.py)
+  const kresby = {};
+  const slozkaKreseb = path.join(KOREN, "data", "kresby");
+  if (await existuje(slozkaKreseb)) {
+    for (const soubor of (await readdir(slozkaKreseb)).filter((f) => f.endsWith(".json"))) {
+      kresby[soubor.replace(/\.json$/, "")] = JSON.parse(await readFile(path.join(slozkaKreseb, soubor), "utf8"));
+    }
+  }
+
   await rm(VEN, { recursive: true, force: true });
   await mkdir(path.join(VEN, "assets"), { recursive: true });
   await mkdir(path.join(VEN, "prace"), { recursive: true });
@@ -80,9 +89,9 @@ async function main() {
   nastavOtisk(soucet.digest("hex").slice(0, 8));
 
   // stránky
-  await writeFile(path.join(VEN, "index.html"), index(site, t));
+  await writeFile(path.join(VEN, "index.html"), index(site, t, kresby));
   for (const prace of site.prace) {
-    await writeFile(path.join(VEN, "prace", `${prace.slug}.html`), detail(site, t, prace.slug));
+    await writeFile(path.join(VEN, "prace", `${prace.slug}.html`), detail(site, t, prace.slug, kresby));
   }
   await writeFile(path.join(VEN, "administrace.html"), administrace(site, t));
 

@@ -1,3 +1,5 @@
+import { nahodnik, rozhozeni, cesta } from "../lib/kresleni.mjs";
+
 /* Kresby — rukou, ne pravítkem.
    Každá čára se rozdělí na krátké úseky a ty se o kousek rozhodí do stran,
    takže výsledek je mírně křivý jako tužkou po papíře. Rozhození je
@@ -7,33 +9,12 @@ const TUS = 'fill="none" stroke="currentColor" stroke-width="1.3" stroke-linecap
 const SLABA = 'fill="none" stroke="var(--linka)" stroke-width="1" stroke-linecap="round"';
 const KOTA = 'fill="none" stroke="var(--oranz)" stroke-width="1.1" stroke-linecap="round"';
 
-let zrno = 1;
-function nahoda() {
-  zrno = (zrno * 1103515245 + 12345) % 2147483648;
-  return zrno / 2147483648;
-}
-function zacni(hodnota) { zrno = hodnota * 7919 + 13; }
+let nahoda = nahodnik(1);
+function zacni(hodnota) { nahoda = nahodnik(hodnota); }
 
 /** Polyčára rozhozená rukou. body = [[x, y], …]; `zavrit` spojí konec se začátkem. */
 export function cara(body, { zavrit = false, rozhod = 0.7, krok = 16 } = {}) {
-  const pts = zavrit ? [...body, body[0]] : body;
-  const ven = [];
-  for (let i = 0; i < pts.length - 1; i++) {
-    const [x1, y1] = pts[i];
-    const [x2, y2] = pts[i + 1];
-    const delka = Math.hypot(x2 - x1, y2 - y1);
-    const dilu = Math.max(1, Math.round(delka / krok));
-    const nx = -(y2 - y1) / (delka || 1);
-    const ny = (x2 - x1) / (delka || 1);
-    for (let k = i === 0 ? 0 : 1; k <= dilu; k++) {
-      const t = k / dilu;
-      const kraj = Math.sin(Math.PI * t);           // uprostřed čáry se ruka rozjede víc
-      const o = (nahoda() - 0.5) * 2 * rozhod * (0.35 + 0.65 * kraj);
-      ven.push([x1 + (x2 - x1) * t + nx * o, y1 + (y2 - y1) * t + ny * o]);
-    }
-  }
-  const d = ven.map(([x, y], i) => `${i ? "L" : "M"} ${x.toFixed(1)} ${y.toFixed(1)}`).join(" ");
-  return `<path d="${d}"/>`;
+  return `<path d="${cesta(rozhozeni(body, nahoda, { rozhod, krok, zavrit }))}"/>`;
 }
 
 /** Obdélník tažený rukou (čtyři tahy, rohy se nepotkají přesně). */
@@ -329,5 +310,19 @@ ${cara([[486, 66], [486, 28]], { rozhod: 0.3 })}
 ${cara([[480, 38], [486, 28], [492, 38]], { rozhod: 0.25 })}
 </g>
 <text x="486" y="84" text-anchor="middle" font-family="var(--mono)" font-size="11" fill="var(--oranz)">S</text>
+</svg>`;
+}
+
+
+/* ------------------------------------------- kresba ze skutečného výkresu */
+/** Data z `tools/vykres.py` (PDF nebo DXF z Revitu) nakreslí stejnou rukou. */
+export function kresbaZDat(data, { trida = "", seed = 3 } = {}) {
+  if (!data || !data.sirka) return "";
+  zacni(seed);
+  const slabe = (data.slabe || []).map((b) => cara(b, { rozhod: 0.45, krok: 24 })).join("");
+  const silne = (data.silne || []).map((b) => cara(b, { rozhod: 0.6, krok: 20 })).join("");
+  return `<svg class="kresba kresba--vykres ${trida}" viewBox="0 0 ${data.sirka} ${data.vyska}" role="img" aria-label="${(data.popis || "Výkres").replace(/"/g, "&quot;")}">
+${slabe ? `<g ${SLABA}>${slabe}</g>` : ""}
+<g ${TUS}>${silne}</g>
 </svg>`;
 }

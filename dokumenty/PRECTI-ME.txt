@@ -51,7 +51,9 @@ CO JE V UKÁZCE VYMYŠLENÉ
  - všech 6 prací včetně názvů, míst, let, čísel i popisů,
  - obě věty v sekci „Kdo to kreslí",
  - čísla 24 staveb / 4 roky / 7 měsíců,
- - skici místo fotek — skutečné fotky dodá ateliér.
+ - skici místo fotek — skutečné fotky dodá ateliér,
+ - půdorys u „Domu nad sadem" je z ukázkového výkresu, ne z vaší zakázky;
+   je tam proto, aby bylo vidět, jak na webu vypadá skutečný výkres.
 
 Skutečné je: název firmy, IČO, sídlo, jméno architekta, telefon (z veřejného
 rejstříku a z loga) a popis toho, co ateliér dělá. E-mail info@atelieridej.cz
@@ -59,7 +61,8 @@ se teprve zakládá — dokud doména nepoběží, pošta na něj nechodí.
 
 Co je potřeba doplnit
 ---------------------
- 1. fotky a podklady skutečných staveb (klidně i rozpracované),
+ 1. fotky a podklady skutečných staveb (klidně i rozpracované)
+    a výkresy v DXF nebo vektorovém PDF — viz JAK-DODAT-VYKRESY.txt,
  2. dvě tři věty o sobě — kde jste studoval a co vás na tom drží,
  3. doménu a e-mail, kam mají chodit poptávky,
  4. rozhodnout o svislém nápisu v aurebeshu (nechat, nebo ne).
