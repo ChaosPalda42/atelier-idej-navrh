@@ -53,10 +53,11 @@ const POPISKY = {
   "kontakt.hotovo": "Hláška po odeslání", "kontakt.podpis": "Podpis pod formulářem",
   "paticka.ukazka": "Patička — věta o ukázce",
   "web.titulek": "Titulek stránky (v záložce prohlížeče a ve vyhledávání)",
+  "vystavka.odkazy": "Věta nad odkazy na skupiny",
   "web.popis": "Popis stránky pro vyhledávače",
 };
 
-const DLOUHE = /perex|text|popis|poznamka|hotovo|napoveda|souhlas|claim|titulek/i;
+const DLOUHE = /perex|text|popis|poznamka|hotovo|napoveda|souhlas|claim|titulek|odkazy/i;
 
 function poleTextu(klic, popisek) {
   return { klic, popisek: popisek || POPISKY[klic] || klic, dlouhe: DLOUHE.test(klic) };
@@ -71,7 +72,6 @@ export function schema(site, t, skici) {
       skupinaTextu("Úvodní obrazovka", ["uvod.stitek", "uvod.claim", "uvod.dolu"]),
       skupinaTextu("Představení", ["uvod.text", "uvod.poznamka", "uvod.cil", "uvod.druhy"]),
       skupinaTextu("Co dělám", ["sluzby.cislo", "sluzby.nadpis", "sluzby.perex", "sluzby.poznamka"]),
-      skupinaTextu("Ze skicáku", ["prace.cislo", "prace.nadpis", "prace.perex", "prace.poznamka", "prace.vse"]),
       skupinaTextu("Jak to probíhá", ["postup.cislo", "postup.nadpis", "postup.perex", "postup.poznamka"]),
       skupinaTextu("Kdo to kreslí", ["oMne.cislo", "oMne.nadpis", "oMne.text.0", "oMne.text.1", "oMne.poznamka",
         ...t.oMne.cisla.flatMap((_, i) => [`oMne.cisla.${i}.hodnota`, `oMne.cisla.${i}.popisek`])]),
@@ -79,6 +79,10 @@ export function schema(site, t, skici) {
         "kontakt.podpis", "kontakt.hotovo"]),
       skupinaTextu("Formulář", ["kontakt.jmeno", "kontakt.email", "kontakt.telefon", "kontakt.zprava",
         "kontakt.zpravaNapoveda", "kontakt.prilohy", "kontakt.prilohyNapoveda", "kontakt.souhlas", "kontakt.odeslat"]),
+      skupinaTextu("Popisky u skic", [
+        "vystavka.odkazy",
+        ...site.vystavka.map((_, i) => `site.vystavka.${i}.poznamka`),
+      ]),
       skupinaTextu("Patička a hlava stránky", ["paticka.ukazka", "web.titulek", "web.popis"]),
     ],
     sluzby: [

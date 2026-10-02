@@ -21,7 +21,7 @@ import re
 import unicodedata
 from pathlib import Path
 
-from PIL import Image, ImageChops, ImageFilter, ImageOps
+from PIL import Image, ImageChops, ImageFilter, ImageMath, ImageOps
 
 from tools.fotky import nazev_varianty, prumerna_barva, srcset, zmensi
 
@@ -108,35 +108,70 @@ def vybel_papir(img: Image.Image, mekkost: float = 48.0, dotah: float = 0.06) ->
     return ven.point(tabulka * 3)
 
 
+def pruhledne(img: Image.Image) -> Image.Image:
+    """Z vybílené kresby udělá obrázek bez papíru — zůstane jen inkoust.
+
+    Papír je bílý, takže průhlednost je prostě „jak daleko od bílé":
+    a = 255 − min(R,G,B). Barva se musí z bílé *vydělit* zpátky, jinak by
+    světlé tahy vybledly: C' = (C − min) · 255 / (255 − min).
+    """
+    r, g, b = img.convert("RGB").split()
+    nejtmavsi = ImageChops.darker(ImageChops.darker(r, g), b)
+    alfa = ImageChops.invert(nejtmavsi)
+
+    def odbel(kanal):
+        return ImageMath.lambda_eval(
+            lambda a: a["convert"](
+                (a["float"](a["c"]) - a["float"](a["m"])) * 255
+                / a["max"](a["float"](a["a"]), 1), "L"),
+            c=kanal, m=nejtmavsi, a=alfa)
+
+    return Image.merge("RGBA", (odbel(r), odbel(g), odbel(b), alfa))
+
+
 def zpracuj(cesta: Path, poradi: int) -> dict:
     jmeno = cesta.stem
     skupina = skupina_ze_jmena(jmeno)
     popis = NAZVY.get(skupina, re.sub(r"^\d+[-_]\s*", "", jmeno).strip())
     zaklad = f"{poradi:02d}-{skupina}"
 
-    with Image.open(cesta) as puvodni:
-        obraz = vybel_papir(puvodni)
+    with Image.open(cesta) as nactena:
+        # fotky z mobilu mají otočení jen v EXIF; bez tohohle leží skica na boku
+        rovne = ImageOps.exif_transpose(nactena).convert("RGB")
+    kresba = pruhledne(vybel_papir(rovne))
 
     VEN.mkdir(parents=True, exist_ok=True)
-    varianty = []
+    varianty, puvodni = [], []
     for sirka in SIRKY:
-        if sirka > obraz.size[0] and varianty:
+        if sirka > kresba.size[0] and varianty:
             continue
-        zmenseny = zmensi(obraz, min(sirka, obraz.size[0]))
-        soubor = nazev_varianty(zaklad, zmenseny.size[0])
-        zmenseny.save(VEN / soubor, quality=84, optimize=True)
-        if not any(v["sirka"] == zmenseny.size[0] for v in varianty):
-            varianty.append({"soubor": soubor, "sirka": zmenseny.size[0]})
+        cil = min(sirka, kresba.size[0])
+
+        zmensena = zmensi(kresba, cil)
+        # málo barev stačí a PNG s průhledností je pak třetinové
+        soubor = f"{zaklad}-{zmensena.size[0]}.png"
+        zmensena.quantize(colors=96, method=Image.Quantize.FASTOCTREE).save(
+            VEN / soubor, optimize=True)
+        if not any(v["sirka"] == zmensena.size[0] for v in varianty):
+            varianty.append({"soubor": soubor, "sirka": zmensena.size[0]})
+
+        if cil >= 900:   # originál se ukazuje až po kliknutí, menší nemá smysl
+            skutecna = zmensi(rovne, cil)
+            jmeno = nazev_varianty(zaklad + "-sken", skutecna.size[0])
+            skutecna.save(VEN / jmeno, quality=84, optimize=True)
+            if not any(v["sirka"] == skutecna.size[0] for v in puvodni):
+                puvodni.append({"soubor": jmeno, "sirka": skutecna.size[0]})
 
     return {
         "zaklad": zaklad,
         "popis": popis,
         "skupina": skupina,
-        "sirka": obraz.size[0],
-        "vyska": obraz.size[1],
-        "barva": prumerna_barva(obraz),
+        "sirka": kresba.size[0],
+        "vyska": kresba.size[1],
+        "barva": prumerna_barva(rovne),
         "varianty": varianty,
         "srcset": srcset(varianty),
+        "sken": puvodni[-1] if puvodni else (varianty[-1] if varianty else None),
     }
 
 
@@ -146,7 +181,7 @@ def main(argv=None) -> int:
         print(f"v {ZDROJ} nic není")
         return 1
     if VEN.exists():
-        for stary in VEN.glob("*.jpg"):
+        for stary in list(VEN.glob("*.jpg")) + list(VEN.glob("*.png")):
             stary.unlink()
     seznam = [zpracuj(p, i + 1) for i, p in enumerate(soubory)]
     (VEN / "seznam.json").write_text(

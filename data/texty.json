@@ -19,23 +19,15 @@
     "perex": "Čtyři věci, a všechny začínají stejně — obhlídkou místa a otázkami. Nic z toho nedělám od stolu na dálku.",
     "poznamka": "Na malou zakázku není malý architekt. Jen menší papírování."
   },
-  "prace": {
-    "nadpis": "Ze skicáku",
-    "cislo": "02",
-    "perex": "Každý dům začíná na papíře. Tohle jsou skici z rozmýšlení — propiska, fix, pastelka, většinou na tom, co bylo zrovna po ruce. Není to portfolio hotových staveb, je to vidět do práce.",
-    "vse": "Vše",
-    "poznamka": "Fotky dokončených staveb sem přibydou. Tohle je to, čím každá začala.",
-    "detail": "Celá skupina"
-  },
   "postup": {
     "nadpis": "Jak to probíhá",
-    "cislo": "03",
+    "cislo": "02",
     "perex": "Od schůzky po hotovou stavbu to trvá dva až tři roky. Vypadá to dlouho, dokud nezjistíte, kde všude se dá ušetřit čas — a kde se to nevyplácí.",
     "poznamka": "Nejdražší je změna, která přijde pozdě. Proto se nejvíc času tráví na začátku."
   },
   "oMne": {
     "nadpis": "Kdo to kreslí",
-    "cislo": "04",
+    "cislo": "03",
     "text": [
       "Vystudoval jsem architekturu a pozemní stavby a několik let kreslil v cizích ateliérech, než jsem si založil vlastní. Bavilo mě vždycky víc to, co se dá postavit, než to, co se dá vyfotit.",
       "Pracuju sám a spolupracuju se stálým okruhem statiků, profesistů a řemeslníků, které znám z dokončených staveb. Na stavbu chodím — detail vymyšlený u stolu se tam stejně musí uhlídat."
@@ -58,7 +50,7 @@
   },
   "kontakt": {
     "nadpis": "Napište mi",
-    "cislo": "05",
+    "cislo": "04",
     "perex": "Napište pár vět o tom, co řešíte. Ozvu se do dvou pracovních dnů a domluvíme schůzku na místě — ta je zdarma a nezavazuje k ničemu.",
     "jmeno": "Jméno",
     "email": "E-mail",
@@ -99,5 +91,9 @@
     "domu": "Zpátky na začátek",
     "skicak": "Ze skicáku",
     "kontakt": "Napsat"
+  },
+  "vystavka": {
+    "odkazy": "Skici jsou roztroušené po celém listu. Pohromadě po skupinách:",
+    "popisek": "Kliknutím se skica zvětší."
   }
 }

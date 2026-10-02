@@ -7,16 +7,19 @@ import { filtr, pocty, sousedi } from "../lib/prace.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", pozadi = "" }) {
+function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", pozadi = "", exponaty = {} }) {
   const kPerex = klic ? ` data-text="${klic}.perex"` : "";
   const kPozn = klic ? ` data-text="${klic}.poznamka"` : "";
-  return `<section class="list sekce" id="${id}" data-psat>
+  const presah = (exponaty.presah || []).length ? " sekce--s-presahem" : "";
+  return `<section class="list sekce${presah}" id="${id}" data-psat>
 <span class="vazba" aria-hidden="true"></span>
 ${pozadi}
+${(exponaty.presah || []).join("\n")}
 <div class="sekce-hlava">
 <span class="sekce-cislo"${klic ? ` data-text="${klic}.cislo"` : ""}>${cislo}</span>
 <h2 class="nadpis rukou pise" data-znaky${klic ? ` data-text="${klic}.nadpis"` : ""}>${esc(nadpis)}</h2>
 ${poznamka ? `<p class="poznamka pise"${kPozn}>${esc(poznamka)}</p>` : ""}
+${(exponaty.okraj || []).join("\n")}
 </div>
 <div class="sekce-telo">
 ${perex ? `<p class="vedouci zjevit"${kPerex}>${esc(perex)}</p>` : ""}
@@ -25,24 +28,60 @@ ${telo}
 </section>`;
 }
 
-/** Skica leží na papíře — bílá se prolne, zůstane tah pera. */
-function skica(s, { k = "", velka = false } = {}) {
+/** Exponát — skica položená do stránky. Bez papíru, takže je součástí listu;
+    teprve pod myší se zvýrazní a dá se na ni kliknout. */
+function exponat(s, misto, { k = "", klic = "" } = {}) {
+  if (!s) return "";
   const cesta = (jmeno) => `${k}obrazky/${jmeno}`;
-  const nejvetsi = s.varianty[s.varianty.length - 1];
   const srcset = s.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ");
-  return `<figure class="skica-list polozit" data-slug="${esc(s.zaklad)}" data-typ="${esc(s.skupina)}">
-<img src="${cesta(s.varianty[0].soubor)}" srcset="${srcset}"
- sizes="${velka ? "(max-width: 920px) 92vw, 44vw" : "(max-width: 920px) 46vw, 23vw"}"
+  const sken = cesta((s.sken || s.varianty[s.varianty.length - 1]).soubor);
+  const velikosti = misto.styl === "vystava"
+    ? "(max-width: 920px) 88vw, 54vw"
+    : misto.styl === "presah" ? "(max-width: 1100px) 60vw, 30vw" : "(max-width: 920px) 60vw, 19vw";
+  return `<figure class="exponat exponat--${misto.styl}" data-slug="${esc(s.zaklad)}"
+ data-typ="${esc(s.skupina)}" data-otoceni="0"
+ style="--w:${s.sirka};--h:${s.vyska}${misto.kde ? `;--kde:${misto.kde}` : ""}${misto.natoceni ? `;--natoceni:${misto.natoceni}` : ""}">
+<span class="exponat-ram">
+<img src="${cesta(s.varianty[0].soubor)}" srcset="${srcset}" sizes="${velikosti}"
  width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(s.popis)}" loading="lazy"
- data-lightbox="${cesta(nejvetsi.soubor)}">
-<figcaption class="skica-popis" data-pole="nazev">${esc(s.popis)}</figcaption>
+ data-lightbox="${sken}">
+</span>
+<figcaption class="exponat-popis"><span ${klic ? `data-text="${klic}"` : 'data-pole="nazev"'}>${esc(misto.poznamka || s.popis)}</span></figcaption>
 </figure>`;
+}
+
+/** Poskládá exponáty podle `vystavka` v datech: { kam -> [html] }. */
+function rozmisti(site, skici, k = "") {
+  const podleZakladu = {};
+  skici.forEach((s) => { podleZakladu[s.zaklad] = s; });
+  const kam = {};
+  (site.vystavka || []).forEach((misto, i) => {
+    const s = podleZakladu[misto.zaklad];
+    if (!s) return;
+    misto = { ...misto, klic: `site.vystavka.${i}.poznamka` };
+    const skupina = (kam[misto.kam] = kam[misto.kam] || { okraj: [], presah: [], vystava: [], poznamky: [], klice: [] });
+    skupina[misto.styl] = skupina[misto.styl] || [];
+    skupina[misto.styl].push(exponat(s, misto, { k, klic: misto.klic }));
+    skupina.poznamky.push(misto.poznamka || "");
+    skupina.klice.push(misto.klic);
+  });
+  return kam;
+}
+
+/** Samostatný list jen pro jednu skicu — jako exponát ve vitríně. */
+function listVystavy(html, poznamka, klicPoznamky = "") {
+  if (!html) return "";
+  return `<section class="list vystava" data-psat>
+<span class="vazba" aria-hidden="true"></span>
+<div class="vystava-telo">${html}</div>
+${poznamka ? `<p class="poznamka pise vystava-poznamka"${klicPoznamky ? ` data-text="${klicPoznamky}"` : ""}>${esc(poznamka)}</p>` : ""}
+</section>`;
 }
 
 export function index(site, t, kresby = {}, skici = []) {
   const { firma, sluzby, postup } = site;
-  const proPocty = skici.map((s) => ({ typ: s.skupina }));
-  const p = pocty(proPocty);
+  const p = pocty(skici.map((s) => ({ typ: s.skupina })));
+  const kam = rozmisti(site, skici);
 
   const hlavicka = `<header class="list uvod" data-psat>
 <div class="uvod-znacka" aria-hidden="true">${znacka({ varianta: "samotna", kresli: true, trida: "znacka--velka" })}</div>
@@ -60,6 +99,7 @@ export function index(site, t, kresby = {}, skici = []) {
 <div class="sekce-hlava">
 <div class="hlavicka-znacka kresba">${znacka({ varianta: "stohovana" })}</div>
 <p class="poznamka pise" data-text="uvod.poznamka">${esc(t.uvod.poznamka)}</p>
+${((kam.predstaveni || {}).okraj || []).join("\n")}
 </div>
 <div class="sekce-telo">
 <p class="vedouci zjevit" data-text="uvod.text">${esc(t.uvod.text)}</p>
@@ -69,6 +109,7 @@ export function index(site, t, kresby = {}, skici = []) {
 </div>
 </div>
 <div class="hero-kresba kresba" aria-hidden="true">${kresbaHero()}</div>
+${((kam.predstaveni || {}).presah || []).join("\n")}
 </section>`;
 
   const sluzbyTelo = `<div class="sluzby">
@@ -77,19 +118,8 @@ ${sluzby.map((s, i) => `<article class="sluzba">
 <h3 class="rukou pise" data-text="site.sluzby.${i}.nazev">${esc(s.nazev)}</h3>
 <p class="zjevit" data-text="site.sluzby.${i}.popis">${esc(s.popis)}</p>
 </article>`).join("\n")}
-</div>`;
-
-  const filtry = `<div class="filtry polozit" role="group" aria-label="Filtr skic">
-<button class="filtr" data-filtr="vse" aria-pressed="true"><span data-text="prace.vse">${esc(t.prace.vse)}</span><span class="filtr-pocet">${p.vse}</span></button>
-${sluzby.filter((s) => p[s.id]).map((s) =>
-    `<button class="filtr" data-filtr="${s.id}" aria-pressed="false">${esc(s.nazev)}<span class="filtr-pocet">${p[s.id]}</span></button>`).join("\n")}
-</div>`;
-
-  const praceTelo = `${filtry}
-<div class="skicak" data-prace>
-${skici.map((s) => skica(s)).join("\n")}
 </div>
-<p class="skicak-odkazy zjevit">Víc ke každé skupině:
+<p class="skicak-odkazy zjevit"><span data-text="vystavka.odkazy">${esc(t.vystavka.odkazy)}</span>
 ${site.skupiny.filter((g) => p[g.id]).map((g) => `<a href="prace/${g.id}.html">${esc(g.nazev)}</a>`).join(" · ")}</p>`;
 
   const postupTelo = `<ol class="postup-osa">
@@ -148,18 +178,19 @@ ${t.oMne.cisla.map((c, i) => `<div class="detail-cislo"><strong class="rukou pis
   const telo = [
     hlavicka,
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vpravo kresba" aria-hidden="true">${kresbaPudorys()}</div>`,
-            klic: "sluzby", id: "co-delam", cislo: t.sluzby.cislo, nadpis: t.sluzby.nadpis,
-            perex: t.sluzby.perex, poznamka: t.sluzby.poznamka, telo: sluzbyTelo }),
-    sekce({ klic: "prace", id: "prace", cislo: t.prace.cislo, nadpis: t.prace.nadpis,
-            perex: t.prace.perex, poznamka: t.prace.poznamka, telo: praceTelo }),
+            exponaty: kam["co-delam"], klic: "sluzby", id: "co-delam", cislo: t.sluzby.cislo,
+            nadpis: t.sluzby.nadpis, perex: t.sluzby.perex, poznamka: t.sluzby.poznamka, telo: sluzbyTelo }),
+    listVystavy(((kam["vystava-1"] || {}).vystava || [])[0], (kam["vystava-1"] || { poznamky: [] }).poznamky[0], (kam["vystava-1"] || { klice: [] }).klice[0]),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--dole kresba" aria-hidden="true">${kresbaRez()}</div>`,
-            klic: "postup", id: "postup", cislo: t.postup.cislo, nadpis: t.postup.nadpis,
-            perex: t.postup.perex, poznamka: t.postup.poznamka, telo: postupTelo }),
+            exponaty: kam.postup, klic: "postup", id: "postup", cislo: t.postup.cislo,
+            nadpis: t.postup.nadpis, perex: t.postup.perex, poznamka: t.postup.poznamka, telo: postupTelo }),
+    listVystavy(((kam["vystava-2"] || {}).vystava || [])[0], (kam["vystava-2"] || { poznamky: [] }).poznamky[0], (kam["vystava-2"] || { klice: [] }).klice[0]),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vlevo kresba" aria-hidden="true">${kresbaSituace()}</div>`,
-            klic: "oMne", id: "o-mne", cislo: t.oMne.cislo, nadpis: t.oMne.nadpis,
-            poznamka: t.oMne.poznamka, telo: oMneTelo }),
-    sekce({ klic: "kontakt", id: "kontakt", cislo: t.kontakt.cislo, nadpis: t.kontakt.nadpis,
-            perex: t.kontakt.perex, poznamka: t.kontakt.poznamka, telo: kontaktTelo }),
+            exponaty: kam["o-mne"], klic: "oMne", id: "o-mne", cislo: t.oMne.cislo,
+            nadpis: t.oMne.nadpis, poznamka: t.oMne.poznamka, telo: oMneTelo }),
+    listVystavy(((kam["vystava-3"] || {}).vystava || [])[0], (kam["vystava-3"] || { poznamky: [] }).poznamky[0], (kam["vystava-3"] || { klice: [] }).klice[0]),
+    sekce({ exponaty: kam.kontakt, klic: "kontakt", id: "kontakt", cislo: t.kontakt.cislo,
+            nadpis: t.kontakt.nadpis, perex: t.kontakt.perex, poznamka: t.kontakt.poznamka, telo: kontaktTelo }),
   ].join("\n");
 
   return stranka({ titulek: t.web.titulek, popis: t.web.popis, telo, t, firma, aktivni: "prace" });
@@ -185,8 +216,8 @@ export function detail(site, t, id, kresby = {}, skici = []) {
 ${skupina.text.map((o, j) => `<p class="${j === 0 ? "vedouci " : ""}zjevit" data-text="site.skupiny.${site.skupiny.indexOf(skupina)}.text.${j}">${esc(o)}</p>`).join("\n")}
 </div>
 </header>
-<div class="skicak skicak--velky">
-${moje.map((s) => skica(s, { k: "../", velka: true })).join("\n")}
+<div class="vystava-rada">
+${moje.map((s) => exponat(s, { styl: "vystava", poznamka: s.popis }, { k: "../" })).join("\n")}
 </div>
 ${vykres ? `<div class="detail-vykres kresba">${kresbaZDat(vykres, { seed: 11 })}</div>` : ""}
 <nav class="sousedi">

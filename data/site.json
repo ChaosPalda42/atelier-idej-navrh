@@ -103,5 +103,85 @@
         "Většinou se to rozhodne na jedné dobré skice — kudy se vjíždí a kam padá stín."
       ]
     }
+  ],
+  "vystavka": [
+    {
+      "zaklad": "02-rodinne-domy",
+      "kam": "predstaveni",
+      "styl": "okraj",
+      "poznamka": "první nápad, jak dům posadit",
+      "natoceni": "-1.9deg"
+    },
+    {
+      "zaklad": "10-rodinne-domy",
+      "kam": "predstaveni",
+      "styl": "presah",
+      "poznamka": "tužkou a červenou — hledání tvaru",
+      "kde": "30%",
+      "natoceni": "2.2deg"
+    },
+    {
+      "zaklad": "05-rodinne-domy",
+      "kam": "co-delam",
+      "styl": "okraj",
+      "poznamka": "jedna propiska, pět minut",
+      "natoceni": "1.3deg"
+    },
+    {
+      "zaklad": "01-bytove-domy",
+      "kam": "co-delam",
+      "styl": "presah",
+      "poznamka": "řez úzkým domem",
+      "kde": "52%",
+      "natoceni": "-1.6deg"
+    },
+    {
+      "zaklad": "03-bytove-domy",
+      "kam": "vystava-1",
+      "styl": "vystava",
+      "poznamka": "Bytový dům. Dvě propisky přes sebe — modrá hledá, červená rozhoduje."
+    },
+    {
+      "zaklad": "09-interiery",
+      "kam": "postup",
+      "styl": "okraj",
+      "poznamka": "stěna koupelny, rozvržení",
+      "natoceni": "-0.8deg"
+    },
+    {
+      "zaklad": "04-bytove-domy",
+      "kam": "postup",
+      "styl": "presah",
+      "poznamka": "zkouška barev a materiálů",
+      "kde": "26%",
+      "natoceni": "1.4deg"
+    },
+    {
+      "zaklad": "08-garaze",
+      "kam": "vystava-2",
+      "styl": "vystava",
+      "poznamka": "Garáž. Nejdřív se kreslí, kudy se vjíždí — až potom, jak to vypadá."
+    },
+    {
+      "zaklad": "07-rodinne-domy",
+      "kam": "o-mne",
+      "styl": "presah",
+      "poznamka": "dům v řadě, pohled z ulice",
+      "kde": "40%",
+      "natoceni": "-2.4deg"
+    },
+    {
+      "zaklad": "06-bytove-domy",
+      "kam": "kontakt",
+      "styl": "okraj",
+      "poznamka": "fasáda, dvě varianty pod sebou",
+      "natoceni": "2.1deg"
+    },
+    {
+      "zaklad": "11-bytove-domy",
+      "kam": "vystava-3",
+      "styl": "vystava",
+      "poznamka": "Čtyři až pět pater. Takhle vypadá dům, než se o něm začne jednat."
+    }
   ]
 }

@@ -408,9 +408,10 @@
     document.body.appendChild(vrstva);
     var obraz = $("img", vrstva);
 
-    function otevri(src, popis) {
+    function otevri(src, popis, uhel) {
       obraz.src = src;
       obraz.alt = popis || "";
+      obraz.style.transform = uhel ? "rotate(" + uhel + "deg)" : "";
       vrstva.hidden = false;
       document.body.style.overflow = "hidden";
     }
@@ -420,7 +421,9 @@
     }
     fotky.forEach(function (f) {
       f.addEventListener("click", function () {
-        otevri(f.dataset.lightbox, f.getAttribute("alt"));
+        var karta = f.closest ? f.closest("[data-otoceni]") : null;
+        otevri(f.dataset.lightbox, f.getAttribute("alt"),
+               karta ? Number(karta.dataset.otoceni) || 0 : 0);
       });
     });
     vrstva.addEventListener("click", zavri);
@@ -466,6 +469,9 @@
         znamych += 1;
         karta.hidden = !!p.skryta;
         if (p.typ) karta.dataset.typ = p.typ;
+        var uhel = ((Number(p.otoceni) || 0) % 360 + 360) % 360;
+        karta.dataset.otoceni = String(uhel);
+        karta.style.setProperty("--uhel", uhel + "deg");
         var nazev = $('[data-pole="nazev"]', karta);
         if (nazev && p.nazev) nazev.textContent = p.nazev;
         var anotace = $('[data-pole="anotace"]', karta);

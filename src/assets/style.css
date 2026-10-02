@@ -481,8 +481,8 @@ p:last-child { margin-bottom: 0; }
 /* ---------------------------------------------------------------- služby */
 .sluzby {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: clamp(26px, 3.2vw, 44px) clamp(26px, 4vw, 52px);
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: clamp(26px, 3.2vw, 44px) clamp(24px, 3.4vw, 46px);
   margin-top: 2.4em;
 }
 .sluzba-kresba { height: 104px; margin-bottom: 16px; color: var(--tuha-2); }
@@ -1006,159 +1006,123 @@ h3.rukou {
   .list-pozadi--vlevo { width: 66%; left: -16%; }
 }
 
-/* ------------------------------------------------------------- skicák */
-.skicak {
-  columns: 3;
-  column-gap: clamp(16px, 2.2vw, 30px);
-  margin-top: 2.2em;
-}
-.skicak--velky { columns: 2; margin: 0; padding: 0 clamp(22px, 5vw, 60px) var(--mezera); }
+/* --------------------------------------------- otočení skici z administrace */
+.exponat-ram { display: block; position: relative; width: 100%; }
 
-.skica-list {
-  break-inside: avoid;
-  margin: 0 0 clamp(16px, 2.2vw, 30px);
+.exponat[data-otoceni="180"] img { transform: rotate(180deg); }
+
+/* u čtvrtotáčky se musí prohodit i rozměr rámu, jinak se rozsype sloupec */
+.exponat[data-otoceni="90"] .exponat-ram,
+.exponat[data-otoceni="270"] .exponat-ram {
+  aspect-ratio: var(--h) / var(--w);
+  overflow: visible;
+}
+.exponat[data-otoceni="90"] img,
+.exponat[data-otoceni="270"] img {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: calc(var(--w) / var(--h) * 100%);
+  max-width: none;
+  transform: translate(-50%, -50%) rotate(var(--uhel, 90deg));
+}
+.svetelny-stul img { transition: transform 0.25s ease; }
+
+/* ------------------------------------------------------------- exponáty */
+/* Skici jsou po listu roztroušené jako exponáty: bez papíru, takže jsou
+   součástí stránky. Teprve pod myší se zvýrazní a dá se na ně kliknout. */
+.exponat {
+  margin: 0;
   --natoceni: 0deg;
 }
-.skica-list:nth-child(3n + 1) { --natoceni: -0.55deg; }
-.skica-list:nth-child(3n + 2) { --natoceni: 0.45deg; }
-.skica-list:nth-child(5n) { --natoceni: 0.8deg; }
+.exponat img { width: 100%; height: auto; display: block; }
 
-.skica-list img {
-  width: 100%;
-  height: auto;
-  /* bílý papír skici se prolne s papírem listu, zůstane jen tah pera */
-  mix-blend-mode: multiply;
+.exponat-ram {
+  display: block;
+  position: relative;
   cursor: zoom-in;
-  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1), filter 0.45s ease;
+  transform: rotate(var(--natoceni));
+  filter: saturate(0.78) contrast(0.94);
+  opacity: 0.78;
+  transition: transform 0.5s cubic-bezier(0.2, 0.8, 0.3, 1),
+              filter 0.4s ease, opacity 0.4s ease;
 }
-.skica-list:hover img { transform: translateY(-3px) scale(1.012); filter: contrast(1.04); }
-
-.skicak-odkazy {
-  margin-top: 2.2em;
-  font-size: 0.92rem;
-  color: var(--tuha-2);
-  max-width: none;
-}
-.skicak-odkazy a { text-decoration: none; border-bottom: 1px solid var(--linka); }
-.skicak-odkazy a:hover { border-bottom-color: var(--oranz); }
-
-.detail-vykres {
-  padding: 0 clamp(22px, 5vw, 60px) var(--mezera);
-  color: var(--tuha-2);
-}
-.detail-vykres svg { width: 100%; height: auto; }
-
-@media (max-width: 920px) {
-  .skicak { columns: 2; }
-  .skicak--velky { columns: 1; }
-}
-@media (max-width: 560px) {
-  .skicak { columns: 1; }
-}
-
-/* ------------------------------------------------- administrace: více listů */
-.admin-list .admin-telo {
-  display: grid;
-  grid-template-columns: 250px minmax(0, 1fr);
-  gap: clamp(26px, 4vw, 54px);
-  align-items: start;
-}
-
-.admin-nav { display: grid; gap: 2px; position: sticky; top: 84px; }
-.admin-nav-polozka {
-  display: block;
-  padding: 10px 13px;
+.exponat-ram::before {
+  content: "";
+  position: absolute;
+  inset: -16px -18px;
+  z-index: -1;
   border-radius: 3px;
-  text-decoration: none;
-  color: var(--tuha-2);
-  border-left: 2px solid transparent;
+  background: rgba(255, 253, 248, 0.8);
+  box-shadow: 0 18px 36px -24px rgba(52, 40, 24, 0.8);
+  opacity: 0;
+  transition: opacity 0.35s ease;
 }
-.admin-nav-polozka span { display: block; font-size: 0.95rem; }
-.admin-nav-polozka small {
-  display: block;
-  font-size: 0.74rem;
-  line-height: 1.35;
-  color: var(--tuha-3);
-  margin-top: 2px;
+.exponat:hover .exponat-ram,
+.exponat:focus-within .exponat-ram {
+  transform: rotate(0deg) translateY(-3px) scale(1.02);
+  filter: none;
+  opacity: 1;
 }
-.admin-nav-polozka:hover { background: rgba(255, 128, 0, 0.08); }
-.admin-nav-polozka.je {
-  background: var(--papir-stin);
-  border-left-color: var(--oranz);
-  color: var(--tuha);
-}
-.admin-nav-polozka.je span { font-weight: 540; }
+.exponat:hover .exponat-ram::before,
+.exponat:focus-within .exponat-ram::before { opacity: 1; }
 
-.admin-obsah { min-width: 0; }
-.admin-skupina { margin-bottom: clamp(30px, 4vw, 48px); }
-.admin-skupina h2 {
+.exponat-popis {
   font-family: var(--rukou);
-  font-size: 1.7rem;
   font-weight: 500;
-  margin-bottom: 0.5em;
-  padding-bottom: 0.25em;
-  border-bottom: 1px solid var(--linka);
-}
-
-.admin-pole-hlava {
-  display: flex;
-  align-items: baseline;
-  justify-content: space-between;
-  gap: 12px;
-  margin-bottom: 5px;
-}
-.admin-pole-popis {
-  font-size: 0.73rem;
-  letter-spacing: 0.02em;
+  font-size: 1.14rem;
+  line-height: 1.25;
   color: var(--tuha-3);
+  margin-top: 9px;
+  transform: rotate(var(--natoceni));
+  transition: color 0.3s ease;
 }
-.admin-pole.je-zmeneno .admin-pole-popis { color: var(--oranz); }
-.admin-pole.je-zmeneno input,
-.admin-pole.je-zmeneno textarea { border-color: var(--oranz); }
-.admin-pole select {
-  width: 100%;
-  font: inherit;
-  font-size: 0.93rem;
-  color: var(--tuha);
-  background: var(--papir);
-  border: 1px solid var(--linka);
-  border-radius: 2px;
-  padding: 8px 10px;
-}
-.admin-puvodni {
-  font-size: 0.78rem;
-  color: var(--tuha-3);
-  margin: 6px 0 0;
-  font-style: italic;
-  max-width: none;
-}
-.admin-mini--vratit { font-size: 0.72rem; padding: 3px 10px; }
+.exponat:hover .exponat-popis { color: var(--oranz); }
 
-a.admin-dlazdice-kus { text-decoration: none; display: block; transition: border-color 0.2s; }
-a.admin-dlazdice-kus:hover { border-color: var(--oranz); }
-.admin-karta--skryta { opacity: 0.5; }
+/* v okraji listu, vedle nadpisu sekce */
+.exponat--okraj { margin-top: 2.6em; --natoceni: -1.4deg; }
 
-.skica-popis {
-  font-family: var(--mono);
-  font-size: 0.62rem;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--tuha-3);
-  padding-top: 7px;
+/* přes pravou hranu listu — jako by tam ležela odložená */
+.exponat--presah {
+  position: absolute;
+  z-index: 2;
+  right: -10%;
+  top: var(--kde, 36%);
+  width: min(300px, 26%);
+  --natoceni: 1.8deg;
 }
 
+/* text se přesahu vyhne, ať mu skica neleží na řádcích */
+@media (min-width: 1101px) {
+  .sekce--s-presahem .sekce-telo { padding-right: 16%; }
+}
+
+/* vlastní list jen pro jednu skicu */
+.vystava {
+  padding: calc(var(--vazba-vyska) + 6px) clamp(22px, 5vw, 60px) clamp(38px, 5vw, 66px);
+  display: grid;
+  grid-template-columns: var(--okraj) minmax(0, 1fr);
+  gap: 0 clamp(26px, 4vw, 54px);
+  align-items: center;
+}
+.vystava-telo { grid-column: 2; }
+.vystava-poznamka { grid-column: 1; grid-row: 1; max-width: 22ch; }
+.vystava .exponat--vystava { --natoceni: -0.7deg; }
+/* na výstavním listu popisek nese poznámka v okraji, dvakrát ho tam netřeba */
+.vystava .exponat-popis { display: none; }
+
+/* sbírka na listu skupiny */
+.vystava-rada {
+  display: grid;
+  gap: clamp(40px, 6vw, 80px);
+  padding: 0 clamp(22px, 5vw, 60px) var(--mezera);
+}
+
+@media (max-width: 1100px) {
+  .exponat--presah { position: static; width: 100%; margin-top: 2.4em; }
+}
 @media (max-width: 920px) {
-  .admin-list .admin-telo { grid-template-columns: minmax(0, 1fr); }
-  .admin-nav {
-    position: static;
-    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-    gap: 6px;
-    margin-bottom: 26px;
-  }
-  .admin-nav-polozka small { display: none; }
-  .admin-nav-polozka {
-    border: 1px solid var(--linka);
-    border-left-width: 2px;
-    text-align: center;
-  }
+  .vystava { grid-template-columns: minmax(0, 1fr); }
+  .vystava-telo, .vystava-poznamka { grid-column: 1; }
+  .vystava-poznamka { grid-row: auto; margin-top: 1.4em; }
 }

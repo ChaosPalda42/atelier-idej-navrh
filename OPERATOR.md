@@ -199,3 +199,25 @@ Michael přišel na `prace/overovaci-studie-navsi.html` → 404 od GitHubu. Dvě
   relativní cesty by se odvíjely od adresy, která neexistuje.
 - **Přesměrování šesti starých adres** z verze s vymyšlenými zakázkami na odpovídající
   listy skupin (meta refresh + canonical + noindex).
+
+## Osmé kolo (2. 10. 2026) — skici jako exponáty
+Michael: skici nemají být samostatná sekce, ale rozeseté po celém webu „jako muzeum,
+kde člověk narazí na exponát". A: odstranit jim pozadí, zvýraznit až pod myší,
+kliknutím ukázat původní skicu. Plus hlásil špatné otočení.
+
+- **Otočení**: 7 z 11 fotek mělo orientaci jen v EXIF (hodnota 6 = 90°) a Pillow ji
+  sám neaplikuje. `ImageOps.exif_transpose` → 8 skic je teď na šířku, jak mají být.
+- **Pozadí pryč**: `pruhledne()` v `tools/skici.py` dělá z vybílené kresby RGBA —
+  alfa = 255 − min(R,G,B), barva se z bílé vydělí zpátky
+  (C' = (C − min)·255/(255 − min)), jinak by světlé tahy vybledly. PNG se kvantuje
+  na 96 barev, jinak by bylo třikrát větší. Vedle toho se ukládá **sken s papírem**
+  (`-sken-`), který se ukáže v lightboxu po kliknutí.
+- **Rozmístění** je data: `vystavka` v `site.json` říká u každé skici `kam`
+  (predstaveni / co-delam / postup / o-mne / kontakt / vystava-1..3), `styl`
+  (okraj / presah / vystava), natočení, výšku přesahu a popisek.
+  Sekce „Ze skicáku" zrušena, čísla sekcí přečíslována.
+- **Chování**: ve výchozím stavu je exponát ztlumený (opacity .78, menší sytost),
+  pod myší se narovná, zvětší, objeví se pod ním světlá „vitrína" a popisek zoranžoví.
+- Sekce s přesahem si uvolní 16 % šířky vpravo, aby skica neležela na textu
+  (při 25 % se rozpadla mřížka služeb do jednoho sloupce).
+- Popisky exponátů jsou editovatelné v administraci (`site.vystavka.N.poznamka`).

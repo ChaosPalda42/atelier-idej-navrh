@@ -166,7 +166,8 @@
     stav.prace.forEach(function (p, i) {
       var karta = prvek("article", "admin-karta" + (p.skryta ? " admin-karta--skryta" : ""));
       var hlava = prvek("div", "admin-radek");
-      hlava.appendChild(prvek("strong", "", p.nazev || "(bez názvu)"));
+      hlava.appendChild(prvek("strong", "", (p.nazev || "(bez názvu)") +
+        (p.otoceni ? "  ·  otočeno o " + p.otoceni + "°" : "")));
 
       var ovladani = prvek("div", "admin-ovladani");
       [["↑", -1], ["↓", 1]].forEach(function (d) {
@@ -174,6 +175,16 @@
         b.title = d[1] < 0 ? "Posunout nahoru" : "Posunout dolů";
         b.disabled = (d[1] < 0 && i === 0) || (d[1] > 0 && i === stav.prace.length - 1);
         b.addEventListener("click", function () { stav = A.presun(stav, p.slug, d[1]); uloz(); });
+        ovladani.appendChild(b);
+      });
+      [["↶", -90], ["↷", 90]].forEach(function (d) {
+        var b = prvek("button", "admin-mini", d[0]);
+        b.title = d[1] < 0 ? "Otočit doleva" : "Otočit doprava";
+        b.addEventListener("click", function () {
+          var uhel = (((Number(p.otoceni) || 0) + d[1]) % 360 + 360) % 360;
+          stav = A.upravPraci(stav, p.slug, { otoceni: uhel });
+          uloz();
+        });
         ovladani.appendChild(b);
       });
       var schovat = prvek("button", "admin-mini", p.skryta ? "Zobrazit" : "Skrýt");
