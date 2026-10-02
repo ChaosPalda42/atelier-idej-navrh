@@ -2,16 +2,17 @@
    Ruční písmo dostane `pise` (píše se), vysázené `zjevit` (jen se položí). */
 import { stranka } from "./layout.mjs";
 import { znacka } from "./znacka.mjs";
-import { KRESBY, kresbaHero, zastupnaSkica } from "./kresby.mjs";
+import { KRESBY, kresbaHero, kresbaPudorys, kresbaRez, kresbaSituace, zastupnaSkica } from "./kresby.mjs";
 import { serad, pocty, sousedi } from "../lib/prace.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "" }) {
+function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", pozadi = "" }) {
   const kPerex = klic ? ` data-text="${klic}.perex"` : "";
   const kPozn = klic ? ` data-text="${klic}.poznamka"` : "";
   return `<section class="list sekce" id="${id}" data-psat>
 <span class="vazba" aria-hidden="true"></span>
+${pozadi}
 <div class="sekce-hlava">
 <span class="sekce-cislo">${cislo}</span>
 <h2 class="nadpis rukou pise" data-znaky>${esc(nadpis)}</h2>
@@ -49,25 +50,37 @@ export function index(site, t) {
   const serazene = serad(prace);
   const p = pocty(prace);
 
-  const hlavicka = `<header class="list hlavicka" data-psat>
-<div class="hlavicka-znacka kresba">${znacka({ varianta: "stohovana", kresli: true, trida: "znacka--velka" })}</div>
-<div class="hlavicka-text">
-<p class="stitek zjevit">${esc(t.uvod.stitek)}</p>
+  const hlavicka = `<header class="list uvod" data-psat>
+<div class="uvod-znacka" aria-hidden="true">${znacka({ varianta: "samotna", kresli: true, trida: "znacka--velka" })}</div>
+<div class="uvod-text">
+<span class="stitek zjevit">${esc(t.uvod.stitek)}</span>
 <h1 class="claim rukou pise" data-znaky data-text="uvod.claim">${esc(t.uvod.claim)}</h1>
+</div>
+<a class="uvod-dolu rukou pise" href="#predstaveni">${esc(t.uvod.dolu)}
+<svg viewBox="0 0 26 34" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2c-1 9 1 18 0 28"/><path d="M6 23l7 9 7-9"/></svg>
+</a>
+</header>
+
+<section class="list predstaveni" id="predstaveni" data-psat>
+<span class="vazba" aria-hidden="true"></span>
+<div class="sekce-hlava">
+<div class="hlavicka-znacka kresba">${znacka({ varianta: "stohovana" })}</div>
+<p class="poznamka pise" data-text="uvod.poznamka">${esc(t.uvod.poznamka)}</p>
+</div>
+<div class="sekce-telo">
 <p class="vedouci zjevit" data-text="uvod.text">${esc(t.uvod.text)}</p>
 <div class="hlavicka-pod polozit">
 <a class="tlacitko" href="#kontakt">${esc(t.uvod.cil)}</a>
 <a class="tlacitko lehke" href="#prace">${esc(t.uvod.druhy)}</a>
 </div>
 </div>
-<p class="poznamka hlavicka-poznamka pise" data-text="uvod.poznamka">${esc(t.uvod.poznamka)}</p>
 <div class="hero-kresba kresba" aria-hidden="true">${kresbaHero()}</div>
-</header>`;
+</section>`;
 
   const sluzbyTelo = `<div class="sluzby">
 ${sluzby.map((s) => `<article class="sluzba">
 <div class="sluzba-kresba kresba">${(KRESBY[s.kresba] || KRESBY.dum)()}</div>
-<h3 class="zjevit">${esc(s.nazev)}</h3>
+<h3 class="rukou pise">${esc(s.nazev)}</h3>
 <p class="zjevit">${esc(s.popis)}</p>
 </article>`).join("\n")}
 </div>`;
@@ -85,14 +98,14 @@ ${serazene.map(karta).join("\n")}
 
   const postupTelo = `<ol class="postup-osa">
 ${postup.map((krok) => `<li class="postup-krok zjevit">
-<h3>${esc(krok.nazev)}</h3><span class="postup-trvani">${esc(krok.trvani)}</span>
+<h3 class="rukou pise">${esc(krok.nazev)}</h3><span class="postup-trvani">${esc(krok.trvani)}</span>
 <p>${esc(krok.popis)}</p>
 </li>`).join("\n")}
 </ol>`;
 
   const oMneTelo = `${t.oMne.text.map((o) => `<p class="zjevit">${esc(o)}</p>`).join("\n")}
 <div class="detail-cisla zjevit">
-${t.oMne.cisla.map((c) => `<div class="detail-cislo"><strong>${esc(c.hodnota)}</strong><span>${esc(c.popisek)}</span></div>`).join("\n")}
+${t.oMne.cisla.map((c) => `<div class="detail-cislo"><strong class="rukou pise">${esc(c.hodnota)}</strong><span>${esc(c.popisek)}</span></div>`).join("\n")}
 </div>`;
 
   const kontaktTelo = `<form class="formular zjevit" id="poptavka" novalidate>
@@ -130,6 +143,7 @@ ${t.oMne.cisla.map((c) => `<div class="detail-cislo"><strong>${esc(c.hodnota)}</
 <button class="tlacitko" type="submit">${esc(t.kontakt.odeslat)}</button>
 </form>
 <p class="vedouci" id="poptavka-hotovo" data-text="kontakt.hotovo" hidden>${esc(t.kontakt.hotovo)}</p>
+<p class="podpis pise">${esc(firma.architekt.replace("Ing. arch. ", ""))}<small>${esc(t.kontakt.podpis)}</small></p>
 <div class="kontakt-udaje zjevit">
 <p class="stitek">Nebo rovnou</p>
 <p><a href="tel:${firma.telefonHref}" data-udaj="telefon">${esc(firma.telefon)}</a><br><a href="mailto:${firma.email}" data-udaj="email">${esc(firma.email)}</a></p>
@@ -137,10 +151,10 @@ ${t.oMne.cisla.map((c) => `<div class="detail-cislo"><strong>${esc(c.hodnota)}</
 
   const telo = [
     hlavicka,
-    sekce({ klic: "sluzby", id: "co-delam", cislo: t.sluzby.cislo, nadpis: t.sluzby.nadpis, perex: t.sluzby.perex, poznamka: t.sluzby.poznamka, telo: sluzbyTelo }),
+    sekce({ pozadi: `<div class="list-pozadi list-pozadi--vpravo kresba" aria-hidden="true">${kresbaPudorys()}</div>`, klic: "sluzby", id: "co-delam", cislo: t.sluzby.cislo, nadpis: t.sluzby.nadpis, perex: t.sluzby.perex, poznamka: t.sluzby.poznamka, telo: sluzbyTelo }),
     sekce({ klic: "prace", id: "prace", cislo: t.prace.cislo, nadpis: t.prace.nadpis, perex: t.prace.perex, poznamka: t.prace.poznamka, telo: praceTelo }),
-    sekce({ klic: "postup", id: "postup", cislo: t.postup.cislo, nadpis: t.postup.nadpis, perex: t.postup.perex, poznamka: t.postup.poznamka, telo: postupTelo }),
-    sekce({ klic: "oMne", id: "o-mne", cislo: t.oMne.cislo, nadpis: t.oMne.nadpis, poznamka: t.oMne.poznamka, telo: oMneTelo }),
+    sekce({ pozadi: `<div class="list-pozadi list-pozadi--dole kresba" aria-hidden="true">${kresbaRez()}</div>`, klic: "postup", id: "postup", cislo: t.postup.cislo, nadpis: t.postup.nadpis, perex: t.postup.perex, poznamka: t.postup.poznamka, telo: postupTelo }),
+    sekce({ pozadi: `<div class="list-pozadi list-pozadi--vlevo kresba" aria-hidden="true">${kresbaSituace()}</div>`, klic: "oMne", id: "o-mne", cislo: t.oMne.cislo, nadpis: t.oMne.nadpis, poznamka: t.oMne.poznamka, telo: oMneTelo }),
     sekce({ klic: "kontakt", id: "kontakt", cislo: t.kontakt.cislo, nadpis: t.kontakt.nadpis, perex: t.kontakt.perex, poznamka: t.kontakt.poznamka, telo: kontaktTelo }),
   ].join("\n");
 
@@ -172,7 +186,7 @@ ${f.popis ? `<figcaption>${esc(f.popis)}</figcaption>` : ""}
 <p class="vedouci zjevit">${esc(prace.anotace)}</p>
 <p class="prace-meta zjevit">${prace.rok} · ${esc(prace.stav)} · ${esc(prace.misto)}</p>
 <div class="detail-cisla zjevit">
-${(prace.cisla || []).map((c) => `<div class="detail-cislo"><strong>${esc(c.hodnota)}</strong><span>${esc(c.popisek)}</span></div>`).join("\n")}
+${(prace.cisla || []).map((c) => `<div class="detail-cislo"><strong class="rukou pise">${esc(c.hodnota)}</strong><span>${esc(c.popisek)}</span></div>`).join("\n")}
 </div>
 </div>
 </header>
