@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { index, detail } from "./src/templates/stranky.mjs";
 import { administrace } from "./src/templates/administrace.mjs";
 import { znacka } from "./src/templates/znacka.mjs";
+import { nastavOtisk } from "./src/templates/layout.mjs";
 
 const KOREN = path.dirname(fileURLToPath(import.meta.url));
 const VEN = path.join(KOREN, "out");
@@ -70,6 +71,13 @@ async function main() {
     const zdroj = path.join(KOREN, "data", slozka);
     if (await existuje(zdroj)) await zkopirujStrom(zdroj, path.join(VEN, slozka));
   }
+
+  // otisk statiky -> adresy stylů a skriptů
+  const soucet = createHash("sha1");
+  for (const soubor of ["assets/style.css", "assets/web.js", "assets/lib.js", "assets/admin.js"]) {
+    soucet.update(await readFile(path.join(VEN, soubor)));
+  }
+  nastavOtisk(soucet.digest("hex").slice(0, 8));
 
   // stránky
   await writeFile(path.join(VEN, "index.html"), index(site, t));

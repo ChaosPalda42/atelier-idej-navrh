@@ -98,3 +98,15 @@ s textem). Je potřeba export JPG/PNG nebo PDF.
   v `.gitignore`. Do cloudu nesmí ani ony, ani Logo.pdf.
 - Nasazeno: https://chaospalda42.github.io/atelier-idej-navrh/
   (repo ChaosPalda42/atelier-idej-navrh, workflow Pages jako u Fofrmontu).
+
+## Čtvrté kolo (2. 10. 2026)
+- **Rozbité rolování na listu „představení"**: sekce neměla třídu `sekce`, takže
+  na ní neplatila mřížka, a globální `position: sticky` u `.sekce-hlava` nechalo
+  text podjíždět pod značku. Přidána třída; zbytek listů byl v pořádku.
+  Poučení: `.sekce-hlava` je lepkavá — list bez mřížky znamená překryv.
+- **Přechody mezi listy**: listy už mezi sebou nemají mezeru se stolem. Leží na
+  sobě jako v bloku: nahoře světlý řez papíru, pod ním měkký stín, který horní
+  list vrhá na spodní, a přes hranu jdou kroužky. Stín má blok jako celek
+  (boky u všech listů, nahoru u prvního, dolů u posledního), ne každý list zvlášť.
+- Adresy stylů a skriptů dostaly otisk (`?v=…`), aby po nasazení nikdo nekoukal
+  na starou verzi z mezipaměti.

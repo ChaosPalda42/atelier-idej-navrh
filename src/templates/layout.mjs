@@ -1,6 +1,11 @@
 /* Obal stránky: hlava dokumentu, list papíru, navigace, patička. */
 import { znacka, razitko } from "./znacka.mjs";
 
+/* Otisk sestavení se přidává k adresám stylů a skriptů, aby po nasazení
+   nikdo nekoukal na starou verzi z mezipaměti prohlížeče. */
+let otisk = "";
+export function nastavOtisk(hodnota) { otisk = hodnota ? `?v=${hodnota}` : ""; }
+
 /** Pomůcky, které stránka používá přes CSS i SVG. */
 export function defs() {
   return `<svg class="defs" aria-hidden="true" focusable="false"><defs>
@@ -65,7 +70,7 @@ export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", ak
 <meta property="og:description" content="${popis}">
 <meta property="og:type" content="website">
 <link rel="icon" href="${k}assets/favicon.svg" type="image/svg+xml">
-<link rel="stylesheet" href="${k}assets/style.css">
+<link rel="stylesheet" href="${k}assets/style.css${otisk}">
 <link rel="preload" href="${k}assets/fonts/inter-cs.woff2" as="font" type="font/woff2" crossorigin>
 </head>
 <body class="${trida}">
@@ -79,9 +84,9 @@ ${telo}
 ${paticka(firma, t, k)}
 </main>
 ${hrot()}
-<script src="${k}assets/lib.js"></script>
-<script src="${k}assets/web.js"></script>
-${skripty.map((s) => `<script src="${k}assets/${s}"></script>`).join("\n")}
+<script src="${k}assets/lib.js${otisk}"></script>
+<script src="${k}assets/web.js${otisk}"></script>
+${skripty.map((s) => `<script src="${k}assets/${s}${otisk}"></script>`).join("\n")}
 </body>
 </html>`;
 }

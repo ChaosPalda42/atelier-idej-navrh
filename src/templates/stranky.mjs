@@ -61,7 +61,7 @@ export function index(site, t) {
 </a>
 </header>
 
-<section class="list predstaveni" id="predstaveni" data-psat>
+<section class="list sekce predstaveni" id="predstaveni" data-psat>
 <span class="vazba" aria-hidden="true"></span>
 <div class="sekce-hlava">
 <div class="hlavicka-znacka kresba">${znacka({ varianta: "stohovana" })}</div>
