@@ -56,9 +56,8 @@ async function main() {
   await mkdir(path.join(VEN, "assets"), { recursive: true });
   await mkdir(path.join(VEN, "prace"), { recursive: true });
 
-  // statika
-  await zkopirujStrom(path.join(KOREN, "src/assets/fonts"), path.join(VEN, "assets/fonts"));
-  await copyFile(path.join(KOREN, "src/assets/style.css"), path.join(VEN, "assets/style.css"));
+  // statika — celá složka assets, ať se nemůže stát, že se na něco zapomene
+  await zkopirujStrom(path.join(KOREN, "src/assets"), path.join(VEN, "assets"));
   await copyFile(path.join(KOREN, "src/ui/web.js"), path.join(VEN, "assets/web.js"));
   await copyFile(path.join(KOREN, "src/ui/admin.js"), path.join(VEN, "assets/admin.js"));
   await writeFile(path.join(VEN, "assets/lib.js"), await svazekKnihoven());

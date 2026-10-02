@@ -45,7 +45,7 @@
   --sloupec: 66ch;
   --okraj: 230px;
   --mezera: clamp(66px, 8vw, 112px);
-  --vazba-vyska: 64px;
+  --vazba-vyska: 72px;
 }
 
 /* ------------------------------------------------------------------ reset */
@@ -65,11 +65,7 @@ body {
   background-color: var(--stul);
   background-image:
     radial-gradient(1400px 800px at 50% -8%, rgba(255, 252, 245, 0.42), transparent 68%),
-    url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'>\
-<filter id='s'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/>\
-<feColorMatrix type='saturate' values='0'/></filter>\
-<rect width='180' height='180' filter='url(%23s)' opacity='0.18'/></svg>");
+    url("stul.svg");
   background-attachment: fixed, scroll;
 }
 
@@ -119,11 +115,7 @@ button { font: inherit; color: inherit; }
   z-index: 0;
   opacity: 0.55;
   mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>\
-<filter id='z'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/>\
-<feColorMatrix type='saturate' values='0'/></filter>\
-<rect width='200' height='200' filter='url(%23z)' opacity='0.2'/></svg>");
+  background-image: url("vlakno.svg");
   background-size: 200px 200px;
 }
 
@@ -141,33 +133,20 @@ button { font: inherit; color: inherit; }
 .list > * { position: relative; z-index: 1; }
 
 /* ------------------------------------------------- kroužková vazba mezi listy */
-.list + .list { margin-top: 30px; }
+.list + .list { margin-top: 36px; }
 
 .vazba {
   position: absolute;
-  top: -30px;
+  top: -36px;
   left: 0;
   right: 0;
   height: var(--vazba-vyska);
   z-index: 3;
   pointer-events: none;
   background-repeat: repeat-x;
-  background-position: 26px top;
-  background-size: 52px var(--vazba-vyska);
-  background-image: url("data:image/svg+xml;utf8,\
-<svg xmlns='http://www.w3.org/2000/svg' width='52' height='64' viewBox='0 0 52 64'>\
-<defs>\
-<linearGradient id='kov' x1='0' x2='1' y1='0' y2='0'>\
-<stop offset='0' stop-color='%23b9b3a8'/><stop offset='0.22' stop-color='%23f2efe9'/>\
-<stop offset='0.52' stop-color='%238e887c'/><stop offset='0.78' stop-color='%23d9d4cb'/>\
-<stop offset='1' stop-color='%238a8478'/></linearGradient>\
-</defs>\
-<ellipse cx='26' cy='45' rx='8.5' ry='5.6' fill='%23b4a890'/>\
-<ellipse cx='26' cy='44' rx='8.5' ry='5.6' fill='%23ddd3c0'/>\
-<rect x='21.6' y='9' width='8.8' height='38' rx='4.4' fill='%236b6459' opacity='0.17' transform='translate(2 2)'/>\
-<rect x='21.6' y='9' width='8.8' height='38' rx='4.4' fill='url(%23kov)'/>\
-<rect x='21.6' y='9' width='8.8' height='7' rx='3.5' fill='%23ffffff' opacity='0.35'/>\
-</svg>");
+  background-position: 28px top;
+  background-size: 56px var(--vazba-vyska);
+  background-image: url("vazba.svg");
 }
 
 /* stín hrany listu pod vazbou */
@@ -176,9 +155,9 @@ button { font: inherit; color: inherit; }
   position: absolute;
   left: 0;
   right: 0;
-  top: 30px;
-  height: 16px;
-  background: linear-gradient(to bottom, rgba(90, 72, 48, 0.16), transparent);
+  top: 36px;
+  height: 18px;
+  background: linear-gradient(to bottom, rgba(90, 72, 48, 0.2), transparent);
 }
 
 /* ------------------------------------------------------------- typografie */
@@ -836,7 +815,7 @@ p:last-child { margin-bottom: 0; }
 
 /* ------------------------------------------------------------ responzivita */
 @media (max-width: 920px) {
-  :root { --okraj: 0px; --vazba-vyska: 56px; }
+  :root { --okraj: 0px; --vazba-vyska: 64px; }
   .hlavicka,
   .sekce,
   .detail-hlava,
