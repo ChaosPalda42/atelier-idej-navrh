@@ -309,3 +309,9 @@ Co se změnilo:
   a sedí u podpisu v kontaktu.
 - „Tady je nějaký divný ořez" u úvodní obrazovky — to byla ta maska, opravená
   už v jedenáctém kole.
+
+## Oprava (3. 10. 2026): věta se skicami
+Michael: „ta věta se skicama tam nepatří". Visela na konci mřížky služeb bez
+souvislosti. Odkazy na čtyři sbírky skic se přesunuly do **patičky** (tam patří
+druhotná navigace) a z hlavní navigace zmizela položka **„Práce"** — mířila na
+`#prace`, což je kotva zrušené sekce, takže nevedla nikam.

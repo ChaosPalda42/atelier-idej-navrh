@@ -1287,3 +1287,6 @@ body.exponat-aktivni .setmeni { opacity: 1; }
   transform: rotate(-6deg);
   opacity: 0.92;
 }
+
+.paticka-sbirky { margin-top: 0.4em; }
+.paticka-sbirky span { color: var(--tuha-3); }

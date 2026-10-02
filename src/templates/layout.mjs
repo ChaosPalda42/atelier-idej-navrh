@@ -32,7 +32,6 @@ export function navigace(t, aktivni, k = "") {
   return `<nav class="navigace" aria-label="Hlavní navigace">
 <div class="navigace-vnitrek">
 <a class="navigace-znacka" href="${k}index.html" aria-label="ateliér IDEJ — domů">${znacka({ varianta: "samotna" })}</a>
-${odkaz("index.html#prace", t.navigace.prace, aktivni === "prace" ? "aktivni" : "")}
 ${odkaz("index.html#co-delam", t.navigace.sluzby)}
 ${odkaz("index.html#postup", t.navigace.postup)}
 ${odkaz("index.html#o-mne", t.navigace.oMne)}
@@ -41,7 +40,7 @@ ${odkaz("index.html#kontakt", t.navigace.kontakt, "cil")}
 </nav>`;
 }
 
-export function paticka(firma, t, k = "") {
+export function paticka(firma, t, k = "", sbirky = []) {
   return `<footer class="list paticka">
 <span class="hrana" aria-hidden="true"></span>
 <div>
@@ -51,6 +50,8 @@ export function paticka(firma, t, k = "") {
 <div>
 <p><a href="tel:${firma.telefonHref}" data-udaj="telefon">${firma.telefon}</a> · <a href="mailto:${firma.email}" data-udaj="email">${firma.email}</a></p>
 <p class="rukou tuzkou" data-text="paticka.ukazka">${t.paticka.ukazka}</p>
+${sbirky.length ? `<p class="paticka-sbirky"><span data-text="vystavka.odkazy">${t.vystavka.odkazy}</span>
+${sbirky.map((g) => `<a href="${k}prace/${g.id}.html">${g.nazev}</a>`).join(" · ")}</p>` : ""}
 <p><a href="${k}administrace.html">${t.paticka.administrace}</a> · <a href="#zacatek">${t.paticka.nahoru}</a></p>
 </div>
 <div class="razitko">${razitko(firma)}</div>
@@ -68,7 +69,7 @@ function prostridejPapiry(telo) {
   });
 }
 
-export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", aktivni = "", skripty = [] }) {
+export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", aktivni = "", skripty = [], sbirky = [] }) {
   telo = prostridejPapiry(telo);
   return `<!doctype html>
 <html lang="cs">
@@ -97,7 +98,7 @@ ${pravitko()}
 ${defs()}
 <main class="blok" id="zacatek">
 ${telo}
-${paticka(firma, t, k)}
+${paticka(firma, t, k, sbirky)}
 </main>
 ${hrot()}
 <script src="${k}assets/lib.js${otisk}"></script>

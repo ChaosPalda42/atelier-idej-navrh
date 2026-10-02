@@ -118,9 +118,7 @@ ${sluzby.map((s, i) => `<article class="sluzba">
 <h3 class="rukou" data-text="site.sluzby.${i}.nazev">${esc(s.nazev)}</h3>
 <p data-text="site.sluzby.${i}.popis">${esc(s.popis)}</p>
 </article>`).join("\n")}
-</div>
-<p class="skicak-odkazy"><span data-text="vystavka.odkazy">${esc(t.vystavka.odkazy)}</span>
-${site.skupiny.filter((g) => p[g.id]).map((g) => `<a href="prace/${g.id}.html">${esc(g.nazev)}</a>`).join(" · ")}</p>`;
+</div>`;
 
   const postupTelo = `<ol class="postup-osa">
 ${postup.map((krok, i) => `<li class="postup-krok">
@@ -198,7 +196,8 @@ ${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" 
             nadpis: t.kontakt.nadpis, perex: t.kontakt.perex, poznamka: t.kontakt.poznamka, telo: kontaktTelo }),
   ].join("\n");
 
-  return stranka({ titulek: t.web.titulek, popis: t.web.popis, telo, t, firma, aktivni: "prace" });
+  return stranka({ titulek: t.web.titulek, popis: t.web.popis, telo, t, firma,
+    sbirky: site.skupiny.filter((g) => p[g.id]) });
 }
 
 /** List jedné skupiny skic (rodinné domy, bytové domy, …). */
@@ -234,7 +233,8 @@ ${vykres ? `<div class="detail-vykres kresba">${kresbaZDat(vykres, { seed: 11 })
   return stranka({
     titulek: `${skupina.nazev} — ateliér IDEJ`,
     popis: skupina.text[0],
-    telo, t, firma: site.firma, k: "../", aktivni: "prace",
+    telo, t, firma: site.firma, k: "../",
+    sbirky: site.skupiny.filter((g) => skici.some((x) => x.skupina === g.id)),
   });
 }
 
