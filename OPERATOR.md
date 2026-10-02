@@ -271,3 +271,16 @@ exponát by se měl pod myší i zvětšit.
   posunem, aby zůstala celá v okně. Popisek při zvětšení ustoupí.
 - **Dotyk**: `@media (hover: none)` — kresby jsou rovnou plné, nic se neztmavuje,
   klepnutí otevře původní sken.
+
+## Jedenácté kolo (3. 10. 2026) — kruh za textem a mezera v kruhu
+- **„Proč je tam ta mezera v kruhu?"** Nebyla v logu. Maska, kterou se kruh
+  objíždí (`<mask>` s `znacka-objezd`), neměla **vlastní rozsah** — použil se
+  výchozí (−10 %/120 %), který se u `maskUnits="userSpaceOnUse"` počítá
+  z viewportu, a ten kresbu ořízl. A protože se kruh pomalu otáčí, ten zářez
+  putoval dokola, takže byl pokaždé jinde. Ověřeno měřením: v datech značky
+  není jediný úhel bez bodu. Maska teď dostává `x/y/width/height` s rezervou
+  160 jednotek.
+- **Kruh ustupuje textu**: `.uvod-znacka` má CSS masku — radiální přechod
+  (74 % × 32 % se středem u levé hrany), takže kresba v pásu, kudy jde claim,
+  měkce zmizí a nad ním i pod ním zůstane celá. Žádná viditelná hrana.
+  Na úzkém okně je text nad kruhem, tam se maska vypíná.

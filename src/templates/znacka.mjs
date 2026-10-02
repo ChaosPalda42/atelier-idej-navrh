@@ -19,9 +19,15 @@ function tahyKruhu() {
 /** Kruh i s maskou, kterou se dá „nakreslit" jedním objezdem. */
 function kruh({ kresli = false }) {
   const id = `tah-${++poradi}`;
+  // Maska MUSÍ mít vlastní rozsah. Bez něj se použije výchozí (-10 %/120 %
+  // počítané z viewportu), který kresbu ořízne — a protože se kruh otáčí,
+  // ten zářez pak putuje dokola.
+  const okraj = 160;
   const maska = kresli
-    ? `<mask id="${id}" maskUnits="userSpaceOnUse">
-<circle class="znacka-objezd" cx="${STRED[0]}" cy="${STRED[1]}" r="100" fill="none" stroke="#fff" stroke-width="280"/>
+    ? `<mask id="${id}" maskUnits="userSpaceOnUse"
+ x="${(K[0] - okraj).toFixed(0)}" y="${(K[1] - okraj).toFixed(0)}"
+ width="${(K[2] + 2 * okraj).toFixed(0)}" height="${(K[3] + 2 * okraj).toFixed(0)}">
+<circle class="znacka-objezd" cx="${STRED[0]}" cy="${STRED[1]}" r="100" fill="none" stroke="#fff" stroke-width="300"/>
 </mask>`
     : "";
   return `${maska}<g class="znacka-kruh" fill="none" stroke-linecap="round" stroke-linejoin="round"${kresli ? ` mask="url(#${id})"` : ""}>${tahyKruhu()}</g>`;

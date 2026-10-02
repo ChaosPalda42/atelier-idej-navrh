@@ -873,6 +873,11 @@ p:last-child { margin-bottom: 0; }
   transform: translateY(-50%);
   opacity: 0.85;
   pointer-events: none;
+  /* Kruh se ztrácí tam, kde je text — měkce, bez viditelné hrany. */
+  --ustup: radial-gradient(74% 32% at -2% 46%,
+    transparent 0 52%, rgba(0, 0, 0, 0.45) 78%, #000 100%);
+  -webkit-mask-image: var(--ustup);
+  mask-image: var(--ustup);
 }
 .uvod-znacka .znacka { width: 100%; height: auto; }
 
@@ -962,7 +967,15 @@ h3.rukou {
   .uvod { grid-template-columns: minmax(0, 1fr); min-height: auto; }
   .uvod-text, .uvod-dolu { grid-column: 1; }
   .uvod-dolu { grid-row: auto; }
-  .uvod-znacka { width: 118%; right: -32%; top: 56%; opacity: 0.55; }
+  /* na úzkém okně je text nad kruhem, ustupovat nemusí */
+  .uvod-znacka {
+    width: 118%;
+    right: -32%;
+    top: 56%;
+    opacity: 0.5;
+    -webkit-mask-image: none;
+    mask-image: none;
+  }
   .list-pozadi { opacity: 0.12; }
   .list-pozadi--vpravo { width: 70%; right: -14%; }
   .list-pozadi--vlevo { width: 66%; left: -16%; }
