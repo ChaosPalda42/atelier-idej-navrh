@@ -53,6 +53,10 @@ async function main() {
   const site = JSON.parse(await readFile(path.join(KOREN, "data/site.json"), "utf8"));
   const t = JSON.parse(await readFile(path.join(KOREN, "data/texty.json"), "utf8"));
 
+  // skici architekta (tools/skici.py)
+  const seznamSkic = path.join(KOREN, "data", "obrazky", "seznam.json");
+  const skici = (await existuje(seznamSkic)) ? JSON.parse(await readFile(seznamSkic, "utf8")) : [];
+
   // kresby vytažené ze skutečných výkresů (tools/vykres.py)
   const kresby = {};
   const slozkaKreseb = path.join(KOREN, "data", "kresby");
@@ -76,7 +80,7 @@ async function main() {
       .replace(/var\(--oranz, (#\w+)\)/g, "$1"));
 
   // fotky a skici, pokud už dorazily podklady
-  for (const slozka of ["fotky", "skici"]) {
+  for (const slozka of ["fotky", "skici", "obrazky"]) {
     const zdroj = path.join(KOREN, "data", slozka);
     if (await existuje(zdroj)) await zkopirujStrom(zdroj, path.join(VEN, slozka));
   }
@@ -89,14 +93,15 @@ async function main() {
   nastavOtisk(soucet.digest("hex").slice(0, 8));
 
   // stránky
-  await writeFile(path.join(VEN, "index.html"), index(site, t, kresby));
-  for (const prace of site.prace) {
-    await writeFile(path.join(VEN, "prace", `${prace.slug}.html`), detail(site, t, prace.slug, kresby));
+  await writeFile(path.join(VEN, "index.html"), index(site, t, kresby, skici));
+  for (const skupina of site.skupiny) {
+    if (!skici.some((s) => s.skupina === skupina.id)) continue;
+    await writeFile(path.join(VEN, "prace", `${skupina.id}.html`), detail(site, t, skupina.id, kresby, skici));
   }
-  await writeFile(path.join(VEN, "administrace.html"), administrace(site, t));
+  await writeFile(path.join(VEN, "administrace.html"), administrace(site, t, skici));
 
   const otisk = createHash("sha1").update(await readFile(path.join(VEN, "index.html"))).digest("hex").slice(0, 8);
-  console.log(`hotovo: ${site.prace.length + 2} stránek, otisk ${otisk}`);
+  console.log(`hotovo: ${site.skupiny.length + 2} stránek, ${skici.length} skic, otisk ${otisk}`);
 }
 
 main().catch((e) => { console.error(e); process.exit(1); });

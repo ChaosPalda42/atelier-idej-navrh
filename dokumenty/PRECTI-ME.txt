@@ -27,9 +27,12 @@ Pojistky, aby to neotravovalo:
 
 Co si na ukázce projít
 ----------------------
- - index.html .............. celá jednostránka (úvod, co dělám, práce,
+ - index.html .............. celá jednostránka (úvod, co dělám, skicák,
                              postup, o mně, kontakt)
- - práce ................... každá karta se dá rozkliknout na detail
+ - Ze skicáku .............. vaše skici; kliknutím se zvětší, filtr nahoře
+                             je přepíná po skupinách
+ - skupiny ................. Rodinné domy, Bytové domy, Interiéry, Garáže —
+                             každá má vlastní list
  - formulář v kontaktu ..... vyzkoušejte ho i prázdný, hlídá si chyby
  - administrace.html ....... demo administrace; co tam změníte (texty,
                              kontakty, práce), objeví se na webu.
@@ -46,22 +49,28 @@ celou dobu pomalu otáčí (jedna otáčka za 72 vteřin).
 Svislý nápis vpravo z originálu („IDEJ" v aurebeshu, hvězdněválečné abecedě)
 je v ukázce vypnutý — čeká na rozhodnutí, jestli ho chcete používat.
 
-CO JE V UKÁZCE VYMYŠLENÉ
-------------------------
- - všech 6 prací včetně názvů, míst, let, čísel i popisů,
- - obě věty v sekci „Kdo to kreslí",
- - čísla 24 staveb / 4 roky / 7 měsíců,
- - skici místo fotek — skutečné fotky dodá ateliér,
- - půdorys u „Domu nad sadem" je z ukázkového výkresu, ne z vaší zakázky;
-   je tam proto, aby bylo vidět, jak na webu vypadá skutečný výkres.
+CO JE SKUTEČNÉ A CO NE
+----------------------
+Skutečné:
+ - všech 11 skic — jsou vaše, jen se jim vyčistil papír, aby kresba seděla
+   rovnou na listu webu,
+ - rozdělení práce na rodinné domy, bytové domy, interiéry a garáže,
+ - údaje z rejstříku, jméno a telefon.
 
-Skutečné je: název firmy, IČO, sídlo, jméno architekta, telefon (z veřejného
-rejstříku a z loga) a popis toho, co ateliér dělá. E-mail info@atelieridej.cz
-se teprve zakládá — dokud doména nepoběží, pošta na něj nechodí.
+Vymyšlené (a čeká to na vás):
+ - oba odstavce v sekci „Kdo to kreslí" a tři čísla pod nimi,
+ - popisky u čtyř skupin prací — napsal jsem je obecně, podle toho,
+   co na skicách je; klidně je přepište po svém,
+ - půdorys na listu „Rodinné domy" je z ukázkového výkresu, ne z vaší
+   zakázky — je tam proto, aby bylo vidět, jak na webu vypadá
+   skutečný výkres převedený do kresby.
+
+E-mail info@atelieridej.cz se teprve zakládá — dokud doména nepoběží,
+pošta na něj nechodí.
 
 Co je potřeba doplnit
 ---------------------
- 1. fotky a podklady skutečných staveb (klidně i rozpracované)
+ 1. fotky dokončených staveb — skici ukazují přemýšlení, fotky ukážou výsledek;
     a výkresy v DXF nebo vektorovém PDF — viz JAK-DODAT-VYKRESY.txt,
  2. dvě tři věty o sobě — kde jste studoval a co vás na tom drží,
  3. doménu a e-mail, kam mají chodit poptávky,

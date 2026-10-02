@@ -6,14 +6,14 @@ const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replac
 
 const ZALOZKY = [
   ["prehled", "Přehled"],
-  ["prace", "Práce"],
+  ["prace", "Skici"],
   ["texty", "Texty"],
   ["poptavky", "Poptávky"],
   ["kontakt", "Kontakt"],
   ["zaloha", "Záloha"],
 ];
 
-export function administrace(site, t) {
+export function administrace(site, t, skici = []) {
   const telo = `<div class="list">
 <header class="admin-hlava">
 <div>
@@ -35,8 +35,8 @@ ${ZALOZKY.map(([id, popis], i) => `<button class="admin-zalozka" role="tab" data
 
 <section class="admin-panel" data-panel="prace" hidden>
 <div class="admin-radek">
-<h2>Práce</h2>
-<button class="tlacitko" id="admin-pridat">Přidat práci</button>
+<h2>Skici</h2>
+<button class="tlacitko" id="admin-pridat">Přidat skicu</button>
 </div>
 <div id="admin-prace" class="admin-seznam"></div>
 </section>
@@ -72,7 +72,7 @@ ${ZALOZKY.map(([id, popis], i) => `<button class="admin-zalozka" role="tab" data
 </section>
 </div>
 </div>
-<script type="application/json" id="admin-vychozi">${JSON.stringify({ firma: site.firma, prace: site.prace, texty: t }).replace(/</g, "\\u003c")}</script>`;
+<script type="application/json" id="admin-vychozi">${JSON.stringify({ firma: site.firma, prace: skici.map((s) => ({ slug: s.zaklad, nazev: s.popis, typ: s.skupina, anotace: "" })), texty: t }).replace(/</g, "\\u003c")}</script>`;
 
   return stranka({
     titulek: "Demo administrace — ateliér IDEJ",

@@ -13,28 +13,29 @@
   },
   "sluzby": [
     {
-      "id": "domy",
+      "id": "rodinne-domy",
       "nazev": "Rodinné domy",
+      "kresba": "dum",
       "popis": "Od prvního náčrtu na pozemku po klíče v ruce. Novostavby i domy, které se musí vejít mezi sousedy, do svahu nebo do pravidel obce.",
-      "kresba": "dum"
+      "vykres": "ukazka-pudorys"
     },
     {
-      "id": "komercni",
-      "nazev": "Komerční stavby",
-      "popis": "Provozovny, kanceláře, výrobní a skladové objekty. Stavba, která musí vydělávat, se navrhuje od provozu, ne od fasády.",
-      "kresba": "hala"
+      "id": "bytove-domy",
+      "nazev": "Bytové domy",
+      "kresba": "bytovy",
+      "popis": "Domy, kde se bydlí po patrech. Řeší se v nich úplně jiné věci než u rodinného domu: hluk, vstupy, parkování a to, aby byty nebyly chodbami."
     },
     {
-      "id": "rekonstrukce",
-      "nazev": "Rekonstrukce a přestavby",
-      "popis": "Domy po rodičích, činžovní byty, stodoly a objekty, kterým se změní účel. Nejdřív se zjistí, co stavba unese, pak se kreslí.",
-      "kresba": "rekonstrukce"
+      "id": "interiery",
+      "nazev": "Interiéry",
+      "kresba": "interier",
+      "popis": "Vnitřek domu i samotný byt. Když je dobře rozmyšlený nábytek a světlo, obejde se spousta věcí bez bourání."
     },
     {
-      "id": "studie",
-      "nazev": "Studie a konzultace",
-      "popis": "Posouzení pozemku před koupí, ověřovací studie, varianty zástavby, jednání s úřady. Někdy je nejcennější výstup věta „tohle nekupujte“.",
-      "kresba": "studie"
+      "id": "garaze",
+      "nazev": "Garáže a přístavby",
+      "kresba": "garaz",
+      "popis": "Drobné stavby, u kterých se nejčastěji chybuje — garáž, přístřešek, přístavba. Musí sednout k domu, který už stojí, a projít přes úřad."
     }
   ],
   "postup": [
@@ -69,177 +70,38 @@
       "trvani": "po dobu stavby"
     }
   ],
-  "prace": [
+  "skupiny": [
     {
-      "slug": "dum-nad-sadem",
-      "nazev": "Dům nad sadem",
-      "typ": "domy",
-      "misto": "Jesenice u Prahy",
-      "rok": 2025,
-      "stav": "dokončeno",
-      "anotace": "Přízemní dům ve svahu, který se sadu neplete do cesty.",
-      "popis": [
-        "Pozemek je prudký a celý jižní; původní zadání znělo na dvoupodlažní dům s terasou nad garáží. Ukázalo se, že stačí dům rozložit po vrstevnici a svah vyřeší podlaží sám.",
-        "Dům je jedno podlaží, zalomené do L. Obytná část míří do starého sadu, provozní část kryje vjezd od silnice. Mezi nimi je zapuštěný dvorek, který v létě táhne vzduch skrz celý dům."
-      ],
-      "cisla": [
-        {
-          "popisek": "Užitná plocha",
-          "hodnota": "164 m²"
-        },
-        {
-          "popisek": "Pozemek",
-          "hodnota": "1 240 m²"
-        },
-        {
-          "popisek": "Studie → kolaudace",
-          "hodnota": "31 měsíců"
-        }
-      ],
-      "fotky": [],
-      "vykresy": [
-        "ukazka-pudorys"
+      "id": "rodinne-domy",
+      "nazev": "Rodinné domy",
+      "text": [
+        "Dům se nekreslí od fasády. Nejdřív se ptám, jak chcete žít — kde se ráno potkáte, kde se dá zavřít dveře, co uvidíte z kuchyně. Teprve pak má smysl kreslit hmotu.",
+        "Tyhle skici jsou z té úplně první fáze. Dělám jich na každý dům desítky a většina z nich skončí v koši; právě proto se v nich dá tak levně hledat."
       ]
     },
     {
-      "slug": "pekarna-v-podloubi",
-      "nazev": "Pekárna v podloubí",
-      "typ": "komercni",
-      "misto": "Beroun",
-      "rok": 2024,
-      "stav": "dokončeno",
-      "anotace": "Provoz pekárny vestavěný do domu v památkové zóně.",
-      "popis": [
-        "Do přízemí měšťanského domu se měla vejít výrobna, prodejna i zázemí pro šest lidí. Omezení bylo dané ze tří stran: klenby, které se nesmějí dotknout, hygiena a odvod par do dvora.",
-        "Výrobna je postavená jako nábytek — samostatná vložená konstrukce, která se kleneb nedotýká a dá se jednou vyndat ven."
-      ],
-      "cisla": [
-        {
-          "popisek": "Plocha provozu",
-          "hodnota": "112 m²"
-        },
-        {
-          "popisek": "Příprava",
-          "hodnota": "9 měsíců"
-        },
-        {
-          "popisek": "Realizace",
-          "hodnota": "5 měsíců"
-        }
-      ],
-      "fotky": []
+      "id": "bytove-domy",
+      "nazev": "Bytové domy",
+      "text": [
+        "U bytového domu rozhoduje skladba bytů a přístup k nim dřív než vzhled. Když se trefí, dům se dobře prodává i dobře žije; když ne, nezachrání ho žádná fasáda.",
+        "Na skicách hledám hmotu, odskoky, balkony a to, kudy do domu lidé chodí."
+      ]
     },
     {
-      "slug": "stodola-u-lipy",
-      "nazev": "Stodola U Lípy",
-      "typ": "rekonstrukce",
-      "misto": "Kostelec nad Černými lesy",
-      "rok": 2025,
-      "stav": "ve výstavbě",
-      "anotace": "Z hospodářské stavby bydlení pro dvě generace.",
-      "popis": [
-        "Zděná stodola z konce 19. století s krovem, který stál za záchranu. Zadání bylo bydlet tam ve dvou generacích a nerozdělit přitom vnitřní prostor na buňky.",
-        "Vložená dřevěná „skříň“ nese patro a drží v sobě všechny provozy. Hala stodoly zůstala celá a je vidět až do hřebene."
-      ],
-      "cisla": [
-        {
-          "popisek": "Zastavěná plocha",
-          "hodnota": "248 m²"
-        },
-        {
-          "popisek": "Dvě bytové jednotky",
-          "hodnota": "92 + 118 m²"
-        },
-        {
-          "popisek": "Stáří krovu",
-          "hodnota": "cca 130 let"
-        }
-      ],
-      "fotky": []
+      "id": "interiery",
+      "nazev": "Interiéry",
+      "text": [
+        "Interiér řeším nejradši zároveň s domem. Když se o nábytku a světle rozhodne až po kolaudaci, je spousta věcí zbytečně složitá.",
+        "Kreslí se to stejně jako dům — od toho, co se v místnosti doopravdy dělá."
+      ]
     },
     {
-      "slug": "hala-s-kancelari",
-      "nazev": "Hala s administrativou",
-      "typ": "komercni",
-      "misto": "Rudná u Prahy",
-      "rok": 2023,
-      "stav": "dokončeno",
-      "anotace": "Výrobní hala, kde se kanceláře nedívají na parkoviště.",
-      "popis": [
-        "Zadání bylo prosté: 1 400 m² výroby, zázemí pro 40 lidí a možnost halu jednou prodloužit o třetinu. Nejtěžší na tom byl vjezd kamionů tak, aby neblokoval zaměstnance.",
-        "Administrativa je otočená do zahrady na severní straně, výroba obsluhovaná z jihu. Prodloužení je připravené bez zásahu do zázemí."
-      ],
-      "cisla": [
-        {
-          "popisek": "Hala",
-          "hodnota": "1 420 m²"
-        },
-        {
-          "popisek": "Administrativa",
-          "hodnota": "380 m²"
-        },
-        {
-          "popisek": "Rezerva na rozšíření",
-          "hodnota": "+ 480 m²"
-        }
-      ],
-      "fotky": []
-    },
-    {
-      "slug": "byt-v-cihlovem-dome",
-      "nazev": "Byt v cihlovém domě",
-      "typ": "rekonstrukce",
-      "misto": "Praha 5 — Smíchov",
-      "rok": 2024,
-      "stav": "dokončeno",
-      "anotace": "Čtyři pokoje do řady přeskládané na byt pro tři lidi.",
-      "popis": [
-        "Prvorepublikový byt s nosnými zdmi na špatných místech a s nejhezčím oknem v nejmenší místnosti. Řešilo se to posunem jediné příčky a novým překladem.",
-        "Zachovaly se dveře, kování i parkety; doplnilo se jen to, co chybělo, a to přiznaně novým materiálem."
-      ],
-      "cisla": [
-        {
-          "popisek": "Plocha bytu",
-          "hodnota": "96 m²"
-        },
-        {
-          "popisek": "Doba prací",
-          "hodnota": "4 měsíce"
-        },
-        {
-          "popisek": "Zbouraných příček",
-          "hodnota": "1"
-        }
-      ],
-      "fotky": []
-    },
-    {
-      "slug": "overovaci-studie-navsi",
-      "nazev": "Ověřovací studie návsi",
-      "typ": "studie",
-      "misto": "Vysoký Újezd",
-      "rok": 2026,
-      "stav": "studie",
-      "anotace": "Kolik domů se na náves vejde, aniž přestane být návsí.",
-      "popis": [
-        "Obec řešila tlak na zastavění poslední volné plochy v centru. Studie porovnává tři míry zastavění a jejich dopad na dopravu, stín a odtok vody.",
-        "Výsledkem není dům, ale podklad pro rozhodnutí zastupitelstva — a regulativ, který se dá vložit do územního plánu."
-      ],
-      "cisla": [
-        {
-          "popisek": "Řešené území",
-          "hodnota": "1,8 ha"
-        },
-        {
-          "popisek": "Posuzované varianty",
-          "hodnota": "3"
-        },
-        {
-          "popisek": "Doporučeno",
-          "hodnota": "varianta B"
-        }
-      ],
-      "fotky": []
+      "id": "garaze",
+      "nazev": "Garáže a přístavby",
+      "text": [
+        "Malá stavba není jednodušší stavba. Musí sednout k domu, který už stojí, vejít se do odstupů a projít přes úřad.",
+        "Většinou se to rozhodne na jedné dobré skice — kudy se vjíždí a kam padá stín."
+      ]
     }
   ]
 }

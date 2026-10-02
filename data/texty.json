@@ -20,12 +20,12 @@
     "poznamka": "Na malou zakázku není malý architekt. Jen menší papírování."
   },
   "prace": {
-    "nadpis": "Vybrané práce",
+    "nadpis": "Ze skicáku",
     "cislo": "02",
-    "perex": "Šest staveb, na kterých je vidět, jak uvažuju: nejdřív co místo unese, pak teprve tvar. U každé je napsané, co bylo zadání a co se ukázalo jako skutečný problém.",
+    "perex": "Každý dům začíná na papíře. Tohle jsou skici z rozmýšlení — propiska, fix, pastelka, většinou na tom, co bylo zrovna po ruce. Není to portfolio hotových staveb, je to vidět do práce.",
     "vse": "Vše",
-    "poznamka": "Fotky dodá ateliér. Do té doby tu kreslím místo nich.",
-    "detail": "Celý projekt"
+    "poznamka": "Fotky dokončených staveb sem přibydou. Tohle je to, čím každá začala.",
+    "detail": "Celá skupina"
   },
   "postup": {
     "nadpis": "Jak to probíhá",
@@ -40,19 +40,19 @@
       "Vystudoval jsem architekturu a pozemní stavby a několik let kreslil v cizích ateliérech, než jsem si založil vlastní. Bavilo mě vždycky víc to, co se dá postavit, než to, co se dá vyfotit.",
       "Pracuju sám a spolupracuju se stálým okruhem statiků, profesistů a řemeslníků, které znám z dokončených staveb. Na stavbu chodím — detail vymyšlený u stolu se tam stejně musí uhlídat."
     ],
-    "poznamka": "Tahle dvě odstavce jsou v ukázce vymyšlené. Napište mi je po svém a nahradím je.",
+    "poznamka": "Tyhle dva odstavce jsou v ukázce vymyšlené. Napište mi je po svém a nahradím je.",
     "cisla": [
       {
-        "popisek": "Dokončené stavby",
-        "hodnota": "24"
+        "popisek": "Skic na jeden dům",
+        "hodnota": "desítky"
       },
       {
-        "popisek": "Nejdelší stavba",
-        "hodnota": "4 roky"
+        "popisek": "Nejradši kreslím",
+        "hodnota": "propiskou"
       },
       {
-        "popisek": "Nejkratší",
-        "hodnota": "7 měsíců"
+        "popisek": "Ateliér má",
+        "hodnota": "1 člověka"
       }
     ]
   },
@@ -74,7 +74,7 @@
     "podpis": "Ing. arch. Martin Jirásko"
   },
   "paticka": {
-    "ukazka": "Tohle je návrh webu, ne ostrý provoz. Práce, čísla i texty v ukázce jsou vymyšlené.",
+    "ukazka": "Tohle je návrh webu, ne ostrý provoz. Skici jsou skutečné, texty o ateliéru zatím ne.",
     "administrace": "Demo administrace",
     "nahoru": "Zpátky nahoru"
   },
@@ -86,10 +86,10 @@
     "kontakt": "Kontakt"
   },
   "detail": {
-    "zpet": "Zpátky na výpis",
-    "zadani": "Zadání a řešení",
+    "zpet": "Zpátky na skicák",
+    "zadani": "Jak to beru",
     "predchozi": "Předchozí",
     "dalsi": "Další",
-    "fotky": "Fotografie dodá ateliér — tady jsou zatím kresby."
+    "fotky": "Skici z rozmýšlení — fotky realizací teprve přibydou."
   }
 }

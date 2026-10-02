@@ -70,6 +70,8 @@ body {
 }
 
 img { max-width: 100%; display: block; }
+/* atribut hidden musí přebít i třídu, která nastavuje display */
+[hidden] { display: none !important; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
 
@@ -1002,4 +1004,54 @@ h3.rukou {
   .list-pozadi { opacity: 0.12; }
   .list-pozadi--vpravo { width: 70%; right: -14%; }
   .list-pozadi--vlevo { width: 66%; left: -16%; }
+}
+
+/* ------------------------------------------------------------- skicák */
+.skicak {
+  columns: 3;
+  column-gap: clamp(16px, 2.2vw, 30px);
+  margin-top: 2.2em;
+}
+.skicak--velky { columns: 2; margin: 0; padding: 0 clamp(22px, 5vw, 60px) var(--mezera); }
+
+.skica-list {
+  break-inside: avoid;
+  margin: 0 0 clamp(16px, 2.2vw, 30px);
+  --natoceni: 0deg;
+}
+.skica-list:nth-child(3n + 1) { --natoceni: -0.55deg; }
+.skica-list:nth-child(3n + 2) { --natoceni: 0.45deg; }
+.skica-list:nth-child(5n) { --natoceni: 0.8deg; }
+
+.skica-list img {
+  width: 100%;
+  height: auto;
+  /* bílý papír skici se prolne s papírem listu, zůstane jen tah pera */
+  mix-blend-mode: multiply;
+  cursor: zoom-in;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1), filter 0.45s ease;
+}
+.skica-list:hover img { transform: translateY(-3px) scale(1.012); filter: contrast(1.04); }
+
+.skicak-odkazy {
+  margin-top: 2.2em;
+  font-size: 0.92rem;
+  color: var(--tuha-2);
+  max-width: none;
+}
+.skicak-odkazy a { text-decoration: none; border-bottom: 1px solid var(--linka); }
+.skicak-odkazy a:hover { border-bottom-color: var(--oranz); }
+
+.detail-vykres {
+  padding: 0 clamp(22px, 5vw, 60px) var(--mezera);
+  color: var(--tuha-2);
+}
+.detail-vykres svg { width: 100%; height: auto; }
+
+@media (max-width: 920px) {
+  .skicak { columns: 2; }
+  .skicak--velky { columns: 1; }
+}
+@media (max-width: 560px) {
+  .skicak { columns: 1; }
 }

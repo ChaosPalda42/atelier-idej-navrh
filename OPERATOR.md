@@ -133,3 +133,29 @@ Factory: 11 z 11 zelených, 89 testů. Ukázka cesty: `podklady/vykresy/pudorys-
 → na detailu „Dům nad sadem". V PRECTI-ME je napsané, že to není jeho zakázka.
 
 Pro klienta: `dokumenty/JAK-DODAT-VYKRESY.txt` (Revit → Export → CAD Formats → DXF).
+
+## Šesté kolo (2. 10. 2026) — skutečný materiál
+Michael poslal `WEB.zip`: **11 skic architekta** (propiska, fix, pastelka na papíře),
+pojmenovaných podle skupin — bytové domy (5), rodinné domy (4), interiéry (1), garáže (1).
+Žádné fotky staveb, žádné výkresy.
+
+Z toho plyne přestavba obsahu:
+- **Vymyšlené zakázky jsou pryč.** Sekce „Vybrané práce" → **„Ze skicáku"**:
+  zeď skic (CSS columns, mírné natočení, lightbox), filtr podle skupin.
+  Místo šesti smyšlených detailů jsou **čtyři listy skupin** (rodinné domy,
+  bytové domy, interiéry, garáže) s texty o tom, jak se ten typ práce bere.
+- **Služby přepsány podle toho, co opravdu dělá** (ne „komerční stavby
+  a rekonstrukce", ale rodinné domy / bytové domy / interiéry / garáže
+  a přístavby) + tři nové kresby ke službám.
+- `tools/skici.py`: skeny se vybílí **odečtením rozmazaného pozadí** (percentil
+  nestačil, skeny z mobilu mají nerovnoměrné osvětlení) a web je nasadí
+  v `mix-blend-mode: multiply`, takže kresba leží rovnou na papíře listu
+  a nevidí se žádný rámeček. Varianty 520/1040/1600 px, poměr se neořezává.
+- Administrace spravuje skici (tentýž `administrace.mjs`, jen jiná data).
+
+Chyba, která se našla až teď: `.svetelny-stul { display: flex }` přebíjelo atribut
+`hidden`, takže přes každou stránku ležel neviditelný lightbox. Přidáno
+`[hidden] { display: none !important; }` do resetu.
+
+V ukázce zůstává vymyšlené už jen: dva odstavce „Kdo to kreslí", tři čísla pod nimi
+a popisky čtyř skupin. Je to napsané v PRECTI-ME.

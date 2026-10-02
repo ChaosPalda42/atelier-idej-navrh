@@ -1,0 +1,203 @@
+[
+ {
+  "zaklad": "01-obrazek",
+  "popis": "obrazek",
+  "skupina": "bytove-domy",
+  "sirka": 1271,
+  "vyska": 3212,
+  "barva": "#f1ebeb",
+  "varianty": [
+   {
+    "soubor": "01-obrazek-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "01-obrazek-1040.jpg",
+    "sirka": 1040
+   }
+  ],
+  "srcset": "01-obrazek-520.jpg 520w, 01-obrazek-1040.jpg 1040w"
+ },
+ {
+  "zaklad": "02-obrazek",
+  "popis": "obrazek",
+  "skupina": "rodinne-domy",
+  "sirka": 1504,
+  "vyska": 582,
+  "barva": "#eef0f3",
+  "varianty": [
+   {
+    "soubor": "02-obrazek-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "02-obrazek-1040.jpg",
+    "sirka": 1040
+   }
+  ],
+  "srcset": "02-obrazek-520.jpg 520w, 02-obrazek-1040.jpg 1040w"
+ },
+ {
+  "zaklad": "03-bytove-domy",
+  "popis": "bytové domy",
+  "skupina": "bytove-domy",
+  "sirka": 1248,
+  "vyska": 1590,
+  "barva": "#f0e5e7",
+  "varianty": [
+   {
+    "soubor": "03-bytove-domy-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "03-bytove-domy-1040.jpg",
+    "sirka": 1040
+   }
+  ],
+  "srcset": "03-bytove-domy-520.jpg 520w, 03-bytove-domy-1040.jpg 1040w"
+ },
+ {
+  "zaklad": "04-bytove-domy",
+  "popis": "bytové domy",
+  "skupina": "bytove-domy",
+  "sirka": 2414,
+  "vyska": 3004,
+  "barva": "#f3f0f2",
+  "varianty": [
+   {
+    "soubor": "04-bytove-domy-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "04-bytove-domy-1040.jpg",
+    "sirka": 1040
+   },
+   {
+    "soubor": "04-bytove-domy-1600.jpg",
+    "sirka": 1600
+   }
+  ],
+  "srcset": "04-bytove-domy-520.jpg 520w, 04-bytove-domy-1040.jpg 1040w, 04-bytove-domy-1600.jpg 1600w"
+ },
+ {
+  "zaklad": "05-rodinne-domy",
+  "popis": "rodinné domy",
+  "skupina": "rodinne-domy",
+  "sirka": 893,
+  "vyska": 2151,
+  "barva": "#fcf3f4",
+  "varianty": [
+   {
+    "soubor": "05-rodinne-domy-520.jpg",
+    "sirka": 520
+   }
+  ],
+  "srcset": "05-rodinne-domy-520.jpg 520w"
+ },
+ {
+  "zaklad": "06-bytovy-dum",
+  "popis": "bytový dům",
+  "skupina": "bytove-domy",
+  "sirka": 1335,
+  "vyska": 2905,
+  "barva": "#e6edee",
+  "varianty": [
+   {
+    "soubor": "06-bytovy-dum-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "06-bytovy-dum-1040.jpg",
+    "sirka": 1040
+   }
+  ],
+  "srcset": "06-bytovy-dum-520.jpg 520w, 06-bytovy-dum-1040.jpg 1040w"
+ },
+ {
+  "zaklad": "07-rodinne-domy",
+  "popis": "rodinné domy",
+  "skupina": "rodinne-domy",
+  "sirka": 1032,
+  "vyska": 2008,
+  "barva": "#fff1e7",
+  "varianty": [
+   {
+    "soubor": "07-rodinne-domy-520.jpg",
+    "sirka": 520
+   }
+  ],
+  "srcset": "07-rodinne-domy-520.jpg 520w"
+ },
+ {
+  "zaklad": "08-garaze",
+  "popis": "garáže",
+  "skupina": "garaze",
+  "sirka": 989,
+  "vyska": 1546,
+  "barva": "#f2f0f0",
+  "varianty": [
+   {
+    "soubor": "08-garaze-520.jpg",
+    "sirka": 520
+   }
+  ],
+  "srcset": "08-garaze-520.jpg 520w"
+ },
+ {
+  "zaklad": "09-interiery",
+  "popis": "interiéry",
+  "skupina": "interiery",
+  "sirka": 1204,
+  "vyska": 1454,
+  "barva": "#eaf6ec",
+  "varianty": [
+   {
+    "soubor": "09-interiery-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "09-interiery-1040.jpg",
+    "sirka": 1040
+   }
+  ],
+  "srcset": "09-interiery-520.jpg 520w, 09-interiery-1040.jpg 1040w"
+ },
+ {
+  "zaklad": "10-rodinne-domy",
+  "popis": "rodinné domy",
+  "skupina": "rodinne-domy",
+  "sirka": 1522,
+  "vyska": 3128,
+  "barva": "#f7f4f5",
+  "varianty": [
+   {
+    "soubor": "10-rodinne-domy-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "10-rodinne-domy-1040.jpg",
+    "sirka": 1040
+   }
+  ],
+  "srcset": "10-rodinne-domy-520.jpg 520w, 10-rodinne-domy-1040.jpg 1040w"
+ },
+ {
+  "zaklad": "11-bytovy-dum",
+  "popis": "bytový dům",
+  "skupina": "bytove-domy",
+  "sirka": 1136,
+  "vyska": 1550,
+  "barva": "#edebec",
+  "varianty": [
+   {
+    "soubor": "11-bytovy-dum-520.jpg",
+    "sirka": 520
+   },
+   {
+    "soubor": "11-bytovy-dum-1040.jpg",
+    "sirka": 1040
+   }
+  ],
+  "srcset": "11-bytovy-dum-520.jpg 520w, 11-bytovy-dum-1040.jpg 1040w"
+ }
+]

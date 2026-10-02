@@ -149,6 +149,9 @@ export const KRESBY = {
   hala: kresbaHala,
   rekonstrukce: kresbaRekonstrukce,
   studie: kresbaStudie,
+  bytovy: null,     // doplněno níž, aby šly funkce definovat až za tímhle
+  interier: null,
+  garaz: null,
 };
 
 /* ------------------------------------------- zástupná skica místo fotky */
@@ -326,3 +329,63 @@ ${slabe ? `<g ${SLABA}>${slabe}</g>` : ""}
 <g ${TUS}>${silne}</g>
 </svg>`;
 }
+
+/* ----------------------------------------------- další kresby ke službám */
+export function kresbaBytovy() {
+  zacni(101);
+  const kusy = [cara([[36, 126], [36, 34], [194, 34], [194, 126]], { rozhod: 0.6 })];
+  for (let p = 0; p < 4; p++) {
+    const y = 48 + p * 20;
+    kusy.push(cara([[36, y + 12], [194, y + 12]], { rozhod: 0.35 }));
+    for (let o = 0; o < 4; o++) {
+      kusy.push(obdelnik(50 + o * 36, y, 20, 12));
+    }
+  }
+  kusy.push(cara([[30, 34], [200, 34]], { rozhod: 0.5 }));
+  kusy.push(cara([[36, 126], [194, 126]], { rozhod: 0.4 }));
+  kusy.push(obdelnik(102, 108, 26, 18));
+  return `<svg class="kresba" viewBox="0 0 230 142" role="img" aria-label="Skica bytového domu">
+<g ${SLABA}>${cara([[6, 126], [224, 126]], { rozhod: 0.5 })}</g>
+<g ${TUS}>${kusy.join("")}</g>
+${kota(36, 136, 194, "")}
+</svg>`;
+}
+
+export function kresbaInterier() {
+  zacni(103);
+  return `<svg class="kresba" viewBox="0 0 230 142" role="img" aria-label="Skica interiéru">
+<g ${SLABA}>${cara([[14, 122], [216, 122]], { rozhod: 0.4 })}</g>
+<g ${TUS}>
+${cara([[24, 122], [24, 26], [206, 26], [206, 122]], { rozhod: 0.6 })}
+${cara([[24, 40], [206, 40]], { rozhod: 0.4 })}
+${obdelnik(42, 56, 54, 40)}
+${cara([[42, 76], [96, 76]], { rozhod: 0.3 })}
+${obdelnik(118, 84, 72, 12)}
+${cara([[128, 96], [128, 118]], { rozhod: 0.3 })}${cara([[180, 96], [180, 118]], { rozhod: 0.3 })}
+${cara([[118, 84], [128, 62], [180, 62], [190, 84]], { rozhod: 0.5 })}
+${cara([[150, 26], [150, 48]], { rozhod: 0.3 })}
+${cara(oblouk(150, 52, 10, 0, 360, 14), { zavrit: true, rozhod: 0.5, krok: 10 })}
+</g>
+</svg>`;
+}
+
+export function kresbaGaraz() {
+  zacni(107);
+  return `<svg class="kresba" viewBox="0 0 230 142" role="img" aria-label="Skica garáže">
+<g ${SLABA}>${cara([[6, 126], [224, 126]], { rozhod: 0.5 })}</g>
+<g ${TUS}>
+${cara([[40, 126], [40, 70], [190, 70], [190, 126]], { rozhod: 0.6 })}
+${cara([[30, 72], [115, 52], [200, 72]], { rozhod: 0.5 })}
+${cara([[40, 70], [190, 70]], { rozhod: 0.4 })}
+${obdelnik(58, 86, 52, 40)}
+${cara([[58, 96], [110, 96]], { rozhod: 0.3 })}${cara([[58, 106], [110, 106]], { rozhod: 0.3 })}${cara([[58, 116], [110, 116]], { rozhod: 0.3 })}
+${cara([[130, 126], [130, 88], [172, 88], [172, 126]], { rozhod: 0.4 })}
+${cara([[130, 108], [172, 108]], { rozhod: 0.3 })}
+</g>
+${kota(40, 136, 190, "")}
+</svg>`;
+}
+
+KRESBY.bytovy = kresbaBytovy;
+KRESBY.interier = kresbaInterier;
+KRESBY.garaz = kresbaGaraz;
