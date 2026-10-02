@@ -91,5 +91,13 @@
     "predchozi": "Předchozí",
     "dalsi": "Další",
     "fotky": "Skici z rozmýšlení — fotky realizací teprve přibydou."
+  },
+  "chyba": {
+    "nadpis": "Tenhle list v bloku není",
+    "text": "Stránka, na kterou jste se dostali, tady není. Buď jsme ji při přestavbě ukázky přejmenovali, nebo se v adrese někde ztratilo písmeno.",
+    "poznamka": "Nic se nestalo. Blok má ještě pár jiných listů.",
+    "domu": "Zpátky na začátek",
+    "skicak": "Ze skicáku",
+    "kontakt": "Napsat"
   }
 }

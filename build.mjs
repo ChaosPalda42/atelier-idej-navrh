@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { index, detail } from "./src/templates/stranky.mjs";
+import { index, detail, chyba404, presmerovani } from "./src/templates/stranky.mjs";
 import { administrace } from "./src/templates/administrace.mjs";
 import { znacka } from "./src/templates/znacka.mjs";
 import { nastavOtisk } from "./src/templates/layout.mjs";
@@ -98,6 +98,22 @@ async function main() {
     if (!skici.some((s) => s.skupina === skupina.id)) continue;
     await writeFile(path.join(VEN, "prace", `${skupina.id}.html`), detail(site, t, skupina.id, kresby, skici));
   }
+  await writeFile(path.join(VEN, "404.html"), chyba404(site, t));
+
+  // adresy z dřívější verze ukázky (vymyšlené zakázky) — ať nekončí na 404
+  const stareAdresy = {
+    "dum-nad-sadem": "rodinne-domy",
+    "stodola-u-lipy": "rodinne-domy",
+    "byt-v-cihlovem-dome": "interiery",
+    "pekarna-v-podloubi": "bytove-domy",
+    "hala-s-kancelari": "bytove-domy",
+    "overovaci-studie-navsi": "rodinne-domy",
+  };
+  for (const [stara, nova] of Object.entries(stareAdresy)) {
+    await writeFile(path.join(VEN, "prace", `${stara}.html`),
+      presmerovani(`${nova}.html`, "ukázka teď stojí na skutečných skicích"));
+  }
+
   await mkdir(path.join(VEN, "administrace"), { recursive: true });
   for (const list of administrace(site, t, skici)) {
     await writeFile(path.join(VEN, list.soubor), list.html);

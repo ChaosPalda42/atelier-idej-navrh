@@ -201,3 +201,58 @@ ${vykres ? `<div class="detail-vykres kresba">${kresbaZDat(vykres, { seed: 11 })
     telo, t, firma: site.firma, k: "../", aktivni: "prace",
   });
 }
+
+/** Stránka, která tu není. GitHub Pages ji servíruje na každou neznámou adresu. */
+export function chyba404(site, t) {
+  const telo = `<article class="list sekce chyba" data-psat>
+<div class="list-pozadi list-pozadi--vpravo kresba" aria-hidden="true">${kresbaSituace()}</div>
+<div class="sekce-hlava">
+<span class="sekce-cislo">404</span>
+<p class="poznamka pise">${esc(t.chyba.poznamka)}</p>
+</div>
+<div class="sekce-telo">
+<h1 class="nadpis rukou pise" data-znaky>${esc(t.chyba.nadpis)}</h1>
+<p class="vedouci zjevit">${esc(t.chyba.text)}</p>
+<div class="hlavicka-pod polozit">
+<a class="tlacitko" href="index.html" data-koren>${esc(t.chyba.domu)}</a>
+<a class="tlacitko lehke" href="index.html#prace" data-koren>${esc(t.chyba.skicak)}</a>
+<a class="tlacitko lehke" href="index.html#kontakt" data-koren>${esc(t.chyba.kontakt)}</a>
+</div>
+</div>
+</article>
+<script>
+/* Adresy se opraví podle toho, odkud se na 404 přišlo (web běží v podsložce). */
+(function () {
+  var cesta = location.pathname.split("/").filter(Boolean);
+  var koren = location.hostname.indexOf("github.io") >= 0 && cesta.length ? "/" + cesta[0] + "/" : "/";
+  var prvky = document.querySelectorAll("[data-koren]");
+  for (var i = 0; i < prvky.length; i++) {
+    prvky[i].setAttribute("href", koren + prvky[i].getAttribute("href"));
+  }
+})();
+</script>`;
+
+  return stranka({
+    titulek: `${t.chyba.nadpis} — ateliér IDEJ`,
+    popis: t.chyba.text,
+    telo, t, firma: site.firma, aktivni: "",
+  });
+}
+
+/** Stará adresa, kterou někdo může mít v záložkách — pošle se tam, kam patří. */
+export function presmerovani(cil, popisek) {
+  return `<!doctype html>
+<html lang="cs">
+<head>
+<meta charset="utf-8">
+<title>Přesunuto — ateliér IDEJ</title>
+<link rel="canonical" href="${cil}">
+<meta http-equiv="refresh" content="0; url=${cil}">
+<meta name="robots" content="noindex">
+</head>
+<body style="font:16px/1.6 system-ui,sans-serif;background:#cfc3ad;color:#221f1b;padding:40px">
+<p>Tahle stránka se přestěhovala${popisek ? ` — ${popisek}` : ""}.
+<a href="${cil}">Pokračovat</a>.</p>
+</body>
+</html>`;
+}

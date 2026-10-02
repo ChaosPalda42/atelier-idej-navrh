@@ -190,3 +190,12 @@ V administraci se uložený stav navíc při načtení srovná se skutečným se
 skic (`srovnejSeSkicami`) — co zmizelo, se zahodí, co přibylo, se doplní.
 Ověřeno: starý stav → všech 11 skic zůstane; skrytí a přejmenování z administrace
 pořád fungují; filtr taky.
+
+## Oprava (2. 10. 2026): 404 a staré adresy
+Michael přišel na `prace/overovaci-studie-navsi.html` → 404 od GitHubu. Dvě věci chyběly:
+- **Vlastní 404** (`out/404.html`, GitHub Pages ji servíruje na každou neznámou adresu):
+  stejný papír, psaný nadpis, tři odkazy. Protože web běží v podsložce
+  (`/atelier-idej-navrh/`), musí si odkazy na 404 dopočítat kořen z `location.pathname` —
+  relativní cesty by se odvíjely od adresy, která neexistuje.
+- **Přesměrování šesti starých adres** z verze s vymyšlenými zakázkami na odpovídající
+  listy skupin (meta refresh + canonical + noindex).
