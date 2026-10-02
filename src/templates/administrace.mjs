@@ -14,7 +14,8 @@ const ZALOZKY = [
 ];
 
 export function administrace(site, t) {
-  const telo = `<header class="admin-hlava">
+  const telo = `<div class="list">
+<header class="admin-hlava">
 <div>
 <p class="stitek">Demo administrace</p>
 <h1>Co si ateliér spravuje sám</h1>
@@ -69,6 +70,7 @@ ${ZALOZKY.map(([id, popis], i) => `<button class="admin-zalozka" role="tab" data
 </div>
 <pre id="admin-vypis" class="admin-vypis"></pre>
 </section>
+</div>
 </div>
 <script type="application/json" id="admin-vychozi">${JSON.stringify({ firma: site.firma, prace: site.prace, texty: t }).replace(/</g, "\\u003c")}</script>`;
 

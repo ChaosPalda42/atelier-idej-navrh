@@ -13,10 +13,11 @@ Rozbalte složku a otevřete soubor index.html v prohlížeči (Chrome, Safari, 
 
 Nápad, na kterém to stojí
 -------------------------
-Celý web je jeden list papíru a obsah se na něj píše a rýsuje před očima:
-značka se nakreslí tahem, nadpisy se píšou, odstavce se odkrývají rychlostí
-čtení, kresby se narýsují. Je to schválně — ateliér prodává to, že vzniká
-něco rukou, a web to má ukázat dřív, než si člověk přečte první větu.
+Web je blok papírů v drátěné vazbě. Každá sekce je vlastní list, mezi listy
+jsou vidět kroužky. Co je psané rukou, to se před očima opravdu píše (úvodní
+věta, nadpisy, poznámky na okraji); vysázený text se jen pokládá na papír;
+kresby se rýsují čárou. Žádná čára není rovná — všechny jsou rozhozené jako
+od ruky.
 
 Pojistky, aby to neotravovalo:
  - text je na stránce celý od začátku (Google i čtečky ho vidí),
@@ -36,10 +37,14 @@ Co si na ukázce projít
 
 Značka
 ------
-Logo bylo k dispozici jen jako obrázek, proto je překreslené do čistého
-vektoru: zachovány tři tahy kruhu i myšlenka, doplněn vysázený logotyp
-„ateliér IDEJ" a varianty (stohovaná, horizontální, samotná značka, favicon).
-Kruh je udělaný tak, aby se dal nakreslit tahem — proto ta animace v záhlaví.
+Z dodaného PDF se podařilo vytáhnout skutečné vektory, takže na webu je logo
+přesně takové, jaké je — včetně tří přejezdů kruhu v různých odstínech
+(sytá oranžová silnější, světlejší tenčí a černý tenký přejezd) i původní
+sazby logotypu. Nic není překreslené.
+Při prvním otevření se kruh objede, jako by ho někdo nakreslil, a pak se
+celou dobu pomalu otáčí (jedna otáčka za 72 vteřin).
+Svislý nápis vpravo z originálu („IDEJ" v aurebeshu, hvězdněválečné abecedě)
+je v ukázce vypnutý — čeká na rozhodnutí, jestli ho chcete používat.
 
 CO JE V UKÁZCE VYMYŠLENÉ
 ------------------------
@@ -48,15 +53,16 @@ CO JE V UKÁZCE VYMYŠLENÉ
  - čísla 24 staveb / 4 roky / 7 měsíců,
  - skici místo fotek — skutečné fotky dodá ateliér.
 
-Skutečné je: název firmy, IČO, sídlo, jméno architekta, telefon a e-mail
-(z veřejného rejstříku a z loga) a popis toho, co ateliér dělá.
+Skutečné je: název firmy, IČO, sídlo, jméno architekta, telefon (z veřejného
+rejstříku a z loga) a popis toho, co ateliér dělá. E-mail info@atelieridej.cz
+se teprve zakládá — dokud doména nepoběží, pošta na něj nechodí.
 
 Co je potřeba doplnit
 ---------------------
  1. fotky a podklady skutečných staveb (klidně i rozpracované),
  2. dvě tři věty o sobě — kde jste studoval a co vás na tom drží,
  3. doménu a e-mail, kam mají chodit poptávky,
- 4. potvrdit, jestli se značka má držet předlohy, nebo se smí dál čistit.
+ 4. rozhodnout o svislém nápisu v aurebeshu (nechat, nebo ne).
 
 Technicky
 ---------

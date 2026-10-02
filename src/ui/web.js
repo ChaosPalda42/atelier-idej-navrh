@@ -116,11 +116,12 @@
   var poradi = 0;
 
   function bloky(sekce) {
-    return $$(".pise, .kresba, .polozit", sekce).map(function (el) {
+    return $$(".pise, .zjevit, .kresba, .polozit", sekce).map(function (el) {
       if (!el.id) el.id = "blok-" + ++poradi;
       var typ = "odstavec";
       if (el.classList.contains("kresba")) typ = "kresba";
       else if (el.classList.contains("polozit")) typ = "foto";
+      else if (el.classList.contains("zjevit")) typ = "jev";
       else if (el.classList.contains("poznamka")) typ = "poznamka";
       else if (/^H[1-6]$/.test(el.tagName)) typ = "nadpis";
 
@@ -130,6 +131,10 @@
         polozka.trvani = Math.min(2400, Math.max(650, Number(el.dataset.delka) * 1.1));
       } else if (typ === "foto") {
         polozka.trvani = 700;
+      } else if (typ === "jev") {
+        // vysázený text se nepíše — jen se položí, úměrně tomu, co se dá přečíst
+        el.classList.add("ceka");
+        polozka.trvani = Math.min(900, Math.max(260, el.textContent.trim().length * 7));
       } else {
         rozdel(el);
         el.classList.add("ceka");
@@ -143,6 +148,7 @@
     if (!el) return;
     if (el.classList.contains("kresba")) { el.classList.remove("ceka"); el.classList.add("hotovo"); return; }
     if (el.classList.contains("polozit")) { el.classList.add("lezi"); return; }
+    if (el.classList.contains("zjevit")) { el.classList.add("videt"); return; }
     $$(".s", el).forEach(function (s) { s.classList.add("napsano"); });
     el.classList.add("dopsano");
   }
@@ -150,6 +156,7 @@
   function pisBlok(el, podil) {
     if (!el) return null;
     if (el.classList.contains("kresba") || el.classList.contains("polozit")) return null;
+    if (el.classList.contains("zjevit")) { el.classList.add("videt"); return null; }
     var spany = el.__spany || (el.__spany = $$(".s", el));
     var kolik = Math.min(spany.length, Math.ceil(podil * spany.length));
     for (var i = 0; i < spany.length; i++) {
@@ -217,6 +224,7 @@
           return;
         }
         if (el.classList.contains("polozit")) { el.classList.add("lezi"); return; }
+        if (el.classList.contains("zjevit")) { el.classList.add("videt"); return; }
         var span = pisBlok(el, p.podil);
         if (span && !el.classList.contains("poznamka")) posledni = span;
       });
@@ -491,6 +499,7 @@
     }
 
     $$(".pise").forEach(function (el) { rozdel(el); el.classList.add("ceka"); });
+    $$(".zjevit").forEach(function (el) { el.classList.add("ceka"); });
     $$(".kresba").forEach(pripravKresbu);
 
     ["click", "keydown"].forEach(function (jmeno) {

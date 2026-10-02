@@ -1,82 +1,91 @@
-/* Značka ateliér IDEJ — tři tahy kruhu a logotyp v křivkách.
-   Cesty jsou vygenerované (tools/znacka.py), tady se jen skládají. */
+/* Značka ateliér IDEJ — skutečné vektory z Logo.pdf (viz tools/znacka.py).
+   Kruh je tažený třikrát: sytá oranžová silnější, světlejší tenčí a černý
+   přejezd přes ně. Nic se nepřekresluje, jen skládá a oživuje. */
 import { ZNACKA } from "./znacka-cesty.mjs";
 
-const SIRKY = [2.6, 2.1, 1.8];
+const K = ZNACKA.kruh.box;           // [x, y, šířka, výška]
+const L = ZNACKA.logotyp.box;
+const A = ZNACKA.aurebesh.box;
+const STRED = [K[0] + K[2] / 2, K[1] + K[3] / 2];
 
-/** Tahy kruhu v poli 0 0 100 100; `tloustka` je v jednotkách cílového viewBoxu. */
-function tahy(merítko, tloustka) {
-  return ZNACKA.kruh
-    .map((d, i) => {
-      const w = (SIRKY[i] / 2.6) * tloustka;
-      return `<path class="tah tah-${i + 1}" stroke-width="${w.toFixed(2)}" d="${d}"/>`;
-    })
+let poradi = 0;
+
+function tahyKruhu() {
+  return ZNACKA.kruh.tahy
+    .map((t) => `<path d="${t.d}" stroke="${t.barva}" stroke-width="${t.sirka}"/>`)
     .join("");
 }
 
-/**
- * varianta: "horizontalni" | "stohovana" | "samotna"
- * barva:    "plna" (kruh oranžový, text tuha) | "oranzova" | "jedna" (vše currentColor)
- */
-export function znacka({ varianta = "horizontalni", barva = "plna", trida = "", popis = "ateliér IDEJ" } = {}) {
-  const oranz = barva === "jedna" ? "currentColor" : "var(--oranz, #ef7d1c)";
-  const tuha = barva === "plna" ? "var(--tuha, #1c1a17)" : oranz;
-
-  if (varianta === "samotna") {
-    return `<svg class="znacka znacka--samotna ${trida}" viewBox="0 0 100 100" role="img" aria-label="${popis}">
-<g class="znacka-kruh" fill="none" stroke="${oranz}" stroke-linecap="round" stroke-linejoin="round">${tahy(1, 2.6)}</g>
-</svg>`;
-  }
-
-  if (varianta === "stohovana") {
-    const F = 23;
-    const m = F / 100;
-    const sirkaA = ZNACKA["ateliér"].sirka * m;
-    const sirkaI = ZNACKA.idej.sirka * m;
-    const mezera = 10;
-    const celkem = sirkaA + mezera + sirkaI;
-    const W = Math.max(100, Math.ceil(celkem) + 6);
-    const x0 = (W - celkem) / 2;
-    const posunKruhu = (W - 100) / 2;
-    return `<svg class="znacka znacka--stohovana ${trida}" viewBox="0 0 ${W} 132" role="img" aria-label="${popis}">
-<g class="znacka-kruh" fill="none" stroke="${oranz}" stroke-linecap="round" stroke-linejoin="round" transform="translate(${posunKruhu.toFixed(2)} 0)">${tahy(1, 2.6)}</g>
-<g class="znacka-text" fill="${tuha}">
-<path class="znacka-slovo" transform="translate(${x0.toFixed(2)} 126) scale(${m})" d="${ZNACKA["ateliér"].d}"/>
-<path class="znacka-slovo" transform="translate(${(x0 + sirkaA + mezera).toFixed(2)} 126) scale(${m})" d="${ZNACKA.idej.d}"/>
-</g>
-</svg>`;
-  }
-
-  const S = 0.72;            // kruh zabírá 72 % výšky
-  const F = 30;              // velikost logotypu
-  const m = F / 100;
-  const okrajKruhu = 65.5;   // pravý okraj kruhu po zmenšení
-  const x0 = okrajKruhu + 20;
-  const sirkaA = ZNACKA["ateliér"].sirka * m;
-  const sirkaI = ZNACKA.idej.sirka * m;
-  const mezera = 12;
-  const sirka = Math.round(x0 + sirkaA + mezera + sirkaI + 2);
-  return `<svg class="znacka znacka--horizontalni ${trida}" viewBox="0 0 ${sirka} 100" role="img" aria-label="${popis}">
-<g class="znacka-kruh" fill="none" stroke="${oranz}" stroke-linecap="round" stroke-linejoin="round" transform="translate(0 14) scale(${S})">${tahy(S, 2.6 / S)}</g>
-<g class="znacka-text" fill="${tuha}">
-<path class="znacka-slovo" transform="translate(${x0.toFixed(2)} 60.9) scale(${m})" d="${ZNACKA["ateliér"].d}"/>
-<path class="znacka-slovo" transform="translate(${(x0 + sirkaA + mezera).toFixed(2)} 60.9) scale(${m})" d="${ZNACKA.idej.d}"/>
-</g>
-</svg>`;
+/** Kruh i s maskou, kterou se dá „nakreslit" jedním objezdem. */
+function kruh({ kresli = false }) {
+  const id = `tah-${++poradi}`;
+  const maska = kresli
+    ? `<mask id="${id}" maskUnits="userSpaceOnUse">
+<circle class="znacka-objezd" cx="${STRED[0]}" cy="${STRED[1]}" r="100" fill="none" stroke="#fff" stroke-width="280"/>
+</mask>`
+    : "";
+  return `${maska}<g class="znacka-kruh" fill="none" stroke-linecap="round" stroke-linejoin="round"${kresli ? ` mask="url(#${id})"` : ""}>${tahyKruhu()}</g>`;
 }
 
-/** Razítko do patičky — jako rohové razítko na výkrese. */
+/**
+ * varianta: "plna" (jako předloha, i s aurebeshem) | "stohovana" | "horizontalni" | "samotna"
+ * kresli:   true = při načtení se kruh objede a pak se pomalu otáčí
+ */
+export function znacka({ varianta = "stohovana", kresli = false, trida = "", popis = "ateliér IDEJ" } = {}) {
+  const logotyp = `<path class="znacka-logotyp" d="${ZNACKA.logotyp.d}" fill="${ZNACKA.logotyp.barva}"/>`;
+  const aurebesh = `<path class="znacka-aurebesh" d="${ZNACKA.aurebesh.d}" fill="${ZNACKA.aurebesh.barva}"/>`;
+  const otevri = (viewBox, dalsi = "") =>
+    `<svg class="znacka znacka--${varianta} ${trida}" viewBox="${viewBox}" role="img" aria-label="${popis}"${dalsi}>`;
+
+  if (varianta === "samotna") {
+    return `${otevri(`${K[0] - 3} ${K[1] - 3} ${K[2] + 6} ${K[3] + 6}`)}${kruh({ kresli })}</svg>`;
+  }
+
+  if (varianta === "plna") {
+    const x = Math.min(K[0], L[0], A[0]) - 4;
+    const y = Math.min(K[1], L[1], A[1]) - 4;
+    const w = Math.max(K[0] + K[2], L[0] + L[2], A[0] + A[2]) - x + 4;
+    const h = Math.max(K[1] + K[3], L[1] + L[3], A[1] + A[3]) - y + 4;
+    return `${otevri(`${x} ${y} ${w} ${h}`)}${kruh({ kresli })}${logotyp}${aurebesh}</svg>`;
+  }
+
+  if (varianta === "horizontalni") {
+    // kruh vlevo, logotyp vpravo, opticky na střed kruhu
+    const mer = 0.56;
+    const mezera = 34;
+    const posunX = K[0] + K[2] + mezera - L[0] * mer;
+    const posunY = STRED[1] - (L[1] + L[3] / 2) * mer;
+    const w = K[0] + K[2] + mezera + L[2] * mer + 4;
+    return `${otevri(`${K[0] - 3} ${K[1] - 3} ${w - K[0] + 6} ${K[3] + 6}`)}
+${kruh({ kresli })}
+<g transform="translate(${posunX.toFixed(2)} ${posunY.toFixed(2)}) scale(${mer})">${logotyp}</g>
+</svg>`;
+  }
+
+  const x = Math.min(K[0], L[0]) - 4;
+  const y = K[1] - 4;
+  const w = Math.max(K[0] + K[2], L[0] + L[2]) - x + 4;
+  const h = L[1] + L[3] - y + 4;
+  return `${otevri(`${x} ${y} ${w} ${h}`)}${kruh({ kresli })}${logotyp}</svg>`;
+}
+
+/** Rohové razítko do patičky — jako na výkrese. */
 export function razitko(firma) {
+  const mer = 0.2;
+  const posunX = 10 - K[0] * mer;
+  const posunY = 14 - K[1] * mer;
   return `<svg class="razitko-kresba" viewBox="0 0 200 112" role="img" aria-label="Razítko ateliéru">
-<g fill="none" stroke="var(--tuha-3, #857d70)" stroke-width="0.8">
+<g fill="none" stroke="var(--linka)" stroke-width="0.8">
 <rect x="0.5" y="0.5" width="199" height="111"/>
 <path d="M0.5 74h199M120.5 0.5v73.5M0.5 92h199"/>
 </g>
-<g class="razitko-znacka" fill="none" stroke="var(--oranz, #ef7d1c)" stroke-linecap="round" stroke-linejoin="round" transform="translate(12 10) scale(0.52)">${tahy(0.52, 5)}</g>
-<g fill="var(--tuha, #1c1a17)" font-family="var(--pismo)" font-size="9.5">
+<g transform="translate(${posunX.toFixed(2)} ${posunY.toFixed(2)}) scale(${mer})">
+<g class="znacka-kruh" fill="none" stroke-linecap="round" stroke-linejoin="round">${tahyKruhu()}</g>
+</g>
+<g fill="var(--tuha)" font-family="var(--pismo)" font-size="9.5">
 <text x="128" y="20">ateliér IDEJ</text>
 </g>
-<g fill="var(--tuha-3, #857d70)" font-family="var(--mono)" font-size="5.6" letter-spacing="0.6">
+<g fill="var(--tuha-3)" font-family="var(--mono)" font-size="5.6" letter-spacing="0.6">
 <text x="128" y="34">${firma.architekt}</text>
 <text x="128" y="45">IČO ${firma.ico}</text>
 <text x="128" y="56">${firma.telefon}</text>

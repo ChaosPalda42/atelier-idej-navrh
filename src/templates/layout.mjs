@@ -1,6 +1,13 @@
 /* Obal stránky: hlava dokumentu, list papíru, navigace, patička. */
 import { znacka, razitko } from "./znacka.mjs";
 
+/** Pomůcky, které stránka používá přes CSS i SVG. */
+export function defs() {
+  return `<svg class="defs" aria-hidden="true" focusable="false"><defs>
+<filter id="papir-stin"><feDropShadow dx="0" dy="1" stdDeviation="0.6" flood-opacity="0.18"/></filter>
+</defs></svg>`;
+}
+
 export function hrot() {
   return `<div class="hrot" aria-hidden="true">
 <svg viewBox="0 0 22 30"><path d="M11 29 4 9l7-8 7 8-7 20z" fill="none" stroke="var(--tuha-3)" stroke-width="1.1"/><path d="M11 29 7.6 19h6.8L11 29z" fill="var(--tuha)"/><path d="M4 9h14" fill="none" stroke="var(--tuha-3)" stroke-width="1.1"/></svg>
@@ -30,7 +37,8 @@ ${odkaz("index.html#kontakt", t.navigace.kontakt, "cil")}
 }
 
 export function paticka(firma, t, k = "") {
-  return `<footer class="paticka">
+  return `<footer class="list paticka">
+<span class="vazba" aria-hidden="true"></span>
 <div>
 <p class="stitek" data-udaj="pravni">${firma.pravni}</p>
 <p><span data-udaj="ulice">${firma.ulice}</span><br><span data-udaj="mesto">${firma.mesto}</span><br>IČO <span data-udaj="ico">${firma.ico}</span></p>
@@ -65,13 +73,11 @@ export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", ak
 <div class="zavoj" aria-hidden="true"></div>
 ${navigace(t, aktivni, k)}
 ${pravitko()}
-<div class="stul">
-<main class="list" id="zacatek">
-<span class="okraj-linka" aria-hidden="true"></span>
+${defs()}
+<main class="blok" id="zacatek">
 ${telo}
 ${paticka(firma, t, k)}
 </main>
-</div>
 ${hrot()}
 <script src="${k}assets/lib.js"></script>
 <script src="${k}assets/web.js"></script>

@@ -56,3 +56,28 @@ Kresby: tenká tuš 1,25 px, žádné stíny v kresbě.
   kontrola `uv run python -m tools.kontrola_webu out`.
 - Značka překreslena generátorem `tools/znacka.py` (tři tahy kruhu jako data,
   logotyp z Inter v křivkách) → `src/templates/znacka-cesty.mjs`.
+
+## Druhé kolo podle zpětné vazby (2. 10. 2026)
+Michael: logo málo detailní, celek se nelíbí, sekce oddělit „kroužkovou vazbou",
+logo animovat (složit se a pomalu rotovat), psaní dává smysl jen u psacího písma,
+svislá linka vlevo překáží, oranžové ruční texty se povedly.
+
+- **Značka už se nepřekresluje.** Z `podklady/logo/Logo.pdf` se nástrojem
+  `tools/znacka.py` vytáhnou skutečné vektory: 69 tahů ve třech barvách
+  (#ff8000 silněji, #ff9664 tenčí, černý přejezd), logotyp v Ebrimě a svislé
+  „IDEJ" v **aurebeshu** (hvězdněválečná abeceda — vysvětluje IDEJ ↔ JEDI).
+  V ukázce je aurebesh zatím vypnutý, čeká se na rozhodnutí.
+  Animace: objezd kruhu maskou (stroke-dashoffset na kruhu v masce) a potom
+  trvalá pomalá rotace 72 s/otáčku.
+- **Blok s drátěnou vazbou:** každá sekce je vlastní `.list`, mezi listy je
+  `.vazba` (dlaždice v data-URI: díra + kovový kroužek + stín hrany).
+  Svislá linka okraje zrušena.
+- **Psaní jen u ručního písma.** `.pise` = Caveat (claim, nadpisy, poznámky),
+  `.zjevit` = vysázený text, který se jen položí. V `pisar.mjs` přibyl typ „jev".
+- **Kresby od ruky:** `cara()` v `kresby.mjs` rozdělí každou čáru na úseky a
+  deterministicky je rozhodí, takže nic není rovné.
+- E-mail v datech změněn na info@atelieridej.cz (doména se teprve zakládá).
+
+Podklady prací: zatím dorazily jen dva soubory .rvt (Revit, 1 GB) z jedné
+zakázky — v nich není nic použitelného jako obrázek (náhled v souboru je list
+s textem). Je potřeba export JPG/PNG nebo PDF.

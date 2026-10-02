@@ -8,7 +8,7 @@
     "mesto": "150 00 Praha 5 — Smíchov",
     "telefon": "735 541 757",
     "telefonHref": "+420735541757",
-    "email": "jirasko96@gmail.com",
+    "email": "info@atelieridej.cz",
     "domena": "atelieridej.cz"
   },
   "sluzby": [
@@ -38,11 +38,36 @@
     }
   ],
   "postup": [
-    { "id": "schuzka", "nazev": "Schůzka na místě", "popis": "Projdeme pozemek nebo dům. Poslouchám, jak chcete žít, ne co jste viděli na Pinterestu.", "trvani": "1 den" },
-    { "id": "studie", "nazev": "Studie", "popis": "Dvě až tři varianty v půdorysech a hmotě. Tady se rozhoduje všechno podstatné a tady je změna nejlevnější.", "trvani": "3–6 týdnů" },
-    { "id": "povoleni", "nazev": "Dokumentace pro povolení", "popis": "Projekt pro stavební úřad včetně profesí a vyjádření dotčených orgánů.", "trvani": "2–4 měsíce" },
-    { "id": "provadeci", "nazev": "Prováděcí dokumentace", "popis": "Výkresy, ze kterých se opravdu staví, a výkaz výměr pro poptávku firem.", "trvani": "1–3 měsíce" },
-    { "id": "stavba", "nazev": "Autorský dozor", "popis": "Na stavbě pravidelně. Detail, který se vymyslí u stolu, se na place stejně musí uhlídat.", "trvani": "po dobu stavby" }
+    {
+      "id": "schuzka",
+      "nazev": "Schůzka na místě",
+      "popis": "Projdeme pozemek nebo dům. Poslouchám, jak chcete žít, ne co jste viděli na Pinterestu.",
+      "trvani": "1 den"
+    },
+    {
+      "id": "studie",
+      "nazev": "Studie",
+      "popis": "Dvě až tři varianty v půdorysech a hmotě. Tady se rozhoduje všechno podstatné a tady je změna nejlevnější.",
+      "trvani": "3–6 týdnů"
+    },
+    {
+      "id": "povoleni",
+      "nazev": "Dokumentace pro povolení",
+      "popis": "Projekt pro stavební úřad včetně profesí a vyjádření dotčených orgánů.",
+      "trvani": "2–4 měsíce"
+    },
+    {
+      "id": "provadeci",
+      "nazev": "Prováděcí dokumentace",
+      "popis": "Výkresy, ze kterých se opravdu staví, a výkaz výměr pro poptávku firem.",
+      "trvani": "1–3 měsíce"
+    },
+    {
+      "id": "stavba",
+      "nazev": "Autorský dozor",
+      "popis": "Na stavbě pravidelně. Detail, který se vymyslí u stolu, se na place stejně musí uhlídat.",
+      "trvani": "po dobu stavby"
+    }
   ],
   "prace": [
     {
@@ -57,7 +82,20 @@
         "Pozemek je prudký a celý jižní; původní zadání znělo na dvoupodlažní dům s terasou nad garáží. Ukázalo se, že stačí dům rozložit po vrstevnici a svah vyřeší podlaží sám.",
         "Dům je jedno podlaží, zalomené do L. Obytná část míří do starého sadu, provozní část kryje vjezd od silnice. Mezi nimi je zapuštěný dvorek, který v létě táhne vzduch skrz celý dům."
       ],
-      "cisla": [ { "popisek": "Užitná plocha", "hodnota": "164 m²" }, { "popisek": "Pozemek", "hodnota": "1 240 m²" }, { "popisek": "Studie → kolaudace", "hodnota": "31 měsíců" } ],
+      "cisla": [
+        {
+          "popisek": "Užitná plocha",
+          "hodnota": "164 m²"
+        },
+        {
+          "popisek": "Pozemek",
+          "hodnota": "1 240 m²"
+        },
+        {
+          "popisek": "Studie → kolaudace",
+          "hodnota": "31 měsíců"
+        }
+      ],
       "fotky": []
     },
     {
@@ -72,7 +110,20 @@
         "Do přízemí měšťanského domu se měla vejít výrobna, prodejna i zázemí pro šest lidí. Omezení bylo dané ze tří stran: klenby, které se nesmějí dotknout, hygiena a odvod par do dvora.",
         "Výrobna je postavená jako nábytek — samostatná vložená konstrukce, která se kleneb nedotýká a dá se jednou vyndat ven."
       ],
-      "cisla": [ { "popisek": "Plocha provozu", "hodnota": "112 m²" }, { "popisek": "Příprava", "hodnota": "9 měsíců" }, { "popisek": "Realizace", "hodnota": "5 měsíců" } ],
+      "cisla": [
+        {
+          "popisek": "Plocha provozu",
+          "hodnota": "112 m²"
+        },
+        {
+          "popisek": "Příprava",
+          "hodnota": "9 měsíců"
+        },
+        {
+          "popisek": "Realizace",
+          "hodnota": "5 měsíců"
+        }
+      ],
       "fotky": []
     },
     {
@@ -87,7 +138,20 @@
         "Zděná stodola z konce 19. století s krovem, který stál za záchranu. Zadání bylo bydlet tam ve dvou generacích a nerozdělit přitom vnitřní prostor na buňky.",
         "Vložená dřevěná „skříň“ nese patro a drží v sobě všechny provozy. Hala stodoly zůstala celá a je vidět až do hřebene."
       ],
-      "cisla": [ { "popisek": "Zastavěná plocha", "hodnota": "248 m²" }, { "popisek": "Dvě bytové jednotky", "hodnota": "92 + 118 m²" }, { "popisek": "Stáří krovu", "hodnota": "cca 130 let" } ],
+      "cisla": [
+        {
+          "popisek": "Zastavěná plocha",
+          "hodnota": "248 m²"
+        },
+        {
+          "popisek": "Dvě bytové jednotky",
+          "hodnota": "92 + 118 m²"
+        },
+        {
+          "popisek": "Stáří krovu",
+          "hodnota": "cca 130 let"
+        }
+      ],
       "fotky": []
     },
     {
@@ -102,7 +166,20 @@
         "Zadání bylo prosté: 1 400 m² výroby, zázemí pro 40 lidí a možnost halu jednou prodloužit o třetinu. Nejtěžší na tom byl vjezd kamionů tak, aby neblokoval zaměstnance.",
         "Administrativa je otočená do zahrady na severní straně, výroba obsluhovaná z jihu. Prodloužení je připravené bez zásahu do zázemí."
       ],
-      "cisla": [ { "popisek": "Hala", "hodnota": "1 420 m²" }, { "popisek": "Administrativa", "hodnota": "380 m²" }, { "popisek": "Rezerva na rozšíření", "hodnota": "+ 480 m²" } ],
+      "cisla": [
+        {
+          "popisek": "Hala",
+          "hodnota": "1 420 m²"
+        },
+        {
+          "popisek": "Administrativa",
+          "hodnota": "380 m²"
+        },
+        {
+          "popisek": "Rezerva na rozšíření",
+          "hodnota": "+ 480 m²"
+        }
+      ],
       "fotky": []
     },
     {
@@ -117,7 +194,20 @@
         "Prvorepublikový byt s nosnými zdmi na špatných místech a s nejhezčím oknem v nejmenší místnosti. Řešilo se to posunem jediné příčky a novým překladem.",
         "Zachovaly se dveře, kování i parkety; doplnilo se jen to, co chybělo, a to přiznaně novým materiálem."
       ],
-      "cisla": [ { "popisek": "Plocha bytu", "hodnota": "96 m²" }, { "popisek": "Doba prací", "hodnota": "4 měsíce" }, { "popisek": "Zbouraných příček", "hodnota": "1" } ],
+      "cisla": [
+        {
+          "popisek": "Plocha bytu",
+          "hodnota": "96 m²"
+        },
+        {
+          "popisek": "Doba prací",
+          "hodnota": "4 měsíce"
+        },
+        {
+          "popisek": "Zbouraných příček",
+          "hodnota": "1"
+        }
+      ],
       "fotky": []
     },
     {
@@ -132,7 +222,20 @@
         "Obec řešila tlak na zastavění poslední volné plochy v centru. Studie porovnává tři míry zastavění a jejich dopad na dopravu, stín a odtok vody.",
         "Výsledkem není dům, ale podklad pro rozhodnutí zastupitelstva — a regulativ, který se dá vložit do územního plánu."
       ],
-      "cisla": [ { "popisek": "Řešené území", "hodnota": "1,8 ha" }, { "popisek": "Posuzované varianty", "hodnota": "3" }, { "popisek": "Doporučeno", "hodnota": "varianta B" } ],
+      "cisla": [
+        {
+          "popisek": "Řešené území",
+          "hodnota": "1,8 ha"
+        },
+        {
+          "popisek": "Posuzované varianty",
+          "hodnota": "3"
+        },
+        {
+          "popisek": "Doporučeno",
+          "hodnota": "varianta B"
+        }
+      ],
       "fotky": []
     }
   ]
