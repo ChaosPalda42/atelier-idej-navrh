@@ -3,10 +3,26 @@
    přejezd přes ně. Nic se nepřekresluje, jen skládá a oživuje. */
 import { ZNACKA } from "./znacka-cesty.mjs";
 
-const K = ZNACKA.kruh.box;           // [x, y, šířka, výška]
+const K = ZNACKA.kruh.box;           // [x, y, šířka, výška] samotné kresby
 const L = ZNACKA.logotyp.box;
 const A = ZNACKA.aurebesh.box;
 const STRED = [K[0] + K[2] / 2, K[1] + K[3] / 2];
+
+// Kruh se otáčí, takže v rámu nezabírá svůj obdélník, ale OPSANOU KRUŽNICI.
+// Rám počítaný z `K` by nejvzdálenější tah při otočení uřízl (kresba je širší
+// než vyšší, 304.8 × 292.6, ale nejdál od středu je 158.8). `KR` je čtverec,
+// kterým kruh projde v každé fázi otáčení.
+const POLOMER = Math.ceil(
+  ZNACKA.kruh.tahy.reduce((nej, tah) => {
+    const cisla = tah.d.match(/-?\d*\.?\d+/g).map(Number);
+    for (let i = 0; i + 1 < cisla.length; i += 2) {
+      const r = Math.hypot(cisla[i] - STRED[0], cisla[i + 1] - STRED[1]) + tah.sirka / 2;
+      if (r > nej) nej = r;
+    }
+    return nej;
+  }, 0),
+);
+const KR = [STRED[0] - POLOMER, STRED[1] - POLOMER, 2 * POLOMER, 2 * POLOMER];
 
 let poradi = 0;
 
@@ -44,14 +60,14 @@ export function znacka({ varianta = "stohovana", kresli = false, trida = "", pop
     `<svg class="znacka znacka--${varianta} ${trida}" viewBox="${viewBox}" role="img" aria-label="${popis}"${dalsi}>`;
 
   if (varianta === "samotna") {
-    return `${otevri(`${K[0] - 3} ${K[1] - 3} ${K[2] + 6} ${K[3] + 6}`)}${kruh({ kresli })}</svg>`;
+    return `${otevri(`${KR[0] - 3} ${KR[1] - 3} ${KR[2] + 6} ${KR[3] + 6}`)}${kruh({ kresli })}</svg>`;
   }
 
   if (varianta === "plna") {
-    const x = Math.min(K[0], L[0], A[0]) - 4;
-    const y = Math.min(K[1], L[1], A[1]) - 4;
-    const w = Math.max(K[0] + K[2], L[0] + L[2], A[0] + A[2]) - x + 4;
-    const h = Math.max(K[1] + K[3], L[1] + L[3], A[1] + A[3]) - y + 4;
+    const x = Math.min(KR[0], L[0], A[0]) - 4;
+    const y = Math.min(KR[1], L[1], A[1]) - 4;
+    const w = Math.max(KR[0] + KR[2], L[0] + L[2], A[0] + A[2]) - x + 4;
+    const h = Math.max(KR[1] + KR[3], L[1] + L[3], A[1] + A[3]) - y + 4;
     return `${otevri(`${x} ${y} ${w} ${h}`)}${kruh({ kresli })}${logotyp}${aurebesh}</svg>`;
   }
 
@@ -59,18 +75,18 @@ export function znacka({ varianta = "stohovana", kresli = false, trida = "", pop
     // kruh vlevo, logotyp vpravo, opticky na střed kruhu
     const mer = 0.56;
     const mezera = 34;
-    const posunX = K[0] + K[2] + mezera - L[0] * mer;
+    const posunX = KR[0] + KR[2] + mezera - L[0] * mer;
     const posunY = STRED[1] - (L[1] + L[3] / 2) * mer;
-    const w = K[0] + K[2] + mezera + L[2] * mer + 4;
-    return `${otevri(`${K[0] - 3} ${K[1] - 3} ${w - K[0] + 6} ${K[3] + 6}`)}
+    const w = KR[0] + KR[2] + mezera + L[2] * mer + 4;
+    return `${otevri(`${KR[0] - 3} ${KR[1] - 3} ${w - KR[0] + 6} ${KR[3] + 6}`)}
 ${kruh({ kresli })}
 <g transform="translate(${posunX.toFixed(2)} ${posunY.toFixed(2)}) scale(${mer})">${logotyp}</g>
 </svg>`;
   }
 
-  const x = Math.min(K[0], L[0]) - 4;
-  const y = K[1] - 4;
-  const w = Math.max(K[0] + K[2], L[0] + L[2]) - x + 4;
+  const x = Math.min(KR[0], L[0]) - 4;
+  const y = KR[1] - 4;
+  const w = Math.max(KR[0] + KR[2], L[0] + L[2]) - x + 4;
   const h = L[1] + L[3] - y + 4;
   return `${otevri(`${x} ${y} ${w} ${h}`)}${kruh({ kresli })}${logotyp}</svg>`;
 }
