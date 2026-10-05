@@ -489,3 +489,11 @@ Exponát proto umí režim `klid` (`data-klid`): kresba je rovnou plná (bez
 `exponaty()` ve web.js si je rovnou nevybírá (`.exponat:not([data-klid])`),
 takže se na ně zvětšení ani nenavěsí. Klepnutím se pořád otevře původní sken —
 to je lupa, ne zvýraznění. Na listech sbírek zůstává efekt beze změny.
+
+## Oprava (5. 10. 2026): pozadí listů končí na hraně, ne na stole
+Bledé kresby na pozadí (půdorys, řez, situace) schválně přetékají přes okraj
+listu — jenže přetékaly dál než na jeho hranu a čáry pokračovaly po stole.
+`overflow: hidden` na `.list` dát nejde, uřízl by kroužky vazby, které přes
+horní hranu přečuhují naschvál. Kresby proto sedí v obalu `.pozadi-ram`
+(`inset: 0`, `overflow: hidden`) — stejný trik, jakým se dřív ořezávaly
+přesahující exponáty. Vazba zůstává nedotčená, protože je mimo ten obal.

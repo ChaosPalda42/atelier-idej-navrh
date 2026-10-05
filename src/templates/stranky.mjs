@@ -11,7 +11,7 @@ function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", 
   const kPerex = klic ? ` data-text="${klic}.perex"` : "";
   const kPozn = klic ? ` data-text="${klic}.poznamka"` : "";
   return `<section class="list sekce" id="${id}" data-psat>
-${pozadi}
+${pozadi ? `<div class="pozadi-ram" aria-hidden="true">${pozadi}</div>` : ""}
 <div class="sekce-hlava">
 <span class="sekce-cislo"${klic ? ` data-text="${klic}.cislo"` : ""}>${cislo}</span>
 <h2 class="nadpis rukou"${klic ? ` data-text="${klic}.nadpis"` : ""}>${esc(nadpis)}</h2>
@@ -305,7 +305,7 @@ ${mojeSkici.length ? `<section class="list projekt-skici" data-psat>
 /** Stránka, která tu není. GitHub Pages ji servíruje na každou neznámou adresu. */
 export function chyba404(site, t) {
   const telo = `<article class="list sekce chyba" data-psat>
-<div class="list-pozadi list-pozadi--vpravo kresba" aria-hidden="true">${kresbaSituace()}</div>
+<div class="pozadi-ram" aria-hidden="true"><div class="list-pozadi list-pozadi--vpravo kresba">${kresbaSituace()}</div></div>
 <div class="sekce-hlava">
 <span class="sekce-cislo">404</span>
 <p class="poznamka pise">${esc(t.chyba.poznamka)}</p>

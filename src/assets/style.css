@@ -1043,6 +1043,17 @@ p:last-child { margin-bottom: 0; }
 .uvod-dolu svg { transition: transform 0.3s ease; }
 
 /* ------------------------------------------------------- kresba na pozadí */
+/* Kresby na pozadí schválně přetékají přes okraj listu — ale skončit musí
+   na jeho hraně, ne na stole. `overflow: hidden` nejde dát na samotný list,
+   uřízl by kroužky vazby, které přes horní hranu přečuhují naschvál. */
+.pozadi-ram {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
 .list-pozadi {
   position: absolute;
   z-index: 0;
