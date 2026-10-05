@@ -89,12 +89,17 @@ export function index(site, t, skici = [], razitkoAtelieru = "") {
 <span class="stitek" data-text="uvod.stitek">${esc(t.uvod.stitek)}</span>
 <h1 class="claim rukou" data-text="uvod.claim">${esc(t.uvod.claim)}</h1>
 </div>
+${naradi(kresbaPravitko(), { kde: "left:-5%;bottom:9%", natoceni: "-8deg", sirka: "200px", trida: "naradi--tlume" })}
 <a class="uvod-dolu rukou pise" href="#predstaveni"><span data-text="uvod.dolu">${esc(t.uvod.dolu)}</span>
 <svg viewBox="0 0 26 34" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2c-1 9 1 18 0 28"/><path d="M6 23l7 9 7-9"/></svg>
 </a>
 </header>
 
 <section class="list sekce predstaveni" id="predstaveni" data-psat>
+<div class="pozadi-ram" aria-hidden="true">
+${naradi(kresbaKruzitko(), { kde: "left:41%;top:13%", natoceni: "-15deg", sirka: "132px", trida: "naradi--tlume" })}
+${naradi(kresbaGuma(), { kde: "right:3%;top:8%", natoceni: "-19deg", sirka: "62px" })}
+</div>
 <div class="sekce-hlava">
 <div class="hlavicka-znacka kresba">${znacka({ varianta: "stohovana" })}</div>
 <p class="poznamka pise" data-text="uvod.poznamka">${esc(t.uvod.poznamka)}</p>
@@ -189,21 +194,31 @@ ${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" 
   const telo = [
     hlavicka,
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vpravo kresba" aria-hidden="true">${kresbaPudorys()}</div>`,
-            naradi: naradi(kresbaPravitko(), { kde: "left:-3%;bottom:13%", natoceni: "7deg", sirka: "230px" }),
+            naradi: naradi(kresbaPravitko(), { kde: "left:-3%;bottom:13%", natoceni: "7deg", sirka: "230px" })
+              + naradi(kresbaTuzka(), { kde: "left:58%;top:49%", natoceni: "72deg", sirka: "23px", trida: "naradi--tlume" })
+              + naradi(kresbaGuma(), { kde: "right:5%;top:7%", natoceni: "-14deg", sirka: "66px" }),
             klic: "sluzby", id: "co-delam", cislo: t.sluzby.cislo,
             nadpis: t.sluzby.nadpis, perex: t.sluzby.perex, poznamka: t.sluzby.poznamka, telo: sluzbyTelo }),
-    sekce({ naradi: naradi(kresbaGuma(), { kde: "left:10%;bottom:20%", natoceni: "-9deg", sirka: "76px" }),
+    sekce({ naradi: naradi(kresbaGuma(), { kde: "left:10%;bottom:20%", natoceni: "-9deg", sirka: "76px" })
+              + naradi(kresbaTuzka(), { kde: "right:-2%;top:19%", natoceni: "158deg", sirka: "25px" })
+              + naradi(kresbaTrojuhelnik(), { kde: "left:44%;bottom:6%", natoceni: "17deg", sirka: "150px", trida: "naradi--tlume" }),
             klic: "prace", id: "prace", cislo: t.prace.cislo,
             nadpis: t.prace.nadpis, perex: t.prace.perex, poznamka: t.prace.poznamka, telo: praceTelo }),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--dole kresba" aria-hidden="true">${kresbaRez()}</div>`,
-            naradi: naradi(kresbaKruzitko(), { kde: "left:6%;top:38%", natoceni: "6deg", sirka: "70px" }),
+            naradi: naradi(kresbaKruzitko(), { kde: "left:6%;top:38%", natoceni: "6deg", sirka: "70px" })
+              + naradi(kresbaPravitko(), { kde: "right:-9%;top:26%", natoceni: "96deg", sirka: "250px" })
+              + naradi(kresbaTuzka(), { kde: "left:36%;bottom:7%", natoceni: "-104deg", sirka: "22px", trida: "naradi--tlume" }),
             klic: "postup", id: "postup", cislo: t.postup.cislo,
             nadpis: t.postup.nadpis, perex: t.postup.perex, poznamka: t.postup.poznamka, telo: postupTelo }),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vlevo kresba" aria-hidden="true">${kresbaSituace()}</div>`,
-            naradi: naradi(kresbaTrojuhelnik(), { kde: "left:4%;top:33%", natoceni: "-6deg", sirka: "112px" }),
+            naradi: naradi(kresbaTrojuhelnik(), { kde: "left:4%;top:33%", natoceni: "-6deg", sirka: "112px" })
+              + naradi(kresbaTuzka(), { kde: "left:54%;top:14%", natoceni: "-61deg", sirka: "24px", trida: "naradi--tlume" })
+              + naradi(kresbaGuma(), { kde: "right:6%;bottom:11%", natoceni: "11deg", sirka: "70px" }),
             klic: "oMne", id: "o-mne", cislo: t.oMne.cislo,
             nadpis: t.oMne.nadpis, poznamka: t.oMne.poznamka, telo: oMneTelo }),
-    sekce({ naradi: naradi(kresbaTuzka(), { kde: "left:9%;top:34%", natoceni: "13deg", sirka: "24px" }),
+    sekce({ naradi: naradi(kresbaTuzka(), { kde: "left:9%;top:34%", natoceni: "13deg", sirka: "24px" })
+              + naradi(kresbaKruzitko(), { kde: "right:7%;top:42%", natoceni: "-12deg", sirka: "120px", trida: "naradi--tlume" })
+              + naradi(kresbaPravitko(), { kde: "left:28%;bottom:-2%", natoceni: "4deg", sirka: "210px", trida: "naradi--tlume" }),
             klic: "kontakt", id: "kontakt", cislo: t.kontakt.cislo,
             nadpis: t.kontakt.nadpis, perex: t.kontakt.perex, poznamka: t.kontakt.poznamka, telo: kontaktTelo }),
   ].join("\n");

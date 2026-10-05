@@ -1075,8 +1075,11 @@ p:last-child { margin-bottom: 0; }
   transform: rotate(var(--natoceni, 0deg));
   transform-origin: 50% 50%;
   pointer-events: none;
+  z-index: 0;
 }
 .naradi svg { width: 100%; height: auto; display: block; }
+/* kus, který leží pod textem, musí ustoupit — jinak se čte přes drážky */
+.naradi--tlume { opacity: 0.24; }
 
 @media (max-width: 1100px) { .naradi { display: none; } }
 .list-pozadi--vpravo { right: -7%; top: 34%; width: min(520px, 40%); }

@@ -520,3 +520,22 @@ Dvě věci, které stály za přepracování:
   oranžové poznámky se teprve dopisovaly a měly jiný box — guma pak na jedné
   seděla. Napoprvé se musí stránka projet celá, počkat, až se poznámky dopíšou,
   a teprve potom měřit.
+
+## Doladění (5. 10. 2026): nářadí po celém webu
+Michael: *„vypadá to, že je to vše na stejném místě; rozházej to, může to být
+i za textem, a klidně 2–3× víc."* Z pěti kusů je osmnáct na sedmi listech.
+
+Nářadí má teď dvě polohy. **V okraji** (krytí 0,45) je vidět jako odložený
+nástroj; **pod textem** (`naradi--tlume`, krytí 0,24) prosvítá zpod odstavců
+jako otisk na prkně. Druhá poloha je možná jen proto, že `.naradi` má
+`z-index: 0` a obsah listu 1 — nářadí je tedy vždycky pod textem, ne nad ním,
+a nemůže se stát, že by se do něj zamíchalo.
+
+Čísla, na kterých to stojí: 0,17 bylo pod textem **tak málo vidět, že to
+vypadalo jako šmouha v papíru**, 0,45 naopak rušilo čtení. 0,24 sedí.
+
+Kontrola kolizí (projet stránku, počkat na dopsání poznámek, pak měřit) běží
+jen na nepřitlumené kusy — u přitlumených je překryv s textem záměr. Hlídá se
+i to, že každý přesahující kus má nad sebou ořezový rám: pět jich přesahuje,
+čtyři ořezává `.pozadi-ram` a jeden (pravítko na úvodním listu) `.uvod`
+vlastním `overflow: hidden`.

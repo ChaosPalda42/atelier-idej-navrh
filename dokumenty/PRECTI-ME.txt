@@ -13,8 +13,10 @@ Rozbalte složku a otevřete soubor index.html v prohlížeči (Chrome, Safari, 
 
 Nápad, na kterém to stojí
 -------------------------
-Po listech je v prázdném okraji odložené nářadí — tužka, pravítko, kružítko,
-guma a trojúhelník. Je nakreslené stejnou rukou jako výkresy na pozadí.
+Po celém webu je rozložené nářadí — tužky, pravítka, kružítka, gumy
+a trojúhelníky. Je nakreslené stejnou rukou jako výkresy na pozadí. Část
+leží v okraji a je vidět, část je schválně vybledlá a prosvítá zpod textu
+jako otisk na pracovním stole. Na hraně listu se vždycky ořízne.
 
 Web je blok papírů v drátěné vazbě. Každá sekce je vlastní list; na horní
 hraně každého listu jsou kroužky, pod nimi proražené díry a mikroperforace,
