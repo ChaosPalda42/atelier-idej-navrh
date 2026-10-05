@@ -56,6 +56,12 @@ const POPISKY = {
   "web.titulek": "Titulek stránky (v záložce prohlížeče a ve vyhledávání)",
   "vystavka.odkazy": "Věta nad odkazy na skupiny",
   "vystavka.popisek": "Pobídka ke zvětšení skici",
+  "projekt.zpet": "Odkaz zpátky na výběr prací",
+  "projekt.skici": "Nadpis nad skicami projektu",
+  "projekt.fotky": "Nadpis nad fotografiemi",
+  "projekt.predchozi": "Odkaz na předchozí projekt",
+  "projekt.dalsi": "Odkaz na další projekt",
+  "projekt.zastupne": "Upozornění, že je projekt ukázkový",
   "web.popis": "Popis stránky pro vyhledávače",
 };
 
@@ -94,6 +100,12 @@ export function schema(site, t, skici) {
       skupinaTextu("Formulář", ["kontakt.jmeno", "kontakt.email", "kontakt.telefon", "kontakt.zprava",
         "kontakt.zpravaNapoveda", "kontakt.prilohy", "kontakt.prilohyNapoveda", "kontakt.souhlas", "kontakt.odeslat"]),
       skupinaTextu("Skicák", ["vystavka.odkazy", "vystavka.popisek"]),
+      skupinaTextu("Listy projektů", ["projekt.zpet", "projekt.skici", "projekt.fotky",
+        "projekt.predchozi", "projekt.dalsi", "projekt.zastupne"]),
+      ...(site.projekty || []).map((pr, i) => skupinaTextu(`Projekt — ${pr.nazev}`, [
+        `site.projekty.${i}.nazev`, `site.projekty.${i}.misto`, `site.projekty.${i}.anotace`,
+        ...pr.text.map((_, j) => `site.projekty.${i}.text.${j}`),
+      ])),
       skupinaTextu("Navigace", ["navigace.sluzby", "navigace.prace", "navigace.postup",
         "navigace.oMne", "navigace.kontakt"]),
       skupinaTextu("Patička a hlava stránky", ["paticka.ukazka", "web.titulek", "web.popis"]),
@@ -129,7 +141,7 @@ function adminList({ site, t, skici, aktivni, telo, k }) {
   const list = LISTY.find((l) => l.id === aktivni);
   const data = {
     firma: site.firma,
-    site: { sluzby: site.sluzby, postup: site.postup, skupiny: site.skupiny },
+    site: { sluzby: site.sluzby, postup: site.postup, skupiny: site.skupiny, projekty: site.projekty },
     skici: skici.map((s) => ({ slug: s.zaklad, nazev: s.popis, typ: s.skupina })),
     texty: t,
     schema: schema(site, t, skici),

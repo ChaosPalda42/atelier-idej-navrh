@@ -1,0 +1,15 @@
+{
+  "id": "C-013",
+  "file": "tools/ukazky.py",
+  "role": "coder",
+  "title": "Zástupné fotografie projektů",
+  "interface": "Modul `tools/ukazky.py` (Python, Pillow). Vyrábí ZÁSTUPNÉ fotografie\nprojektů do ukázky webu — architekt fotky realizací zatím nedodal, takže na\ndetailu projektu musí být něco, co na první pohled vypadá jako vzorek, ne jako\njeho práce.\n\nKonstanty modulu:\n  VEN    pathlib.Path, kam se obrázky zapisují (testy ji přepisují monkeypatchem,\n         takže se MUSÍ číst až uvnitř funkcí, ne uložit do jiné proměnné při importu)\n  SIRKY  tuple šířek variant, vzestupně, např. (520, 1040, 1600)\n\ndef vyrob(pocet: int, *, seed: int = 1) -> list[dict]\n  Vyrobí `pocet` plotem v poměru 3:2 a vrátí manifest. Pro pocet <= 0 vrať [].\n  Složku VEN si vytvoř (mkdir parents=True, exist_ok=True).\n  Každý záznam: {\n    \"zaklad\":  \"ukazka-01\", \"ukazka-02\", … (pořadí od jedné, dvě číslice),\n    \"popis\":   text obsahující slovo \\\"ukázková\\\" (malá/velká písmena jedno),\n    \"sirka\", \"vyska\": rozměr největší varianty, poměr přesně 3:2,\n    \"barva\":   průměrná barva jako \\\"#rrggbb\\\" (sedm znaků),\n    \"varianty\": [{\"soubor\": \"<zaklad>-<sirka>.jpg\", \"sirka\": int}, …] vzestupně podle šířky,\n    \"srcset\":  \\\"<soubor> <sirka>w, …\\\" ve stejném pořadí\n  }\n  Soubor každé varianty musí na disku opravdu být, mít přesně svou šířku\n  a výšku round(sirka * 2 / 3).\n\n  Jak má plotna vypadat: světlý podklad v tónu papíru, tenký rám a čitelný\n  popis, že jde o zástupnou fotografii (klidně i rozměr). Tmavých pixelů\n  (jas < 110) musí být víc než 200, světlých víc než tmavých. Plotny se mezi\n  sebou musí lišit odstínem — `barva` nesmí u všech vyjít stejná.\n  Kresli jen přes Pillow (ImageDraw), písmo ber `ImageFont.load_default()`,\n  žádné soubory s fonty.\n\ndef main(argv=None) -> int\n  argv[0] je počet (výchozí 4). Vyrobí plotny, zapíše manifest do\n  VEN/\\\"ukazky.json\\\" (JSON, ensure_ascii=False) a vrátí 0.\n\nVšechno musí být DETERMINISTICKÉ: dvě volání se stejnými argumenty dají\nbajtově shodné soubory. Náhodu ber z vlastního generátoru nasazeného `seed`\n(random.Random(seed)), nikdy z globálního `random` ani z času.",
+  "uses": {
+    "tools/fotky.py": "pomocné funkce `prumerna_barva(img) -> \"#rrggbb\"`, `srcset(varianty) -> str`, `nazev_varianty(zaklad, sirka) -> str` — použij je, ať popis variant vypadá stejně jako u skic"
+  },
+  "acceptance": "tests/test_ukazky.py",
+  "notes": "Žádné stahování z internetu, žádné cizí obrázky — plotny se kreslí. VEN se v testech přepisuje, takže na ni nesmí existovat kopie zachycená při importu.",
+  "budget": {
+    "iterations": 12
+  }
+}

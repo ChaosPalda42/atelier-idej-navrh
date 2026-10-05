@@ -410,3 +410,34 @@ sloupcích bomba"*.
   horní hranu bloku ven na stůl jako u ostatních listů. Pozor: tím přestal
   platit `.blok > .list:first-child`, od kterého se odvíjel horní stín —
   první list má teď třídu `list--prvni`.
+
+## Šestnácté kolo (5. 10. 2026) — listy projektů
+Architekt: *„po kliknutí na tu skicu by měl do budoucna vyjet detail projektu
+včetně dalších fotografií."* Michael: postavit hned, s lorem ipsum a vzorovými
+obrázky. Projekt je nový tvar v `site.json`: `{slug, nazev, misto, rok, stav,
+typ, anotace, text[], skici[], fotky[]}`. `typ` schválně odpovídá id skupiny
+skic, takže filtr z C-003 i `sousedi()` fungují beze změny.
+
+Dlaždice ve Vybraných pracích teď vede na list projektu (a nemá lupu — ta by
+si s odkazem konkurovala). Skici bez projektu by lupu měly dál, dnes ale patří
+všech jedenáct k některému ze šesti ukázkových projektů.
+
+**Zástupné fotografie (C-013, zelená na 2 iterace).** `tools/ukazky.py` kreslí
+plotny v poměru 3:2 — papírový tón, rám, rohové značky, nápis „UKÁZKOVÁ
+FOTOGRAFIE". Deterministické, nic se nestahuje.
+
+Tři věci, na které kontrakt nestačil a musely se dodělat ručně:
+- **Kam se zapisuje.** V kontraktu jsem zapomněl říct cestu, worker zvolil
+  `out/ukazky` a testy to neodhalily, protože si `VEN` přepisují monkeypatchem.
+  Review to tentokrát trefila. → `KOREN / "data" / "obrazky"`.
+- **`main()` ignorovala příkazovou řádku** (`argv=None` → prázdný seznam →
+  výchozí 4), takže `python -m tools.ukazky 10` dělalo čtyři plotny.
+- **Písmo.** Kontrakt říkal `load_default()`; jenže výchozí Aileron nemá háčky
+  a „UKÁZKOVÁ" vyšlo jako „UK□ZKOV□". Inter z `src/assets/fonts` nepomůže —
+  je to woff2 subset, ze kterého Pillow glyfy nedostane (a woff2 by chtělo
+  Brotli navíc). Teď se hledá první systémové písmo, které má `ŘůÁ` v cmapě
+  (ověřuje fontTools), a když žádné není, popis se vysází bez diakritiky.
+
+Poučení do dalších kontraktů: **u nástroje, co něco zapisuje, patří cesta do
+kontraktu** — jinak si ji worker vymyslí a akceptační test, který si cíl
+přepisuje, to nemá jak chytit.

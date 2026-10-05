@@ -35,17 +35,27 @@ function obrazekSkici(s, { k = "", trida = "", velikosti = "100vw", lupa = true,
  width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(popis || s.popis)}" loading="lazy"${lupa ? ` data-lightbox="${sken}"` : ""}>`;
 }
 
-/** Karta skici v mřížce vybraných prací. Filtr (C-003) ji najde přes data-typ. */
-function karta(s, k = "") {
+/** Karta skici v mřížce vybraných prací. Filtr (C-003) ji najde přes data-typ.
+    Patří-li skica k projektu, vede dlaždice na jeho list; jinak se po kliknutí
+    otevře aspoň původní sken. */
+function karta(s, projekt, k = "") {
+  const obraz = obrazekSkici(s, {
+    k, trida: "skica-obraz", velikosti: "(max-width: 560px) 44vw, 22vw", lupa: !projekt,
+  });
+  const vnitrek = projekt
+    ? `<a class="skica-odkaz" href="${k}prace/${esc(projekt.slug)}.html">${obraz}</a>`
+    : obraz;
   return `<figure class="skica-list" data-slug="${esc(s.zaklad)}" data-typ="${esc(s.skupina)}">
-${obrazekSkici(s, { k, trida: "skica-obraz", velikosti: "(max-width: 560px) 44vw, 22vw" })}
-<figcaption class="skica-popis" data-pole="nazev">${esc(s.popis)}</figcaption>
+${vnitrek}
+<figcaption class="skica-popis" data-pole="nazev">${projekt
+    ? `<a class="skica-odkaz" href="${k}prace/${esc(projekt.slug)}.html">${esc(projekt.nazev)}</a>`
+    : esc(s.popis)}</figcaption>
 </figure>`;
 }
 
 /** Exponát — skica na listu sbírky. Bez papíru, takže je součástí listu;
     teprve pod myší se zvýrazní a dá se na ni kliknout. */
-function exponat(s, misto, { k = "" } = {}) {
+function exponat(s, misto = {}, { k = "" } = {}) {
   if (!s) return "";
   const cesta = (jmeno) => `${k}obrazky/${jmeno}`;
   const srcset = s.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ");
@@ -65,6 +75,9 @@ export function index(site, t, skici = [], razitkoAtelieru = "") {
   const { firma, sluzby, postup } = site;
   const p = pocty(skici.map((s) => ({ typ: s.skupina })));
   const podleZakladu = Object.fromEntries(skici.map((s) => [s.zaklad, s]));
+  /* rejstřík skica -> projekt, aby dlaždice věděla, kam odkázat */
+  const kProjektu = {};
+  (site.projekty || []).forEach((pr) => (pr.skici || []).forEach((z) => { kProjektu[z] = pr; }));
   const hero = podleZakladu[site.hero];
 
   const hlavicka = `<header class="list uvod" data-psat>
@@ -109,7 +122,7 @@ ${site.skupiny.filter((g) => p[g.id]).map((g) =>
     `<button class="filtr" data-filtr="${g.id}" aria-pressed="false">${esc(g.nazev)}<span class="filtr-pocet">${p[g.id]}</span></button>`).join("\n")}
 </div>
 <div class="skicak" data-prace>
-${skici.map((s) => karta(s)).join("\n")}
+${skici.map((s) => karta(s, kProjektu[s.zaklad])).join("\n")}
 </div>`;
 
   const postupTelo = `<ol class="postup-osa">
@@ -227,6 +240,64 @@ ${vykres ? `<div class="detail-vykres kresba">${kresbaZDat(vykres, { seed: 11 })
     titulek: `${skupina.nazev} — ateliér IDEJ`,
     popis: skupina.text[0],
     telo, t, firma: site.firma, k: "../",
+    sbirky: site.skupiny.filter((g) => skici.some((x) => x.skupina === g.id)),
+  });
+}
+
+/** Zástupná fotografie projektu (tools/ukazky.py). */
+function fotka(u, k = "", popis = "") {
+  if (!u) return "";
+  const cesta = (jmeno) => `${k}obrazky/${jmeno}`;
+  const nejvetsi = u.varianty[u.varianty.length - 1];
+  return `<figure class="fotka">
+<img src="${cesta(u.varianty[0].soubor)}"
+ srcset="${u.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ")}"
+ sizes="(max-width: 920px) 92vw, 46vw" width="${u.sirka}" height="${u.vyska}"
+ alt="${esc(popis || u.popis)}" loading="lazy" data-lightbox="${cesta(nejvetsi.soubor)}">
+</figure>`;
+}
+
+/** List jednoho projektu: skici z rozmýšlení, fotky realizace, texty. */
+export function projekt(site, t, p, skici = [], ukazky = []) {
+  const podle = (seznam, klic) => (klic || []).map((z) => seznam.find((x) => x.zaklad === z)).filter(Boolean);
+  const mojeSkici = podle(skici, p.skici);
+  const mojeFotky = podle(ukazky, p.fotky);
+  const okolo = sousedi(site.projekty, p.slug);
+  const i = site.projekty.indexOf(p);
+  const stav = (t.projekt.stavy || {})[p.stav] || p.stav;
+
+  const telo = `<article class="list sekce projekt" data-psat>
+<div class="sekce-hlava">
+<span class="sekce-cislo">${esc(String(p.rok))}</span>
+<p class="stitek"><a href="../index.html#prace" data-text="projekt.zpet">${esc(t.projekt.zpet)}</a></p>
+<p class="poznamka pise" data-text="projekt.zastupne">${esc(t.projekt.zastupne)}</p>
+</div>
+<div class="sekce-telo">
+<h1 class="nadpis rukou" data-text="site.projekty.${i}.nazev">${esc(p.nazev)}</h1>
+<p class="projekt-udaje"><span data-text="site.projekty.${i}.misto">${esc(p.misto)}</span> · ${esc(stav)}</p>
+<p class="vedouci" data-text="site.projekty.${i}.anotace">${esc(p.anotace)}</p>
+${p.text.map((o, j) => `<p data-text="site.projekty.${i}.text.${j}">${esc(o)}</p>`).join("\n")}
+</div>
+</article>
+
+${mojeFotky.length ? `<section class="list projekt-fotky" data-psat>
+<h2 class="nadpis rukou" data-text="projekt.fotky">${esc(t.projekt.fotky)}</h2>
+<div class="fotky-rada">${mojeFotky.map((u) => fotka(u, "../", p.nazev)).join("\n")}</div>
+</section>` : ""}
+
+${mojeSkici.length ? `<section class="list projekt-skici" data-psat>
+<h2 class="nadpis rukou" data-text="projekt.skici">${esc(t.projekt.skici)}</h2>
+<div class="vystava-rada">${mojeSkici.map((s) => exponat(s, { poznamka: s.popis }, { k: "../" })).join("\n")}</div>
+<nav class="sousedi">
+<a href="${esc(okolo.predchozi.slug)}.html"><span class="stitek" data-text="projekt.predchozi">${esc(t.projekt.predchozi)}</span>${esc(okolo.predchozi.nazev)}</a>
+<a href="${esc(okolo.dalsi.slug)}.html" style="text-align:right"><span class="stitek" data-text="projekt.dalsi">${esc(t.projekt.dalsi)}</span>${esc(okolo.dalsi.nazev)}</a>
+</nav>
+</section>` : ""}`;
+
+  return stranka({
+    titulek: `${p.nazev} — ateliér IDEJ`,
+    popis: p.anotace,
+    telo, t, firma: site.firma, k: "../", aktivni: "prace",
     sbirky: site.skupiny.filter((g) => skici.some((x) => x.skupina === g.id)),
   });
 }

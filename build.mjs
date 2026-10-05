@@ -5,7 +5,7 @@ import { createHash } from "node:crypto";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 
-import { index, detail, chyba404, presmerovani } from "./src/templates/stranky.mjs";
+import { index, detail, projekt, chyba404, presmerovani } from "./src/templates/stranky.mjs";
 import { administrace } from "./src/templates/administrace.mjs";
 import { znacka } from "./src/templates/znacka.mjs";
 import { nastavOtisk } from "./src/templates/layout.mjs";
@@ -57,6 +57,10 @@ async function main() {
   const seznamSkic = path.join(KOREN, "data", "obrazky", "seznam.json");
   const skici = (await existuje(seznamSkic)) ? JSON.parse(await readFile(seznamSkic, "utf8")) : [];
 
+  // zástupné fotografie projektů (tools/ukazky.py)
+  const seznamUkazek = path.join(KOREN, "data", "obrazky", "ukazky.json");
+  const ukazky = (await existuje(seznamUkazek)) ? JSON.parse(await readFile(seznamUkazek, "utf8")) : [];
+
   // kresby vytažené ze skutečných výkresů (tools/vykres.py)
   const kresby = {};
   const slozkaKreseb = path.join(KOREN, "data", "kresby");
@@ -98,6 +102,9 @@ async function main() {
   for (const skupina of site.skupiny) {
     if (!skici.some((s) => s.skupina === skupina.id)) continue;
     await writeFile(path.join(VEN, "prace", `${skupina.id}.html`), detail(site, t, skupina.id, kresby, skici));
+  }
+  for (const p of site.projekty || []) {
+    await writeFile(path.join(VEN, "prace", `${p.slug}.html`), projekt(site, t, p, skici, ukazky));
   }
   await writeFile(path.join(VEN, "404.html"), chyba404(site, t));
 

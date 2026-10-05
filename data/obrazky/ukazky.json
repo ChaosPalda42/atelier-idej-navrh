@@ -1,0 +1,222 @@
+[
+  {
+    "zaklad": "ukazka-01",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-01",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#e5e1dd",
+    "varianty": [
+      {
+        "soubor": "ukazka-01-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-01-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-01-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-01-520.jpg 520w, ukazka-01-1040.jpg 1040w, ukazka-01-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-02",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-02",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#dadee1",
+    "varianty": [
+      {
+        "soubor": "ukazka-02-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-02-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-02-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-02-520.jpg 520w, ukazka-02-1040.jpg 1040w, ukazka-02-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-03",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-03",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#dae0d9",
+    "varianty": [
+      {
+        "soubor": "ukazka-03-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-03-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-03-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-03-520.jpg 520w, ukazka-03-1040.jpg 1040w, ukazka-03-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-04",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-04",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#e5e0e5",
+    "varianty": [
+      {
+        "soubor": "ukazka-04-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-04-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-04-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-04-520.jpg 520w, ukazka-04-1040.jpg 1040w, ukazka-04-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-05",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-05",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#e2e1d9",
+    "varianty": [
+      {
+        "soubor": "ukazka-05-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-05-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-05-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-05-520.jpg 520w, ukazka-05-1040.jpg 1040w, ukazka-05-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-06",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-06",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#cfcddd",
+    "varianty": [
+      {
+        "soubor": "ukazka-06-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-06-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-06-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-06-520.jpg 520w, ukazka-06-1040.jpg 1040w, ukazka-06-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-07",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-07",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#ded9d3",
+    "varianty": [
+      {
+        "soubor": "ukazka-07-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-07-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-07-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-07-520.jpg 520w, ukazka-07-1040.jpg 1040w, ukazka-07-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-08",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-08",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#e0e3e5",
+    "varianty": [
+      {
+        "soubor": "ukazka-08-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-08-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-08-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-08-520.jpg 520w, ukazka-08-1040.jpg 1040w, ukazka-08-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-09",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-09",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#dfe5df",
+    "varianty": [
+      {
+        "soubor": "ukazka-09-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-09-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-09-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-09-520.jpg 520w, ukazka-09-1040.jpg 1040w, ukazka-09-1600.jpg 1600w"
+  },
+  {
+    "zaklad": "ukazka-10",
+    "popis": "Ukázková fotografie — zástupný snímek projektu ukazka-10",
+    "sirka": 1600,
+    "vyska": 1067,
+    "barva": "#ded8de",
+    "varianty": [
+      {
+        "soubor": "ukazka-10-520.jpg",
+        "sirka": 520
+      },
+      {
+        "soubor": "ukazka-10-1040.jpg",
+        "sirka": 1040
+      },
+      {
+        "soubor": "ukazka-10-1600.jpg",
+        "sirka": 1600
+      }
+    ],
+    "srcset": "ukazka-10-520.jpg 520w, ukazka-10-1040.jpg 1040w, ukazka-10-1600.jpg 1600w"
+  }
+]

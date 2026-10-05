@@ -15,7 +15,7 @@ ze zadaného PDF — při otevření se objede a pak se pomalu otáčí.
 ## Jak to postavit
     uv sync
     node build.mjs                       # -> out/
-    uv run pytest -q                     # 99 akceptačních testů
+    uv run pytest -q                     # 107 akceptačních testů
     uv run python -m tools.kontrola_webu out
     ./tools/pack.sh                      # balíček pro klienta
 
@@ -36,6 +36,15 @@ Složka `data/kresby/` je zatím prázdná — ukázkový půdorys, který v ní
 a šel pryč. Jakmile v ní nějaký výkres bude, stačí ho u služby v `data/site.json`
 odkázat klíčem `vykres` a objeví se na listu té sbírky.
 Podrobný návod pro klienta je v `dokumenty/JAK-DODAT-VYKRESY.txt`.
+
+## Zástupné fotografie
+Dokud architekt nepošle fotky realizací, mají listy projektů kreslené plotny:
+
+    uv run python -m tools.ukazky 10     # -> data/obrazky/ukazka-*.jpg + ukazky.json
+
+Jsou deterministické a kreslí se Pillow — žádné cizí snímky. Hledá se systémové
+písmo s češtinou (Arial, DejaVu, Liberation); když žádné není, popis se vysází
+bez diakritiky, protože výchozí písmo Pillow háčky nemá.
 
 ## Co je v ukázce vymyšlené
 Popisky u jednotlivých skic, texty na čtyřech listech sbírek, popisky polí ve formuláři

@@ -96,5 +96,18 @@
     "perex": "",
     "poznamka": "Každý prostor si zaslouží jasnou ideu a promyšlené řešení.",
     "vse": "Vše"
+  },
+  "projekt": {
+    "zpet": "Zpátky na výběr prací",
+    "skici": "Ze skicáku",
+    "fotky": "Fotografie",
+    "predchozi": "Předchozí",
+    "dalsi": "Další",
+    "zastupne": "Ukázkový projekt — texty jsou lorem ipsum a fotografie zástupné plotny. Skici jsou skutečné.",
+    "stavy": {
+      "studie": "studie",
+      "dokumentace": "dokumentace",
+      "realizace": "dokončeno"
+    }
   }
 }

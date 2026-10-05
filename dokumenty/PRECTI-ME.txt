@@ -36,6 +36,13 @@ Co si na ukázce projít
                              sloupcích, každá v poli stejné čtvercové
                              velikosti; filtr podle skupiny. Kliknutím se
                              skica ukáže ve velkém i s původním papírem
+ - listy projektů .......... kliknutím na skicu ve Vybraných pracích se
+                             otevře list projektu: texty, fotografie a skici,
+                             ze kterých vznikl. UPOZORNĚNÍ: zatím jsou to
+                             ukázkové projekty — texty jsou lorem ipsum
+                             a fotografie zástupné plotny. Skici jsou vaše
+                             skutečné. Je to tam proto, abyste viděli, jak
+                             bude projekt vypadat, až pošlete fotky
  - skupiny ................. Rodinné domy, Bytové domy, Interiéry, Garáže —
                              každá má vlastní list, na něm jsou skici té
                              skupiny ve velkém
@@ -74,6 +81,10 @@ Ode mě (klidně přepište, všechno jde v administraci):
    psal jsem je podle toho, co na papíře je,
  - texty na čtyřech listech sbírek skic,
  - popisky polí ve formuláři,
+ - šest ukázkových projektů (názvy, místa, roky) i s jejich texty — texty
+   jsou schválně lorem ipsum, ať je na první pohled jasné, že je máte
+   přepsat; fotografie u nich jsou kreslené plotny s nápisem
+   „ukázková fotografie", žádné cizí snímky,
  - bledé čáry prosvítající papírem na pozadí listů (půdorys, řez, situace).
    Jsou to kreslené vodoznaky, ne ukázka práce.
 

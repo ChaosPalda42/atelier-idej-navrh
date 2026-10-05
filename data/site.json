@@ -103,5 +103,130 @@
    ]
   }
  ],
- "hero": "03-bytove-domy"
+ "hero": "03-bytove-domy",
+ "projekty": [
+  {
+   "slug": "ukazka-dum-nad-sadem",
+   "nazev": "Dům nad sadem",
+   "misto": "Praha-západ",
+   "rok": 2026,
+   "stav": "studie",
+   "typ": "rodinne-domy",
+   "skici": [
+    "02-rodinne-domy",
+    "05-rodinne-domy"
+   ],
+   "fotky": [
+    "ukazka-01",
+    "ukazka-02"
+   ],
+   "anotace": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+   "text": [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras mattis consectetur purus sit amet fermentum, vestibulum id ligula porta felis.",
+    "Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Nullam quis risus eget urna mollis ornare vel eu leo. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
+   ]
+  },
+  {
+   "slug": "ukazka-bytovy-dum-v-proluce",
+   "nazev": "Bytový dům v proluce",
+   "misto": "Praha 5",
+   "rok": 2025,
+   "stav": "dokumentace",
+   "typ": "bytove-domy",
+   "skici": [
+    "03-bytove-domy",
+    "01-bytove-domy"
+   ],
+   "fotky": [
+    "ukazka-03",
+    "ukazka-04"
+   ],
+   "anotace": "Maecenas faucibus mollis interdum.",
+   "text": [
+    "Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Nullam quis risus eget urna mollis ornare vel eu leo. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.",
+    "Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Sed posuere consectetur est at lobortis. Etiam porta sem malesuada magna mollis euismod, nec elit non mi porta gravida at eget."
+   ]
+  },
+  {
+   "slug": "ukazka-nastavba-v-ulici",
+   "nazev": "Nástavba v ulici",
+   "misto": "Praha 8",
+   "rok": 2025,
+   "stav": "realizace",
+   "typ": "bytove-domy",
+   "skici": [
+    "11-bytove-domy",
+    "04-bytove-domy",
+    "06-bytove-domy"
+   ],
+   "fotky": [
+    "ukazka-05",
+    "ukazka-06"
+   ],
+   "anotace": "Aenean lacinia bibendum nulla sed consectetur.",
+   "text": [
+    "Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Sed posuere consectetur est at lobortis. Etiam porta sem malesuada magna mollis euismod, nec elit non mi porta gravida at eget.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras mattis consectetur purus sit amet fermentum, vestibulum id ligula porta felis."
+   ]
+  },
+  {
+   "slug": "ukazka-interier-v-klenbach",
+   "nazev": "Interiér v klenbách",
+   "misto": "Praha 1",
+   "rok": 2024,
+   "stav": "realizace",
+   "typ": "interiery",
+   "skici": [
+    "09-interiery"
+   ],
+   "fotky": [
+    "ukazka-07"
+   ],
+   "anotace": "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+   "text": [
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras mattis consectetur purus sit amet fermentum, vestibulum id ligula porta felis.",
+    "Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Nullam quis risus eget urna mollis ornare vel eu leo. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor."
+   ]
+  },
+  {
+   "slug": "ukazka-garaz-a-pristresek",
+   "nazev": "Garáž a přístřešek",
+   "misto": "Středočeský kraj",
+   "rok": 2024,
+   "stav": "realizace",
+   "typ": "garaze",
+   "skici": [
+    "08-garaze"
+   ],
+   "fotky": [
+    "ukazka-08"
+   ],
+   "anotace": "Maecenas faucibus mollis interdum.",
+   "text": [
+    "Maecenas faucibus mollis interdum. Donec ullamcorper nulla non metus auctor fringilla. Nullam quis risus eget urna mollis ornare vel eu leo. Vivamus sagittis lacus vel augue laoreet rutrum faucibus dolor auctor.",
+    "Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Sed posuere consectetur est at lobortis. Etiam porta sem malesuada magna mollis euismod, nec elit non mi porta gravida at eget."
+   ]
+  },
+  {
+   "slug": "ukazka-dum-v-rade",
+   "nazev": "Dům v řadě",
+   "misto": "Praha 6",
+   "rok": 2026,
+   "stav": "studie",
+   "typ": "rodinne-domy",
+   "skici": [
+    "07-rodinne-domy",
+    "10-rodinne-domy"
+   ],
+   "fotky": [
+    "ukazka-09",
+    "ukazka-10"
+   ],
+   "anotace": "Aenean lacinia bibendum nulla sed consectetur.",
+   "text": [
+    "Aenean lacinia bibendum nulla sed consectetur. Curabitur blandit tempus porttitor. Sed posuere consectetur est at lobortis. Etiam porta sem malesuada magna mollis euismod, nec elit non mi porta gravida at eget.",
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer posuere erat a ante venenatis dapibus posuere velit aliquet. Cras mattis consectetur purus sit amet fermentum, vestibulum id ligula porta felis."
+   ]
+  }
+ ]
 }
