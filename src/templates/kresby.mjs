@@ -205,3 +205,141 @@ ${slabe ? `<g ${SLABA}>${slabe}</g>` : ""}
 
 /* ----------------------------------------------- další kresby ke službám */
 
+/* ------------------------------------------------- nářadí na rýsovacím prkně */
+/* Tužky, pravítko, kružítko a guma odložené po listech. Kreslí se stejnou
+   rukou jako výkresy na pozadí, jen o něco zřetelněji — neleží pod papírem
+   jako vodoznak, leží na něm. Každý kus má svislou osu nahoru; natočení
+   a umístění dělá CSS, aby se daly přehazovat bez překreslování. */
+
+/** Tužka. `delka` je celá délka i s tuhou a gumou. */
+export function kresbaTuzka(delka = 180, { seed = 21, guma = true } = {}) {
+  zacni(seed);
+  const s = 13;                       // šířka těla
+  const hrot = 22;                    // kuželová špička
+  const objimka = guma ? 16 : 0;      // kovová objímka
+  const konec = delka - objimka - (guma ? 12 : 0);
+  const kusy = [
+    // tělo
+    cara([[-s / 2, hrot], [-s / 2, konec]], { rozhod: 0.4 }),
+    cara([[s / 2, hrot], [s / 2, konec]], { rozhod: 0.4 }),
+    // hrana šestihranu, aby to nebyla jen trubka
+    cara([[0, hrot + 4], [0, konec - 4]], { rozhod: 0.5 }),
+    // ořezaná špička a tuha
+    cara([[-s / 2, hrot], [0, 0], [s / 2, hrot]], { rozhod: 0.35, krok: 10 }),
+    cara([[-s / 6, hrot * 0.3], [0, 0], [s / 6, hrot * 0.3]], { rozhod: 0.25, krok: 8 }),
+    cara([[-s / 2 + 1.5, hrot], [s / 2 - 1.5, hrot]], { rozhod: 0.3 }),
+  ];
+  if (guma) {
+    kusy.push(
+      cara([[-s / 2, konec], [s / 2, konec]], { rozhod: 0.3 }),
+      cara([[-s / 2, konec + objimka], [s / 2, konec + objimka]], { rozhod: 0.3 }),
+      cara([[-s / 2, konec], [-s / 2, delka - 6]], { rozhod: 0.4 }),
+      cara([[s / 2, konec], [s / 2, delka - 6]], { rozhod: 0.4 }),
+      // kroužky na objímce
+      cara([[-s / 2, konec + 5], [s / 2, konec + 5]], { rozhod: 0.25 }),
+      cara([[-s / 2, konec + 10], [s / 2, konec + 10]], { rozhod: 0.25 }),
+      // zakulacená guma
+      cara([[-s / 2, delka - 6], [-s / 2 + 1, delka - 2], [0, delka], [s / 2 - 1, delka - 2], [s / 2, delka - 6]],
+           { rozhod: 0.3, krok: 8 }),
+    );
+  } else {
+    kusy.push(cara([[-s / 2, konec], [s / 2, konec]], { rozhod: 0.3 }));
+  }
+  return `<svg class="naradi-kresba" viewBox="${-s} -6 ${s * 2} ${delka + 14}" role="img" aria-label="Tužka">
+<g ${TUS}>${kusy.join("")}</g></svg>`;
+}
+
+/** Pravítko s dělením. */
+export function kresbaPravitko(delka = 300, { seed = 22 } = {}) {
+  zacni(seed);
+  const v = 34;
+  const kusy = [obdelnik(0, 0, delka, v)];
+  const krok = delka / 30;
+  for (let i = 0; i <= 30; i++) {
+    const dlouha = i % 5 === 0;
+    kusy.push(cara([[i * krok, 0], [i * krok, dlouha ? 13 : 7]], { rozhod: 0.18, krok: 6 }));
+  }
+  // zkosená hrana, po které se rýsuje
+  kusy.push(cara([[2, v - 7], [delka - 2, v - 7]], { rozhod: 0.3 }));
+  return `<svg class="naradi-kresba" viewBox="-4 -4 ${delka + 8} ${v + 8}" role="img" aria-label="Pravítko">
+<g ${TUS}>${kusy.join("")}</g>
+<g fill="currentColor" font-family="var(--mono)" font-size="7" letter-spacing="0.4" opacity="0.8">
+${[0, 10, 20, 30].map((i) => `<text x="${i * krok + 2}" y="22">${i}</text>`).join("")}
+</g></svg>`;
+}
+
+/** Kružítko rozevřené na poloměr. Ramena jsou plochá, ne čáry — teprve
+    tloušťka z toho udělá nástroj a ne dvě čárky do špičky. */
+export function kresbaKruzitko(vyska = 190, { seed = 23 } = {}) {
+  zacni(seed);
+  const r = 46;                 // rozevření
+  const dno = vyska - 16;
+  const kusy = [
+    // hlavice, za kterou se kružítko drží
+    cara([[-4, -2], [-4, 9]], { rozhod: 0.3 }),
+    cara([[4, -2], [4, 9]], { rozhod: 0.3 }),
+    cara([[-4, -2], [0, -8], [4, -2]], { rozhod: 0.3, krok: 8 }),
+    cara([[-4, 2], [4, 2]], { rozhod: 0.2 }),
+    cara([[-4, 5], [4, 5]], { rozhod: 0.2 }),
+    // rameno s jehlou
+    cara([[-4, 10], [-r, dno], [-r + 7, dno], [2, 12]], { zavrit: true, rozhod: 0.45, krok: 16 }),
+    // rameno s tuhou
+    cara([[4, 10], [r, dno], [r - 7, dno], [-2, 12]], { zavrit: true, rozhod: 0.45, krok: 16 }),
+    // kloub
+    cara(oblouk(0, 11, 7, 0, 360, 12), { zavrit: true, rozhod: 0.35, krok: 7 }),
+    // jehla
+    cara([[-r + 3.5, dno], [-r + 1, vyska]], { rozhod: 0.2, krok: 7 }),
+    cara([[-r - 1, dno + 3], [-r + 8, dno + 3]], { rozhod: 0.25 }),
+    // držák tuhy a tuha
+    obdelnik(r - 8, dno, 9, 9),
+    cara([[r - 3.5, dno + 9], [r - 2, vyska]], { rozhod: 0.2, krok: 7 }),
+  ];
+  return `<svg class="naradi-kresba" viewBox="${-r - 10} -14 ${r * 2 + 20} ${vyska + 24}" role="img" aria-label="Kružítko">
+<g ${TUS}>${kusy.join("")}</g></svg>`;
+}
+
+/** Guma — kvádr v lehké perspektivě, jinak je to jen obdélník. */
+export function kresbaGuma(sirka = 74, { seed = 24 } = {}) {
+  zacni(seed);
+  const v = 34, h = 11;        // výška čelní stěny a hloubka horní
+  const kusy = [
+    // čelo
+    cara([[0, h], [sirka, h], [sirka, v + h], [0, v + h]], { zavrit: true, rozhod: 0.4, krok: 14 }),
+    // horní plocha
+    cara([[0, h], [h, 0], [sirka + h, 0], [sirka, h]], { zavrit: true, rozhod: 0.4, krok: 14 }),
+    // bok
+    cara([[sirka, h], [sirka + h, 0], [sirka + h, v], [sirka, v + h]], { zavrit: true, rozhod: 0.4, krok: 14 }),
+    // papírová manžeta
+    cara([[sirka * 0.26, h], [sirka * 0.26, v + h]], { rozhod: 0.3 }),
+    cara([[sirka * 0.62, h], [sirka * 0.62, v + h]], { rozhod: 0.3 }),
+    cara([[sirka * 0.26 + h, 0], [sirka * 0.26, h]], { rozhod: 0.25 }),
+    cara([[sirka * 0.62 + h, 0], [sirka * 0.62, h]], { rozhod: 0.25 }),
+    cara([[sirka * 0.32, h + 11], [sirka * 0.56, h + 11]], { rozhod: 0.3 }),
+    cara([[sirka * 0.32, h + 18], [sirka * 0.52, h + 18]], { rozhod: 0.3 }),
+  ];
+  return `<svg class="naradi-kresba" viewBox="-5 -5 ${sirka + h + 10} ${v + h + 10}" role="img" aria-label="Guma">
+<g ${TUS}>${kusy.join("")}</g></svg>`;
+}
+
+/** Trojúhelník s úhloměrem. */
+export function kresbaTrojuhelnik(odvesna = 170, { seed = 25 } = {}) {
+  zacni(seed);
+  const o = odvesna;
+  const kusy = [
+    cara([[0, o], [o, o], [0, 0]], { zavrit: true, rozhod: 0.5, krok: 18 }),
+    // vnitřní výřez
+    cara([[16, o - 14], [o - 26, o - 14], [16, 22]], { zavrit: true, rozhod: 0.45, krok: 16 }),
+  ];
+  const krok = (o - 30) / 10;
+  for (let i = 0; i <= 10; i++) {
+    kusy.push(cara([[14 + i * krok, o], [14 + i * krok, o - (i % 5 === 0 ? 10 : 5)]], { rozhod: 0.18, krok: 6 }));
+  }
+  return `<svg class="naradi-kresba" viewBox="-6 -6 ${o + 12} ${o + 12}" role="img" aria-label="Trojúhelník">
+<g ${TUS}>${kusy.join("")}</g></svg>`;
+}
+
+/** Nářadí odložené na listu — `kde` je dvojice CSS vlastností. */
+export function naradi(co, { kde = "", natoceni = "0deg", sirka = "120px", trida = "" } = {}) {
+  return `<div class="naradi ${trida}" aria-hidden="true"
+ style="${kde};--natoceni:${natoceni};--sirka:${sirka}">${co}</div>`;
+}

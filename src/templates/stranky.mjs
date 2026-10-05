@@ -2,16 +2,19 @@
    Ručně psané se píše (`pise`), všechno ostatní je prostě na papíře. */
 import { stranka } from "./layout.mjs";
 import { znacka } from "./znacka.mjs";
-import { kresbaPudorys, kresbaRez, kresbaSituace, kresbaZDat } from "./kresby.mjs";
+import {
+  kresbaPudorys, kresbaRez, kresbaSituace, kresbaZDat,
+  kresbaTuzka, kresbaPravitko, kresbaKruzitko, kresbaGuma, kresbaTrojuhelnik, naradi,
+} from "./kresby.mjs";
 import { filtr, pocty, sousedi } from "../lib/prace.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
 
-function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", pozadi = "" }) {
+function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", pozadi = "", naradi = "" }) {
   const kPerex = klic ? ` data-text="${klic}.perex"` : "";
   const kPozn = klic ? ` data-text="${klic}.poznamka"` : "";
   return `<section class="list sekce" id="${id}" data-psat>
-${pozadi ? `<div class="pozadi-ram" aria-hidden="true">${pozadi}</div>` : ""}
+${pozadi || naradi ? `<div class="pozadi-ram" aria-hidden="true">${pozadi}${naradi}</div>` : ""}
 <div class="sekce-hlava">
 <span class="sekce-cislo"${klic ? ` data-text="${klic}.cislo"` : ""}>${cislo}</span>
 <h2 class="nadpis rukou"${klic ? ` data-text="${klic}.nadpis"` : ""}>${esc(nadpis)}</h2>
@@ -186,17 +189,22 @@ ${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" 
   const telo = [
     hlavicka,
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vpravo kresba" aria-hidden="true">${kresbaPudorys()}</div>`,
+            naradi: naradi(kresbaPravitko(), { kde: "left:-3%;bottom:13%", natoceni: "7deg", sirka: "230px" }),
             klic: "sluzby", id: "co-delam", cislo: t.sluzby.cislo,
             nadpis: t.sluzby.nadpis, perex: t.sluzby.perex, poznamka: t.sluzby.poznamka, telo: sluzbyTelo }),
-    sekce({ klic: "prace", id: "prace", cislo: t.prace.cislo,
+    sekce({ naradi: naradi(kresbaGuma(), { kde: "left:10%;bottom:20%", natoceni: "-9deg", sirka: "76px" }),
+            klic: "prace", id: "prace", cislo: t.prace.cislo,
             nadpis: t.prace.nadpis, perex: t.prace.perex, poznamka: t.prace.poznamka, telo: praceTelo }),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--dole kresba" aria-hidden="true">${kresbaRez()}</div>`,
+            naradi: naradi(kresbaKruzitko(), { kde: "left:6%;top:38%", natoceni: "6deg", sirka: "70px" }),
             klic: "postup", id: "postup", cislo: t.postup.cislo,
             nadpis: t.postup.nadpis, perex: t.postup.perex, poznamka: t.postup.poznamka, telo: postupTelo }),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vlevo kresba" aria-hidden="true">${kresbaSituace()}</div>`,
+            naradi: naradi(kresbaTrojuhelnik(), { kde: "left:4%;top:33%", natoceni: "-6deg", sirka: "112px" }),
             klic: "oMne", id: "o-mne", cislo: t.oMne.cislo,
             nadpis: t.oMne.nadpis, poznamka: t.oMne.poznamka, telo: oMneTelo }),
-    sekce({ klic: "kontakt", id: "kontakt", cislo: t.kontakt.cislo,
+    sekce({ naradi: naradi(kresbaTuzka(), { kde: "left:9%;top:34%", natoceni: "13deg", sirka: "24px" }),
+            klic: "kontakt", id: "kontakt", cislo: t.kontakt.cislo,
             nadpis: t.kontakt.nadpis, perex: t.kontakt.perex, poznamka: t.kontakt.poznamka, telo: kontaktTelo }),
   ].join("\n");
 

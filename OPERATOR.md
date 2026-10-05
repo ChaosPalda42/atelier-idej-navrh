@@ -497,3 +497,26 @@ listu — jenže přetékaly dál než na jeho hranu a čáry pokračovaly po st
 horní hranu přečuhují naschvál. Kresby proto sedí v obalu `.pozadi-ram`
 (`inset: 0`, `overflow: hidden`) — stejný trik, jakým se dřív ořezávaly
 přesahující exponáty. Vazba zůstává nedotčená, protože je mimo ten obal.
+
+## Osmnácté kolo (5. 10. 2026) — nářadí na prkně
+Architekt: *„mohli bychom na různá místa dát pár tužek, pravítko, kružítko,
+gumu?"* Pět kusů v `kresby.mjs`: `kresbaTuzka`, `kresbaPravitko`,
+`kresbaKruzitko`, `kresbaGuma`, `kresbaTrojuhelnik`, pokládá je `naradi()`.
+Kreslí se stejnou rozhozenou rukou jako výkresy, jen zřetelněji (krytí 0,45) —
+neprosvítají papírem, leží na něm. Sedí v `.pozadi-ram`, takže se na hraně
+listu ořežou; pod 1100 px, kde se levý okraj ztrácí, se schovají.
+
+Rozmístění: pravítko přes levý dolní roh listu „Co děláme" (přesahuje ven),
+guma a trojúhelník do okraje u prací a „O nás", kružítko u postupu, tužka
+u kontaktu. Na listu představení nářadí není — okraj tam drží logo a pod ním
+hned začíná velká skica.
+
+Dvě věci, které stály za přepracování:
+- **Kružítko a guma z čar nečetly.** Kružítko byly dvě čárky do špičky; teprve
+  plochá ramena (uzavřené čtyřúhelníky), kloub, hlavice a držák tuhy z toho
+  udělaly nástroj. Guma byl obdélník s linkami; teprve kvádr v perspektivě
+  (čelo + horní plocha + bok) a papírová manžeta.
+- **Kontrola kolizí měřená moc brzy lže.** Poprvé vyšlo „nikde nic", protože
+  oranžové poznámky se teprve dopisovaly a měly jiný box — guma pak na jedné
+  seděla. Napoprvé se musí stránka projet celá, počkat, až se poznámky dopíšou,
+  a teprve potom měřit.
