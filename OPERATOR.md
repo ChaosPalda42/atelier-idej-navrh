@@ -315,3 +315,64 @@ Michael: „ta věta se skicama tam nepatří". Visela na konci mřížky služe
 souvislosti. Odkazy na čtyři sbírky skic se přesunuly do **patičky** (tam patří
 druhotná navigace) a z hlavní navigace zmizela položka **„Práce"** — mířila na
 `#prace`, což je kotva zrušené sekce, takže nevedla nikam.
+
+## Třinácté kolo (5. 10. 2026) — vazba zpátky, a tentokrát pořádně
+Architekt poslal `web_proces.pdf` (sedm stran, screeny ještě z verze před
+přestavbou). Michael: *„I když s ním nesouhlasím, bude to jeho web."* Tři věci:
+vrátit kroužkovou vazbu v realističtější podobě, nahradit moje kresby jeho
+skicami a vrátit sekci ukázek prací. Rozhodnutí k otevřeným bodům padla
+v AskUserQuestion: kroužky **i** pauzák, chybějící skici nahradit tím, co je,
+kreslené vodoznaky na pozadí nechat.
+
+**Vazba (C-012 + operátor).** Rozmístění kroužků dělá Factory
+(`src/lib/vazba.mjs`, 3 iterace, zelená): poloha je čistě geometrická (první
+sedí na okraji, poslední taky, mezera nikdy nepřeroste rozestup), náklon,
+odlesk a krytí stínu jdou z LCG nasazeného seedem — každý list má jiný, takže
+vazba není tapeta. Kreslení je operátorské: `<symbol>` v `defs()` a `<use>`
+na každý kroužek.
+
+Dvě věci, které to rozhodly:
+- **Kroužek nesmí mít pevnou velikost v pixelech.** První verze měla pevných
+  30 px a procentní rozteč; na okně užším než návrhových 1180 px do sebe
+  sousedi najeli. Teď je celá vazba jedno SVG přes šířku listu a škáluje se
+  vcelku. Posun nad hranu se dělá **procentním `margin-top`** — procentní
+  marginy se počítají ze šířky rodiče, takže se zmenšuje spolu s kresbou.
+- **Bez viditelného švu vazba neváže.** Dokud byl přechod mezi listy jen
+  náznak, vypadal drát jako hřebíky zapíchnuté do jednolitého papíru. Teprve
+  když horní list dostal pořádný řez a stín na list pod sebou, začalo to číst
+  jako blok. Mimochodem přesně ten stín, který se Michaelovi v šestém kole
+  nelíbil — sám o sobě je to rušivá hrana, s drátem je to vazba.
+
+Vazba se vkládá **jedním průchodem** v `oblecListy()` (layout.mjs) nad hotovým
+tělem stránky, ne v jednotlivých šablonách: list vzniká na pěti místech a na
+vazbu by se někde zapomnělo. Tentýž průchod prostřídává pauzák — a patička
+musela do něj, jinak na ní vazba chyběla (byla připojená až za `${telo}`).
+
+**Jeho skici místo mých kreseb.** Hlavička listu představení, čtyři karty
+služeb. Dopsané kresby (`kresbaHero`, `KRESBY`, `zastupnaSkica`) jsou smazané.
+Vymyšlený ukázkový půdorys taky — ale cesta pro skutečný výkres z DXF zůstává
+zapojená: `data/kresby/*.json` + `vykres` u služby, složka je zatím prázdná.
+Ke „Komerčním stavbám" je garáž a k „Rekonstrukcím" rodinný dům; nic bližšího
+architekt nemá, je to poznamenané v PRECTI-ME.
+
+**Vybrané práce zpátky.** Sekce 02, filtr z C-003 a mřížka všech 11 skic ve
+sloupcích (`columns`, ne grid — skici mají od 582 do 3212 px výšky a v mřížce
+by kolem nízkých zůstaly díry). Výstavka se ztenčila z jedenácti míst na šest
+a tři „vitrínové" listy zmizely: co je v mřížce, nemá smysl mít na webu
+potřetí. Položka **Práce** je zpátky v navigaci, kotva `#prace` zase existuje,
+takže fungují i přesměrování starých adres a odkaz „Zpátky na skicák".
+
+**Texty.** Perex u služeb je prázdný a věta „Každý prostor si zaslouží jasnou
+ideu a promyšlené řešení." se přesunula tam, kam ji architekt zakreslil —
+jako poznámku na okraji u Vybraných prací. Navigace přešla na množné číslo
+(Co děláme / O nás). Razítko jde k pravému okraji sloupce a výškou sedí na
+podpis, jak to má v připomínkách nakreslené.
+
+**Mimochodem nalezeno:** administrace neměla **vůbec žádný styl pro vlastní
+rozcestník** (`.admin-nav`) — osm listů se vysypalo jako věta inline odkazů.
+Chybělo to od začátku, jen si toho nikdo nevšiml. Doplněno; architekt si
+v PDF říká, že texty chce přepisovat sám, takže na tom záleží.
+
+**Review u C-012 se mýlila.** Verdikt „fix: u neplatného vstupu házej výjimku"
+jde proti kontraktu i akceptačnímu testu, které prázdné pole vyžadují. Modul
+zůstal, jak je. (Viz poučení z příručky: správná akce pod špatným verdiktem.)

@@ -1,0 +1,12 @@
+{
+  "id": "C-012",
+  "file": "src/lib/vazba.mjs",
+  "role": "coder",
+  "title": "Kroužková vazba — rozmístění kroužků po hraně listu",
+  "interface": "ES modul, čistý JavaScript bez závislostí a bez DOM. Jediný export.\n\nexport function krouzky(sirka, { rozestup = 56, okraj = 30, seed = 1, naklonMax = 1.6 } = {})\n\nVrací pole objektů { x, naklon, lesk, stin } — jeden za každý kroužek drátěné\nvazby podél horní hrany listu širokého `sirka`. Objekt má právě tyhle čtyři klíče.\n\nPOLOHA (nezávisí na seedu, je čistě geometrická):\n  L = sirka - 2 * okraj\n  Není-li `sirka` konečné číslo nebo je L < 0  ->  vrať prázdné pole [].\n  Je-li L === 0  ->  jediný kroužek s x = sirka / 2.\n  Jinak: n = Math.ceil(L / rozestup)   (počet mezer),  kroužků je n + 1,\n         krok = L / n,  x_i = okraj + i * krok  pro i = 0..n.\n  Tím je zaručeno, že mezera mezi sousedy nikdy nepřeroste `rozestup`\n  a že první kroužek sedí na `okraj` a poslední na `sirka - okraj`.\n  Pole je vzestupné podle x.\n\nROZHOZENÍ (závisí na seedu, aby vazba nevypadala jako tapeta):\n  naklon  natočení kroužku ve stupních, v rozsahu <-naklonMax, naklonMax>.\n          Při naklonMax === 0 musí vyjít přesná nula u všech kroužků.\n  lesk    poloha odlesku na kovu, v rozsahu <0.3, 0.7>.\n  stin    násobek krytí stínu, v rozsahu <0.8, 1.2>.\n  Všechny tři se počítají z deterministického generátoru nasazeného `seed`\n  (např. LCG) — dvě volání se stejnými argumenty musí dát shodné pole,\n  volání s jiným seedem musí dát jiné náklony. Sousední kroužky se musí\n  lišit; konstanta pro celou řadu je chyba.",
+  "acceptance": "tests/test_vazba.py",
+  "notes": "Žádné čtení souborů, žádný import, žádná práce s DOM — modul jen počítá čísla. Kreslení SVG dělá šablona, ne tenhle modul.",
+  "budget": {
+    "iterations": 10
+  }
+}

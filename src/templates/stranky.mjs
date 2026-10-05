@@ -2,7 +2,7 @@
    Ručně psané se píše (`pise`), všechno ostatní je prostě na papíře. */
 import { stranka } from "./layout.mjs";
 import { znacka } from "./znacka.mjs";
-import { KRESBY, kresbaHero, kresbaPudorys, kresbaRez, kresbaSituace, kresbaZDat } from "./kresby.mjs";
+import { kresbaPudorys, kresbaRez, kresbaSituace, kresbaZDat } from "./kresby.mjs";
 import { filtr, pocty, sousedi } from "../lib/prace.mjs";
 
 const esc = (s) => String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
@@ -12,7 +12,6 @@ function sekce({ id, cislo, nadpis, perex = "", poznamka = "", telo, klic = "", 
   const kPozn = klic ? ` data-text="${klic}.poznamka"` : "";
   const presah = (exponaty.presah || []).length ? " sekce--s-presahem" : "";
   return `<section class="list sekce${presah}" id="${id}" data-psat>
-<span class="hrana" aria-hidden="true"></span>
 ${pozadi}
 ${(exponaty.presah || []).length ? `<div class="presahy" aria-hidden="false">${(exponaty.presah || []).join("\n")}</div>` : ""}
 <div class="sekce-hlava">
@@ -26,6 +25,25 @@ ${perex ? `<p class="vedouci"${kPerex}>${esc(perex)}</p>` : ""}
 ${telo}
 </div>
 </section>`;
+}
+
+/** Obrázek skici — srcset, poměr stran, zvětšení po kliknutí.
+    Skici jsou PNG s průhledným pozadím, takže leží rovnou na papíře. */
+function obrazekSkici(s, { k = "", trida = "", velikosti = "100vw", lupa = true, popis = "" } = {}) {
+  if (!s) return "";
+  const cesta = (jmeno) => `${k}obrazky/${jmeno}`;
+  const sken = cesta((s.sken || s.varianty[s.varianty.length - 1]).soubor);
+  return `<img class="${trida}" src="${cesta(s.varianty[0].soubor)}"
+ srcset="${s.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ")}" sizes="${velikosti}"
+ width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(popis || s.popis)}" loading="lazy"${lupa ? ` data-lightbox="${sken}"` : ""}>`;
+}
+
+/** Karta skici v mřížce vybraných prací. Filtr (C-003) ji najde přes data-typ. */
+function karta(s, k = "") {
+  return `<figure class="skica-list" data-slug="${esc(s.zaklad)}" data-typ="${esc(s.skupina)}">
+${obrazekSkici(s, { k, trida: "skica-obraz", velikosti: "(max-width: 560px) 88vw, (max-width: 920px) 44vw, 23vw" })}
+<figcaption class="skica-popis" data-pole="nazev">${esc(s.popis)}</figcaption>
+</figure>`;
 }
 
 /** Exponát — skica položená do stránky. Bez papíru, takže je součástí listu;
@@ -68,20 +86,12 @@ function rozmisti(site, skici, k = "") {
   return kam;
 }
 
-/** Samostatný list jen pro jednu skicu — jako exponát ve vitríně. */
-function listVystavy(html, poznamka, klicPoznamky = "") {
-  if (!html) return "";
-  return `<section class="list vystava" data-psat>
-<span class="hrana" aria-hidden="true"></span>
-<div class="vystava-telo">${html}</div>
-${poznamka ? `<p class="poznamka pise vystava-poznamka"${klicPoznamky ? ` data-text="${klicPoznamky}"` : ""}>${esc(poznamka)}</p>` : ""}
-</section>`;
-}
-
-export function index(site, t, kresby = {}, skici = [], razitkoAtelieru = "") {
+export function index(site, t, skici = [], razitkoAtelieru = "") {
   const { firma, sluzby, postup } = site;
   const p = pocty(skici.map((s) => ({ typ: s.skupina })));
   const kam = rozmisti(site, skici);
+  const podleZakladu = Object.fromEntries(skici.map((s) => [s.zaklad, s]));
+  const hero = podleZakladu[site.hero];
 
   const hlavicka = `<header class="list uvod" data-psat>
 <div class="uvod-znacka" aria-hidden="true">${znacka({ varianta: "samotna", kresli: true, trida: "znacka--velka" })}</div>
@@ -95,7 +105,6 @@ export function index(site, t, kresby = {}, skici = [], razitkoAtelieru = "") {
 </header>
 
 <section class="list sekce predstaveni" id="predstaveni" data-psat>
-<span class="hrana" aria-hidden="true"></span>
 <div class="sekce-hlava">
 <div class="hlavicka-znacka kresba">${znacka({ varianta: "stohovana" })}</div>
 <p class="poznamka pise" data-text="uvod.poznamka">${esc(t.uvod.poznamka)}</p>
@@ -108,16 +117,27 @@ ${((kam.predstaveni || {}).okraj || []).join("\n")}
 <a class="tlacitko lehke" href="#postup" data-text="uvod.druhy">${esc(t.uvod.druhy)}</a>
 </div>
 </div>
-<div class="hero-kresba kresba" aria-hidden="true">${kresbaHero()}</div>
+${hero ? `<div class="hero-kresba">${obrazekSkici(hero, { trida: "hero-obraz", velikosti: "(max-width: 920px) 92vw, 78vw" })}</div>` : ""}
 ${((kam.predstaveni || {}).presah || []).length ? `<div class="presahy">${((kam.predstaveni || {}).presah || []).join("\n")}</div>` : ""}
 </section>`;
 
   const sluzbyTelo = `<div class="sluzby">
 ${sluzby.map((s, i) => `<article class="sluzba">
-<div class="sluzba-kresba kresba">${(KRESBY[s.kresba] || KRESBY.dum)()}</div>
+${podleZakladu[s.skica] ? `<div class="sluzba-kresba">${obrazekSkici(podleZakladu[s.skica], { trida: "sluzba-obraz", velikosti: "(max-width: 920px) 44vw, 23vw", popis: s.nazev })}</div>` : ""}
 <h3 class="rukou" data-text="site.sluzby.${i}.nazev">${esc(s.nazev)}</h3>
 <p data-text="site.sluzby.${i}.popis">${esc(s.popis)}</p>
 </article>`).join("\n")}
+</div>`;
+
+  /* Vybrané práce: filtr (C-003) a mřížka skic. Skupiny se berou ze skic,
+     ne ze služeb — architekt má zatím skici jen ke čtyřem z nich. */
+  const praceTelo = `<div class="filtry" role="group" aria-label="Filtr skic">
+<button class="filtr" data-filtr="vse" aria-pressed="true"><span data-text="prace.vse">${esc(t.prace.vse)}</span><span class="filtr-pocet">${p.vse}</span></button>
+${site.skupiny.filter((g) => p[g.id]).map((g) =>
+    `<button class="filtr" data-filtr="${g.id}" aria-pressed="false">${esc(g.nazev)}<span class="filtr-pocet">${p[g.id]}</span></button>`).join("\n")}
+</div>
+<div class="skicak" data-prace>
+${skici.map((s) => karta(s)).join("\n")}
 </div>`;
 
   const postupTelo = `<ol class="postup-osa">
@@ -183,15 +203,14 @@ ${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" 
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vpravo kresba" aria-hidden="true">${kresbaPudorys()}</div>`,
             exponaty: kam["co-delam"], klic: "sluzby", id: "co-delam", cislo: t.sluzby.cislo,
             nadpis: t.sluzby.nadpis, perex: t.sluzby.perex, poznamka: t.sluzby.poznamka, telo: sluzbyTelo }),
-    listVystavy(((kam["vystava-1"] || {}).vystava || [])[0], (kam["vystava-1"] || { poznamky: [] }).poznamky[0], (kam["vystava-1"] || { klice: [] }).klice[0]),
+    sekce({ exponaty: kam.prace, klic: "prace", id: "prace", cislo: t.prace.cislo,
+            nadpis: t.prace.nadpis, perex: t.prace.perex, poznamka: t.prace.poznamka, telo: praceTelo }),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--dole kresba" aria-hidden="true">${kresbaRez()}</div>`,
             exponaty: kam.postup, klic: "postup", id: "postup", cislo: t.postup.cislo,
             nadpis: t.postup.nadpis, perex: t.postup.perex, poznamka: t.postup.poznamka, telo: postupTelo }),
-    listVystavy(((kam["vystava-2"] || {}).vystava || [])[0], (kam["vystava-2"] || { poznamky: [] }).poznamky[0], (kam["vystava-2"] || { klice: [] }).klice[0]),
     sekce({ pozadi: `<div class="list-pozadi list-pozadi--vlevo kresba" aria-hidden="true">${kresbaSituace()}</div>`,
             exponaty: kam["o-mne"], klic: "oMne", id: "o-mne", cislo: t.oMne.cislo,
             nadpis: t.oMne.nadpis, poznamka: t.oMne.poznamka, telo: oMneTelo }),
-    listVystavy(((kam["vystava-3"] || {}).vystava || [])[0], (kam["vystava-3"] || { poznamky: [] }).poznamky[0], (kam["vystava-3"] || { klice: [] }).klice[0]),
     sekce({ exponaty: kam.kontakt, klic: "kontakt", id: "kontakt", cislo: t.kontakt.cislo,
             nadpis: t.kontakt.nadpis, perex: t.kontakt.perex, poznamka: t.kontakt.poznamka, telo: kontaktTelo }),
   ].join("\n");
@@ -203,11 +222,13 @@ ${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" 
 /** List jedné skupiny skic (rodinné domy, bytové domy, …). */
 export function detail(site, t, id, kresby = {}, skici = []) {
   const skupina = site.skupiny.find((g) => g.id === id);
-  const sluzba = site.sluzby.find((s) => s.id === id);
+  /* Výkres z DXF/PDF (tools/vykres.py → data/kresby/*.json). Dokud architekt
+     žádný nepošle, složka je prázdná a na listu prostě není — ukázkový
+     půdorys, který tu byl dřív, byl vymyšlený. */
+  const vykres = kresby[(site.sluzby.find((x) => x.id === id) || {}).vykres] || null;
   const moje = filtr(skici.map((s) => ({ ...s, typ: s.skupina })), id);
   const poradi = site.skupiny.filter((g) => skici.some((s) => s.skupina === g.id));
   const okolo = sousedi(poradi.map((g) => ({ ...g, slug: g.id })), id);
-  const vykres = (sluzba && kresby[sluzba.vykres]) || null;
 
   const telo = `<article class="list detail" data-psat>
 <header class="detail-hlava">

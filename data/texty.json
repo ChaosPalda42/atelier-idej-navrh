@@ -16,18 +16,18 @@
   "sluzby": {
     "nadpis": "Co děláme",
     "cislo": "01",
-    "perex": "Každý prostor si zaslouží jasnou ideu a promyšlené řešení.",
+    "perex": "",
     "poznamka": "Koexistence, kontrast, udržitelnost"
   },
   "postup": {
     "nadpis": "Jak to probíhá",
-    "cislo": "02",
+    "cislo": "03",
     "perex": "",
     "poznamka": ""
   },
   "oMne": {
     "nadpis": "O nás",
-    "cislo": "03",
+    "cislo": "04",
     "claim": "Ateliér Idej je nástroj stavebníka",
     "poznamka": "",
     "bloky": [
@@ -44,7 +44,7 @@
   },
   "kontakt": {
     "nadpis": "Napište nám",
-    "cislo": "04",
+    "cislo": "05",
     "perex": "Napište pár vět o tom, co chystáte za projekt. Pro lepší odpověď nezapomeňte uvést i parcelační číslo či adresu záměru. Odpovídáme do druhého dne.",
     "jmeno": "Jméno",
     "email": "E-mail",
@@ -66,9 +66,9 @@
   },
   "navigace": {
     "prace": "Práce",
-    "sluzby": "Co dělám",
+    "sluzby": "Co děláme",
     "postup": "Postup",
-    "oMne": "O mně",
+    "oMne": "O nás",
     "kontakt": "Kontakt"
   },
   "detail": {
@@ -89,5 +89,12 @@
   "vystavka": {
     "odkazy": "Skici po skupinách:",
     "popisek": "Kliknutím se skica zvětší."
+  },
+  "prace": {
+    "nadpis": "Vybrané práce",
+    "cislo": "02",
+    "perex": "",
+    "poznamka": "Každý prostor si zaslouží jasnou ideu a promyšlené řešení.",
+    "vse": "Vše"
   }
 }

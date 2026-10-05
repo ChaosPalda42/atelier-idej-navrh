@@ -45,7 +45,7 @@
   --sloupec: 66ch;
   --okraj: 230px;
   --mezera: clamp(66px, 8vw, 112px);
-  --hrana-vyska: 58px;
+  --hrana-vyska: 72px;
 }
 
 /* ------------------------------------------------------------------ reset */
@@ -225,6 +225,8 @@ p:last-child { margin-bottom: 0; }
   background: var(--oranz);
 }
 .poznamka.tuzkou { color: var(--tuha-2); }
+/* prázdná poznámka by na papíře nechala osamocenou oranžovou pomlčku */
+.poznamka:empty { display: none; }
 .poznamka.tuzkou::before { background: var(--tuha-3); }
 
 /* -------------------------------------------- psaní (jen ruční písmo) */
@@ -414,9 +416,7 @@ p:last-child { margin-bottom: 0; }
   grid-column: 1 / -1;
   margin: clamp(30px, 5vw, 62px) 0 0;
   padding-bottom: clamp(26px, 4vw, 48px);
-  color: var(--tuha-2);
 }
-.hero-kresba svg { width: 100%; height: auto; }
 
 /* ------------------------------------------------------------------ sekce */
 .sekce {
@@ -448,10 +448,74 @@ p:last-child { margin-bottom: 0; }
   gap: clamp(26px, 3.2vw, 44px) clamp(24px, 3.4vw, 46px);
   margin-top: 2.4em;
 }
-.sluzba-kresba { height: 104px; margin-bottom: 16px; color: var(--tuha-2); }
-.sluzba-kresba svg { height: 100%; width: auto; }
 .sluzba h3 { margin-bottom: 0.4em; }
 .sluzba p { font-size: 0.95rem; color: var(--tuha-2); margin: 0; }
+
+/* ------------------------------------------- skici architekta v obsahu */
+/* Skici jsou PNG bez papíru (tools/skici.py), takže leží rovnou na listu.
+   Nikde se neořezávají — skica je skica, poměr stran se nemění. */
+.hero-kresba {
+  display: flex;
+  justify-content: center;
+}
+.hero-obraz {
+  width: auto;
+  max-width: 100%;
+  max-height: clamp(220px, 32vw, 400px);
+  height: auto;
+}
+
+.sluzba-kresba {
+  height: 120px;
+  margin-bottom: 16px;
+  display: flex;
+  align-items: flex-end;
+}
+.sluzba-obraz {
+  width: auto;
+  max-width: 100%;
+  max-height: 100%;
+  height: auto;
+  cursor: zoom-in;
+  transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.sluzba:hover .sluzba-obraz { transform: translateY(-3px) scale(1.03); }
+
+/* ----------------------------------------------- mřížka vybraných prací */
+/* Sloupce, ne mřížka: skici mají od výšky 582 po 3212 px a v mřížce by
+   kolem nízkých zůstaly díry. Ve sloupcích se poskládají jako na nástěnce. */
+.skicak {
+  columns: 3;
+  column-gap: clamp(16px, 2.2vw, 30px);
+  margin-top: 2.2em;
+}
+.skica-list {
+  break-inside: avoid;
+  margin: 0 0 clamp(18px, 2.4vw, 32px);
+  --natoceni: 0deg;
+  transform: rotate(var(--natoceni));
+}
+.skica-list:nth-child(3n + 1) { --natoceni: -0.6deg; }
+.skica-list:nth-child(3n + 2) { --natoceni: 0.45deg; }
+.skica-list:nth-child(5n) { --natoceni: 0.9deg; }
+
+.skica-obraz {
+  width: 100%;
+  height: auto;
+  cursor: zoom-in;
+  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1), filter 0.45s ease;
+}
+.skica-list:hover .skica-obraz { transform: translateY(-3px) scale(1.015); filter: contrast(1.05); }
+
+.skica-popis {
+  font-family: var(--rukou);
+  font-size: 1.02rem;
+  color: var(--tuha-3);
+  margin-top: 4px;
+}
+
+@media (max-width: 920px) { .skicak { columns: 2; } }
+@media (max-width: 560px) { .skicak { columns: 1; } }
 
 /* ----------------------------------------------------------------- práce */
 .filtry { display: flex; flex-wrap: wrap; gap: 8px; margin: 2.4em 0 32px; }
@@ -694,6 +758,35 @@ p:last-child { margin-bottom: 0; }
 }
 .admin-hlava h1 { margin: 0.3em 0 0.4em; font-family: var(--rukou); font-size: clamp(2rem, 3.4vw, 2.8rem); font-weight: 500; }
 .admin-hlava .vedouci { max-width: 58ch; }
+/* rozcestník administrace — osm listů, na kterém zrovna jste, je černý */
+.admin-nav {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(228px, 1fr));
+  gap: 10px;
+  margin: 0 0 clamp(30px, 4vw, 48px);
+}
+.admin-nav-polozka {
+  display: block;
+  padding: 13px 16px;
+  border: 1px solid var(--linka);
+  border-radius: 4px;
+  text-decoration: none;
+  background: rgba(255, 255, 255, 0.4);
+  transition: border-color 0.2s, background 0.2s;
+}
+.admin-nav-polozka:hover { border-color: var(--oranz); }
+.admin-nav-polozka span { display: block; font-weight: 600; font-size: 0.95rem; }
+.admin-nav-polozka small {
+  display: block;
+  margin-top: 3px;
+  font-size: 0.8rem;
+  line-height: 1.45;
+  color: var(--tuha-3);
+}
+.admin-nav-polozka.je { background: var(--tuha); border-color: var(--tuha); }
+.admin-nav-polozka.je span { color: var(--papir); }
+.admin-nav-polozka.je small { color: rgba(250, 246, 238, 0.72); }
+
 .admin-telo { padding: 0 clamp(22px, 5vw, 60px) clamp(46px, 6vw, 76px); }
 
 .admin-zalozky {
@@ -802,7 +895,7 @@ p:last-child { margin-bottom: 0; }
 
 /* ------------------------------------------------------------ responzivita */
 @media (max-width: 920px) {
-  :root { --okraj: 0px; --hrana-vyska: 48px; }
+  :root { --okraj: 0px; --hrana-vyska: 62px; }
   .hlavicka,
   .sekce,
   .detail-hlava,
@@ -847,7 +940,7 @@ p:last-child { margin-bottom: 0; }
   .navigace, .pravitko, .hrot, .nacitani, .setmeni { display: none !important; }
   body { background: #fff; }
   .list { box-shadow: none; }
-  .list::before, .list::after, .hrana { display: none; }
+  .list::before, .list::after, .hrana, .vazba { display: none; }
   .pise .s { clip-path: none !important; opacity: 1 !important; }
   .zjevit.ceka { opacity: 1 !important; transform: none !important; }
 }
@@ -1168,20 +1261,66 @@ body.exponat-aktivni .setmeni { opacity: 1; }
   top: 0;
   left: 0;
   right: 0;
-  height: 1px;
+  height: 2px;
   background: linear-gradient(to right,
-    rgba(132, 118, 92, 0.12), rgba(132, 118, 92, 0.4) 9%,
-    rgba(132, 118, 92, 0.4) 91%, rgba(132, 118, 92, 0.12));
+    rgba(124, 108, 82, 0.16), rgba(124, 108, 82, 0.5) 7%,
+    rgba(124, 108, 82, 0.5) 93%, rgba(124, 108, 82, 0.16));
 }
+/* list nahoře končí řezem a vrhá stín na ten pod sebou — teprve tím je
+   poznat, že vazba opravdu spojuje dva listy, a ne jeden dlouhý papír */
 .hrana::after {
   content: "";
   position: absolute;
-  top: 1px;
+  top: 2px;
   left: 0;
   right: 0;
-  height: 24px;
-  background: linear-gradient(to bottom, rgba(74, 58, 36, 0.15), transparent);
+  height: 30px;
+  background: linear-gradient(to bottom, rgba(74, 58, 36, 0.26), rgba(74, 58, 36, 0.05) 55%, transparent);
 }
+
+/* --------------------------------------------------- kroužková vazba */
+/* Vazba je jedno SVG přes celou šířku listu; v jeho soustavě (viewBox
+   0 0 1180 84) leží šev mezi listy na y = 27. Záporný `margin-top` v
+   PROCENTECH posune vazbu o těch 27 jednotek nahoru — procentní marginy
+   se počítají ze šířky rodiče, takže posun škáluje spolu s kresbou a drát
+   se přehýbá přes hranu i na užším okně. */
+.vazba {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: auto;
+  margin-top: -3.432%;        /* = 27 * 1.5 / 1180, viz VAZBA_SEV */
+  z-index: 4;
+  pointer-events: none;
+  overflow: visible;
+}
+
+/* drát vrhá stín na papír pod sebou — i na list, přes který se přehýbá */
+.vazba > g {
+  filter: drop-shadow(2.4px 3.4px 2.2px rgba(62, 46, 26, calc(0.32 * var(--stin, 1))));
+}
+.vazba-odlesk { opacity: var(--lesk, 0.5); }
+
+/* mikroperforace, po které se list z bloku vytrhne */
+.perforace {
+  fill: none;
+  stroke: rgba(122, 106, 80, 0.3);
+  stroke-width: 1.4;
+  stroke-dasharray: 3 9;
+  stroke-linecap: round;
+}
+
+/* První list je vršek bloku: nad ním není co překrývat, tak vazba sjede
+   dolů a drát leží na něm. */
+.blok > .list:first-child .vazba { margin-top: 0.3%; }
+.blok > .list:first-child .hrana { display: none; }
+
+/* Na pauzáku je materiál tenčí a chladnější — stín i perforace s ním. */
+.list--pauzak .vazba > g {
+  filter: drop-shadow(2.4px 3.4px 2.4px rgba(54, 60, 50, calc(0.26 * var(--stin, 1))));
+}
+.list--pauzak .perforace { stroke: rgba(104, 118, 104, 0.26); }
 
 /* pauzák — průsvitný list s chladnějším tónem a hladším povrchem */
 .list--pauzak {
@@ -1274,14 +1413,18 @@ body.exponat-aktivni .setmeni { opacity: 1; }
 }
 
 /* razítko ateliéru vedle podpisu */
+/* razítko jde k pravému okraji sloupce a výškou sedí na podpis — tak to
+   architekt zakreslil v připomínkách (str. 7). */
 .podpis-rada {
   display: flex;
-  align-items: flex-end;
+  align-items: center;
+  justify-content: space-between;
   gap: clamp(24px, 4vw, 54px);
   flex-wrap: wrap;
 }
 .razitko-ruka {
-  width: clamp(76px, 9vw, 104px);
+  width: clamp(92px, 11vw, 128px);
+  margin-right: clamp(0px, 2vw, 26px);
   height: auto;
   mix-blend-mode: multiply;
   transform: rotate(-6deg);

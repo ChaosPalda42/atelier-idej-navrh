@@ -94,7 +94,7 @@ async function main() {
 
   // stránky
   const razitko = (await existuje(path.join(KOREN, "data", "obrazky", "razitko.png"))) ? "razitko.png" : "";
-  await writeFile(path.join(VEN, "index.html"), index(site, t, kresby, skici, razitko));
+  await writeFile(path.join(VEN, "index.html"), index(site, t, skici, razitko));
   for (const skupina of site.skupiny) {
     if (!skici.some((s) => s.skupina === skupina.id)) continue;
     await writeFile(path.join(VEN, "prace", `${skupina.id}.html`), detail(site, t, skupina.id, kresby, skici));

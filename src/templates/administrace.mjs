@@ -10,7 +10,7 @@ export const LISTY = [
     popis: "Co je na webu a co jste v něm změnili." },
   { id: "texty", soubor: "administrace/texty.html", nazev: "Texty webu",
     popis: "Všechno, co je na stránce napsané — po sekcích, jak to jde za sebou." },
-  { id: "sluzby", soubor: "administrace/sluzby.html", nazev: "Co dělám",
+  { id: "sluzby", soubor: "administrace/sluzby.html", nazev: "Co děláme",
     popis: "Čtyři skupiny práce a texty na jejich listech." },
   { id: "postup", soubor: "administrace/postup.html", nazev: "Jak to probíhá",
     popis: "Kroky od schůzky po dozor na stavbě." },
@@ -83,7 +83,8 @@ export function schema(site, t, skici) {
     texty: [
       skupinaTextu("Úvodní obrazovka", ["uvod.stitek", "uvod.claim", "uvod.dolu"]),
       skupinaTextu("Představení", ["uvod.text", "uvod.poznamka", "uvod.cil", "uvod.druhy"]),
-      skupinaTextu("Co dělám", ["sluzby.cislo", "sluzby.nadpis", "sluzby.perex", "sluzby.poznamka"]),
+      skupinaTextu("Co děláme", ["sluzby.cislo", "sluzby.nadpis", "sluzby.perex", "sluzby.poznamka"]),
+      skupinaTextu("Vybrané práce", ["prace.cislo", "prace.nadpis", "prace.perex", "prace.poznamka", "prace.vse"]),
       skupinaTextu("Jak to probíhá", ["postup.cislo", "postup.nadpis", "postup.perex", "postup.poznamka"]),
       skupinaTextu("O nás", ["oMne.cislo", "oMne.nadpis", "oMne.claim",
         ...t.oMne.bloky.flatMap((_, i) => [`oMne.bloky.${i}.nadpis`, `oMne.bloky.${i}.text`]),
@@ -96,6 +97,8 @@ export function schema(site, t, skici) {
         "vystavka.odkazy",
         ...site.vystavka.map((_, i) => `site.vystavka.${i}.poznamka`),
       ]),
+      skupinaTextu("Navigace", ["navigace.sluzby", "navigace.prace", "navigace.postup",
+        "navigace.oMne", "navigace.kontakt"]),
       skupinaTextu("Patička a hlava stránky", ["paticka.ukazka", "web.titulek", "web.popis"]),
     ],
     sluzby: [

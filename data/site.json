@@ -1,187 +1,155 @@
 {
-  "firma": {
-    "nazev": "ateliér IDEJ",
-    "pravni": "Ateliér Idej s.r.o.",
-    "ico": "24855561",
-    "architekt": "Ing. arch. Martin Jirásko",
-    "ulice": "Nádražní 349/3",
-    "mesto": "150 00 Praha 5 — Smíchov",
-    "telefon": "735 541 757",
-    "telefonHref": "+420735541757",
-    "email": "info@atelieridej.cz",
-    "domena": "atelieridej.cz"
+ "firma": {
+  "nazev": "ateliér IDEJ",
+  "pravni": "Ateliér Idej s.r.o.",
+  "ico": "24855561",
+  "architekt": "Ing. arch. Martin Jirásko",
+  "ulice": "Nádražní 349/3",
+  "mesto": "150 00 Praha 5 — Smíchov",
+  "telefon": "735 541 757",
+  "telefonHref": "+420735541757",
+  "email": "info@atelieridej.cz",
+  "domena": "atelieridej.cz"
+ },
+ "sluzby": [
+  {
+   "id": "rodinne-domy",
+   "nazev": "Rodinné domy",
+   "popis": "Dům vzniká z rozhovoru, náčrtu a jasné představy o životě jeho obyvatel. Provázíme projekt od prvního návrhu až po kolaudaci.",
+   "skica": "02-rodinne-domy"
   },
-  "sluzby": [
-    {
-      "id": "rodinne-domy",
-      "nazev": "Rodinné domy",
-      "kresba": "dum",
-      "vykres": "ukazka-pudorys",
-      "popis": "Dům vzniká z rozhovoru, náčrtu a jasné představy o životě jeho obyvatel. Provázíme projekt od prvního návrhu až po kolaudaci."
-    },
-    {
-      "id": "komercni",
-      "nazev": "Komerční stavby",
-      "kresba": "hala",
-      "popis": "Navrhujeme stavby pro podnikání, služby i veřejnost s důrazem na vyvážený vztah architektonického výrazu, funkčnosti a ekonomiky provozu."
-    },
-    {
-      "id": "rekonstrukce",
-      "nazev": "Rekonstrukce a přestavby",
-      "kresba": "rekonstrukce",
-      "popis": "Každý stávající dům v sobě nese vlastní příběh i omezení. Při rekonstrukci hledáme jeho silné stránky a převádíme je do podoby odpovídající dnešnímu využití."
-    },
-    {
-      "id": "bytove-domy",
-      "nazev": "Bytové domy",
-      "kresba": "bytovy",
-      "popis": "Navrhujeme bydlení, které obstojí v čase – funkční v každodenním provozu, přirozeně začleněné do okolí a odpovídající současným nárokům na kvalitu bydlení."
-    }
-  ],
-  "postup": [
-    {
-      "id": "schuzka",
-      "nazev": "Schůzka na místě",
-      "trvani": "",
-      "popis": "Společně projdeme pozemek nebo stavbu, vyslechneme vaše přání, nápady i představu o projektu a položíme důležité otázky. Seznámíme vás s možnostmi záměru vzhledem k územnímu plánu a dalším platným regulativům."
-    },
-    {
-      "id": "studie",
-      "nazev": "Studie",
-      "trvani": "",
-      "popis": "Na základě zadání připravíme architektonickou studii a prověříme vhodné varianty řešení. Každý návrh posuzujeme v kontextu místa, finančních možností a potřeb budoucích uživatelů."
-    },
-    {
-      "id": "povoleni",
-      "nazev": "Dokumentace pro povolení stavby",
-      "trvani": "",
-      "popis": "Zpracujeme kompletní projektovou dokumentaci v rozsahu vyžadovaném platnými předpisy. Zajistíme potřebné průzkumy a koordinaci profesí, dokumentaci následně podáme a projednáme s příslušnými úřady."
-    },
-    {
-      "id": "provadeci",
-      "nazev": "Prováděcí dokumentace",
-      "trvani": "",
-      "popis": "V návaznosti na povolení stavby koordinujeme dopracování projektu do podrobnosti potřebné pro realizaci. Spolupracujeme s ověřenými projektanty jednotlivých profesí a dbáme na návaznost všech částí projektu."
-    },
-    {
-      "id": "dozor",
-      "nazev": "Autorský dozor",
-      "trvani": "",
-      "popis": "V průběhu stavby se účastníme kontrolních dnů a dohlížíme na soulad realizace s architektonickým a projektovým řešením. Případné změny koordinujeme s klientem, zhotovitelem i dotčenými úřady."
-    }
-  ],
-  "skupiny": [
-    {
-      "id": "rodinne-domy",
-      "nazev": "Rodinné domy",
-      "text": [
-        "Dům vzniká z rozhovoru, náčrtu a jasné představy o životě jeho obyvatel. Než se začne kreslit hmota, musí být jasné, jak se v domě bude žít.",
-        "Tyhle skici jsou z té úplně první fáze. Je jich na každý dům desítky a většina skončí v koši — právě proto se v nich dá tak levně hledat."
-      ]
-    },
-    {
-      "id": "bytove-domy",
-      "nazev": "Bytové domy",
-      "text": [
-        "U bytového domu rozhoduje skladba bytů a přístup k nim dřív než vzhled. Když se trefí, dům se dobře prodává i dobře žije.",
-        "Na skicách hledáme hmotu, odskoky, balkony a to, kudy do domu lidé chodí."
-      ]
-    },
-    {
-      "id": "interiery",
-      "nazev": "Interiéry",
-      "text": [
-        "Interiér řešíme nejradši zároveň s domem. Když se o nábytku a světle rozhoduje až po kolaudaci, je spousta věcí zbytečně složitá.",
-        "Kreslí se stejně jako dům — od toho, co se v místnosti doopravdy dělá."
-      ]
-    },
-    {
-      "id": "garaze",
-      "nazev": "Garáže a drobné stavby",
-      "text": [
-        "Malá stavba není jednodušší stavba. Musí sednout k domu, který už stojí, vejít se do odstupů a projít přes úřad.",
-        "Většinou se to rozhodne na jedné dobré skice — kudy se vjíždí a kam padá stín."
-      ]
-    }
-  ],
-  "vystavka": [
-    {
-      "zaklad": "02-rodinne-domy",
-      "kam": "predstaveni",
-      "styl": "okraj",
-      "poznamka": "první nápad, jak dům posadit",
-      "natoceni": "-1.9deg"
-    },
-    {
-      "zaklad": "10-rodinne-domy",
-      "kam": "predstaveni",
-      "styl": "presah",
-      "poznamka": "tužkou a červenou — hledání tvaru",
-      "kde": "30%",
-      "natoceni": "2.2deg"
-    },
-    {
-      "zaklad": "05-rodinne-domy",
-      "kam": "co-delam",
-      "styl": "okraj",
-      "poznamka": "jedna propiska, pět minut",
-      "natoceni": "1.3deg"
-    },
-    {
-      "zaklad": "01-bytove-domy",
-      "kam": "co-delam",
-      "styl": "presah",
-      "poznamka": "řez úzkým domem",
-      "kde": "52%",
-      "natoceni": "-1.6deg"
-    },
-    {
-      "zaklad": "03-bytove-domy",
-      "kam": "vystava-1",
-      "styl": "vystava",
-      "poznamka": "Bytový dům. Dvě propisky přes sebe — modrá hledá, červená rozhoduje."
-    },
-    {
-      "zaklad": "09-interiery",
-      "kam": "postup",
-      "styl": "okraj",
-      "poznamka": "stěna koupelny, rozvržení",
-      "natoceni": "-0.8deg"
-    },
-    {
-      "zaklad": "04-bytove-domy",
-      "kam": "postup",
-      "styl": "presah",
-      "poznamka": "zkouška barev a materiálů",
-      "kde": "26%",
-      "natoceni": "1.4deg"
-    },
-    {
-      "zaklad": "08-garaze",
-      "kam": "vystava-2",
-      "styl": "vystava",
-      "poznamka": "Garáž. Nejdřív se kreslí, kudy se vjíždí — až potom, jak to vypadá."
-    },
-    {
-      "zaklad": "07-rodinne-domy",
-      "kam": "o-mne",
-      "styl": "presah",
-      "poznamka": "dům v řadě, pohled z ulice",
-      "kde": "40%",
-      "natoceni": "-2.4deg"
-    },
-    {
-      "zaklad": "06-bytove-domy",
-      "kam": "kontakt",
-      "styl": "okraj",
-      "poznamka": "fasáda, dvě varianty pod sebou",
-      "natoceni": "2.1deg"
-    },
-    {
-      "zaklad": "11-bytove-domy",
-      "kam": "vystava-3",
-      "styl": "vystava",
-      "poznamka": "Čtyři až pět pater. Takhle vypadá dům, než se o něm začne jednat."
-    }
-  ]
+  {
+   "id": "komercni",
+   "nazev": "Komerční stavby",
+   "popis": "Navrhujeme stavby pro podnikání, služby i veřejnost s důrazem na vyvážený vztah architektonického výrazu, funkčnosti a ekonomiky provozu.",
+   "skica": "08-garaze"
+  },
+  {
+   "id": "rekonstrukce",
+   "nazev": "Rekonstrukce a přestavby",
+   "popis": "Každý stávající dům v sobě nese vlastní příběh i omezení. Při rekonstrukci hledáme jeho silné stránky a převádíme je do podoby odpovídající dnešnímu využití.",
+   "skica": "05-rodinne-domy"
+  },
+  {
+   "id": "bytove-domy",
+   "nazev": "Bytové domy",
+   "popis": "Navrhujeme bydlení, které obstojí v čase – funkční v každodenním provozu, přirozeně začleněné do okolí a odpovídající současným nárokům na kvalitu bydlení.",
+   "skica": "11-bytove-domy"
+  }
+ ],
+ "postup": [
+  {
+   "id": "schuzka",
+   "nazev": "Schůzka na místě",
+   "trvani": "",
+   "popis": "Společně projdeme pozemek nebo stavbu, vyslechneme vaše přání, nápady i představu o projektu a položíme důležité otázky. Seznámíme vás s možnostmi záměru vzhledem k územnímu plánu a dalším platným regulativům."
+  },
+  {
+   "id": "studie",
+   "nazev": "Studie",
+   "trvani": "",
+   "popis": "Na základě zadání připravíme architektonickou studii a prověříme vhodné varianty řešení. Každý návrh posuzujeme v kontextu místa, finančních možností a potřeb budoucích uživatelů."
+  },
+  {
+   "id": "povoleni",
+   "nazev": "Dokumentace pro povolení stavby",
+   "trvani": "",
+   "popis": "Zpracujeme kompletní projektovou dokumentaci v rozsahu vyžadovaném platnými předpisy. Zajistíme potřebné průzkumy a koordinaci profesí, dokumentaci následně podáme a projednáme s příslušnými úřady."
+  },
+  {
+   "id": "provadeci",
+   "nazev": "Prováděcí dokumentace",
+   "trvani": "",
+   "popis": "V návaznosti na povolení stavby koordinujeme dopracování projektu do podrobnosti potřebné pro realizaci. Spolupracujeme s ověřenými projektanty jednotlivých profesí a dbáme na návaznost všech částí projektu."
+  },
+  {
+   "id": "dozor",
+   "nazev": "Autorský dozor",
+   "trvani": "",
+   "popis": "V průběhu stavby se účastníme kontrolních dnů a dohlížíme na soulad realizace s architektonickým a projektovým řešením. Případné změny koordinujeme s klientem, zhotovitelem i dotčenými úřady."
+  }
+ ],
+ "skupiny": [
+  {
+   "id": "rodinne-domy",
+   "nazev": "Rodinné domy",
+   "text": [
+    "Dům vzniká z rozhovoru, náčrtu a jasné představy o životě jeho obyvatel. Než se začne kreslit hmota, musí být jasné, jak se v domě bude žít.",
+    "Tyhle skici jsou z té úplně první fáze. Je jich na každý dům desítky a většina skončí v koši — právě proto se v nich dá tak levně hledat."
+   ]
+  },
+  {
+   "id": "bytove-domy",
+   "nazev": "Bytové domy",
+   "text": [
+    "U bytového domu rozhoduje skladba bytů a přístup k nim dřív než vzhled. Když se trefí, dům se dobře prodává i dobře žije.",
+    "Na skicách hledáme hmotu, odskoky, balkony a to, kudy do domu lidé chodí."
+   ]
+  },
+  {
+   "id": "interiery",
+   "nazev": "Interiéry",
+   "text": [
+    "Interiér řešíme nejradši zároveň s domem. Když se o nábytku a světle rozhoduje až po kolaudaci, je spousta věcí zbytečně složitá.",
+    "Kreslí se stejně jako dům — od toho, co se v místnosti doopravdy dělá."
+   ]
+  },
+  {
+   "id": "garaze",
+   "nazev": "Garáže a drobné stavby",
+   "text": [
+    "Malá stavba není jednodušší stavba. Musí sednout k domu, který už stojí, vejít se do odstupů a projít přes úřad.",
+    "Většinou se to rozhodne na jedné dobré skice — kudy se vjíždí a kam padá stín."
+   ]
+  }
+ ],
+ "vystavka": [
+  {
+   "zaklad": "10-rodinne-domy",
+   "kam": "predstaveni",
+   "styl": "presah",
+   "poznamka": "tužkou a červenou — hledání tvaru",
+   "kde": "30%",
+   "natoceni": "2.2deg"
+  },
+  {
+   "zaklad": "01-bytove-domy",
+   "kam": "co-delam",
+   "styl": "presah",
+   "poznamka": "řez úzkým domem",
+   "kde": "52%",
+   "natoceni": "-1.6deg"
+  },
+  {
+   "zaklad": "09-interiery",
+   "kam": "postup",
+   "styl": "okraj",
+   "poznamka": "stěna koupelny, rozvržení",
+   "natoceni": "-0.8deg"
+  },
+  {
+   "zaklad": "04-bytove-domy",
+   "kam": "postup",
+   "styl": "presah",
+   "poznamka": "zkouška barev a materiálů",
+   "kde": "26%",
+   "natoceni": "1.4deg"
+  },
+  {
+   "zaklad": "07-rodinne-domy",
+   "kam": "o-mne",
+   "styl": "presah",
+   "poznamka": "dům v řadě, pohled z ulice",
+   "kde": "40%",
+   "natoceni": "-2.4deg"
+  },
+  {
+   "zaklad": "06-bytove-domy",
+   "kam": "kontakt",
+   "styl": "okraj",
+   "poznamka": "fasáda, dvě varianty pod sebou",
+   "natoceni": "2.1deg"
+  }
+ ],
+ "hero": "03-bytove-domy"
 }

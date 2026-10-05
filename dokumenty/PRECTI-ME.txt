@@ -13,11 +13,11 @@ Rozbalte složku a otevřete soubor index.html v prohlížeči (Chrome, Safari, 
 
 Nápad, na kterém to stojí
 -------------------------
-Web je blok papírů v drátěné vazbě. Každá sekce je vlastní list, mezi listy
-jsou vidět kroužky. Co je psané rukou, to se před očima opravdu píše (úvodní
-věta, nadpisy, poznámky na okraji); vysázený text se jen pokládá na papír;
-kresby se rýsují čárou. Žádná čára není rovná — všechny jsou rozhozené jako
-od ruky.
+Web je blok papírů v drátěné vazbě. Každá sekce je vlastní list; na horní
+hraně každého listu jsou kroužky, pod nimi proražené díry a mikroperforace,
+po které se list z bloku vytrhne. Žádné dva kroužky nejsou ohnuté stejně.
+Každý druhý list je pauzák — průsvitný a chladnější v tónu, jako prokládací
+list ve skicáku.
 
 Píše se jen to, co je psané rukou — oranžové poznámky na okraji a podpis.
 Vysázený text se jen klidně objeví.
@@ -32,13 +32,14 @@ Co si na ukázce projít
 ----------------------
  - index.html .............. celá jednostránka (úvod, co dělám, skicák,
                              postup, o mně, kontakt)
- - skici ................... nejsou v jedné galerii, ale roztroušené po celém
-                             listu jako exponáty v muzeu — v okraji, přes hranu
-                             listu, některé mají vlastní list. Mají odstraněný
-                             papír, takže jsou součástí stránky; teprve pod myší
-                             se zvýrazní — ztmavne okolí a kresba zůstane
-                             nasvícená s měkkým okrajem; kliknutím se ukáže
-                             původní sken i s papírem
+ - Vybrané práce ........... list se všemi skicami pohromadě, s filtrem podle
+                             skupiny. Kliknutím se skica ukáže ve velkém
+                             i s původním papírem
+ - skici v textu ........... šest skic je navíc roztroušeno po ostatních
+                             listech jako exponáty v muzeu — v okraji nebo
+                             přes hranu listu. Mají odstraněný papír, takže
+                             jsou součástí stránky; teprve pod myší se zvýrazní
+                             — ztmavne okolí a kresba zůstane nasvícená
  - skupiny ................. Rodinné domy, Bytové domy, Interiéry, Garáže —
                              každá má vlastní list
  - formulář v kontaktu ..... vyzkoušejte ho i prázdný, hlídá si chyby
@@ -64,8 +65,10 @@ CO JE SKUTEČNÉ A CO NE
 Skutečné (od vás):
  - všechny texty na webu — úvodní věta, představení ateliéru, čtyři skupiny
    práce, pět kroků postupu, celé „O nás" i text u kontaktu,
- - všech 11 skic. Odstranil se jim papír (zůstal jen inkoust i s barvou)
-   a srovnalo se otočení z fotoaparátu; původní sken se ukáže po kliknutí,
+ - všech 11 skic — v přehledu Vybraných prací, u čtyř skupin práce,
+   na listu představení i roztroušené po textu. Odstranil se jim papír
+   (zůstal jen inkoust i s barvou) a srovnalo se otočení z fotoaparátu;
+   původní sken se ukáže po kliknutí,
  - razítko u podpisu,
  - údaje z rejstříku, jméno a telefon.
 
@@ -74,8 +77,13 @@ Ode mě (klidně přepište, všechno jde v administraci):
    psal jsem je podle toho, co na papíře je,
  - texty na čtyřech listech sbírek skic,
  - popisky polí ve formuláři,
- - půdorys na listu „Rodinné domy" je z ukázkového výkresu, ne z vaší zakázky —
-   je tam proto, aby bylo vidět, jak na webu vypadá skutečný výkres.
+ - bledé čáry prosvítající papírem na pozadí listů (půdorys, řez, situace).
+   Jsou to kreslené vodoznaky, ne ukázka práce.
+
+Pozn.: dvě ze čtyř skupin práce nemají vlastní skicu — ke „Komerčním stavbám"
+je u textu kresba garáže a k „Rekonstrukcím" kresba rodinného domu, protože
+nic bližšího zatím nemáme. Jakmile pošlete skicu komerční stavby a skicu
+rekonstrukce, vymění se za ně.
 
 E-mail info@atelieridej.cz se teprve zakládá — dokud doména nepoběží,
 pošta na něj nechodí.
