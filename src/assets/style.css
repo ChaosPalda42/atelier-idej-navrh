@@ -1897,8 +1897,10 @@ body.admin .obsah-list { display: none !important; }
      výšku řádku, na kterou se dá klepnout, aniž by se rozsypala sazba. */
   .skica-popis a { min-height: 40px; display: flex; align-items: center; }
   .paticka a,
-  .paticka-sbirky a { display: inline-block; padding: 7px 0; }
+  .paticka-sbirky a,
+  .kontakt-udaje a { display: inline-block; padding: 9px 0; }
   .paticka p { margin-bottom: 0.2em; }
+  .kontakt-udaje p { margin-bottom: 0; }
 }
 
 @media (max-width: 700px) {
