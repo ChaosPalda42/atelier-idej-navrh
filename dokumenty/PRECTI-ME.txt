@@ -6,6 +6,14 @@ Co to je
 Klikací ukázka nového webu pro Ateliér Idej s.r.o. Není to hotový web
 v provozu — je to návrh, na kterém se dá rozhodnout, jestli jdeme touhle cestou.
 
+Na telefonu
+-----------
+Web je dělaný hlavně na telefon. Místo lišty nahoře je u palce dvojtlačítko
+**Obsah / Kontakt** — obsah se otevře jako další list papíru se všemi sekcemi
+a je v něm podtržené to, kde zrovna jste. Skicák je ve dvou sloupcích, filtry
+se posouvají prstem do strany a klepnutí na skicu ji přenese na list projektu.
+Kdo má v telefonu zapnuté omezení pohybu, nedostane žádnou animaci.
+
 Jak to spustit
 --------------
 Rozbalte složku a otevřete soubor index.html v prohlížeči (Chrome, Safari, Edge).

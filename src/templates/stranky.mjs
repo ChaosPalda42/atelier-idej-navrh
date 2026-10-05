@@ -29,13 +29,14 @@ ${telo}
 
 /** Obrázek skici — srcset, poměr stran, zvětšení po kliknutí.
     Skici jsou PNG s průhledným pozadím, takže leží rovnou na papíře. */
-function obrazekSkici(s, { k = "", trida = "", velikosti = "100vw", lupa = true, popis = "" } = {}) {
+function obrazekSkici(s, { k = "", trida = "", velikosti = "100vw", lupa = true, popis = "", prechod = "" } = {}) {
   if (!s) return "";
   const cesta = (jmeno) => `${k}obrazky/${jmeno}`;
   const sken = cesta((s.sken || s.varianty[s.varianty.length - 1]).soubor);
   return `<img class="${trida}" src="${cesta(s.varianty[0].soubor)}"
  srcset="${s.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ")}" sizes="(max-width: 920px) 88vw, 54vw"
- width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(popis || s.popis)}" loading="lazy"${lupa ? ` data-lightbox="${sken}"` : ""}>`;
+ width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(popis || s.popis)}" loading="lazy" decoding="async"
+${prechod ? ` style="view-transition-name:${prechod}"` : ""}${lupa ? ` data-lightbox="${sken}"` : ""}>`;
 }
 
 /** Karta skici v mřížce vybraných prací. Filtr (C-003) ji najde přes data-typ.
@@ -43,7 +44,8 @@ function obrazekSkici(s, { k = "", trida = "", velikosti = "100vw", lupa = true,
     otevře aspoň původní sken. */
 function karta(s, projekt, k = "") {
   const obraz = obrazekSkici(s, {
-    k, trida: "skica-obraz", velikosti: "(max-width: 560px) 44vw, 22vw", lupa: !projekt,
+    k, trida: "skica-obraz", velikosti: "(max-width: 700px) 44vw, 22vw", lupa: !projekt,
+    prechod: `skica-${s.zaklad}`,
   });
   const vnitrek = projekt
     ? `<a class="skica-odkaz" href="${k}prace/${esc(projekt.slug)}.html">${obraz}</a>`
@@ -67,8 +69,8 @@ function exponat(s, misto = {}, { k = "", klid = false } = {}) {
  data-typ="${esc(s.skupina)}" data-otoceni="0"${klid ? " data-klid" : ""} style="--w:${s.sirka};--h:${s.vyska}">
 <span class="exponat-ram">
 <img src="${cesta(s.varianty[0].soubor)}" srcset="${srcset}" sizes="(max-width: 920px) 88vw, 54vw"
- width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(s.popis)}" loading="lazy"
- data-lightbox="${sken}">
+ width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(s.popis)}" loading="lazy" decoding="async"
+ style="view-transition-name:skica-${esc(s.zaklad)}" data-lightbox="${sken}">
 </span>
 <figcaption class="exponat-popis"><span data-pole="nazev">${esc(misto.poznamka || s.popis)}</span></figcaption>
 </figure>`;
@@ -276,7 +278,7 @@ function fotka(u, k = "", popis = "") {
 <img src="${cesta(u.varianty[0].soubor)}"
  srcset="${u.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ")}"
  sizes="(max-width: 920px) 92vw, 46vw" width="${u.sirka}" height="${u.vyska}"
- alt="${esc(popis || u.popis)}" loading="lazy" data-lightbox="${cesta(nejvetsi.soubor)}">
+ alt="${esc(popis || u.popis)}" loading="lazy" decoding="async" data-lightbox="${cesta(nejvetsi.soubor)}">
 </figure>`;
 }
 

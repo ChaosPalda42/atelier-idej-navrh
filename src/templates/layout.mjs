@@ -1,5 +1,5 @@
 /* Obal stránky: hlava dokumentu, list papíru, navigace, patička. */
-import { znacka, razitko } from "./znacka.mjs";
+import { znacka, razitko, defsZnacky } from "./znacka.mjs";
 import { krouzky } from "../lib/vazba.mjs";
 
 /* Otisk sestavení se přidává k adresám stylů a skriptů, aby po nasazení
@@ -12,6 +12,7 @@ export function defs() {
   return `<svg class="defs" aria-hidden="true" focusable="false"><defs>
 <filter id="papir-stin"><feDropShadow dx="0" dy="1" stdDeviation="0.6" flood-opacity="0.18"/></filter>
 ${defsVazby()}
+${defsZnacky()}
 </defs></svg>`;
 }
 
@@ -92,17 +93,49 @@ export function pravitko() {
 </div>`;
 }
 
+/** Sekce v pořadí, v jakém leží v bloku — pro navigaci i pro obsah. */
+function sekceWebu(t) {
+  return [
+    { kotva: "co-delam", nazev: t.navigace.sluzby, cislo: t.sluzby.cislo },
+    { kotva: "prace", nazev: t.navigace.prace, cislo: t.prace.cislo },
+    { kotva: "postup", nazev: t.navigace.postup, cislo: t.postup.cislo },
+    { kotva: "o-mne", nazev: t.navigace.oMne, cislo: t.oMne.cislo },
+    { kotva: "kontakt", nazev: t.navigace.kontakt, cislo: t.kontakt.cislo },
+  ];
+}
+
 export function navigace(t, aktivni, k = "") {
-  const odkaz = (cil, popis, trida = "") =>
-    `<a class="${trida}" href="${k}${cil}">${popis}</a>`;
+  const sekce = sekceWebu(t);
+  const odkaz = (s, trida = "") =>
+    `<a class="${trida}" href="${k}index.html#${s.kotva}">${s.nazev}</a>`;
   return `<nav class="navigace" aria-label="Hlavní navigace">
 <div class="navigace-vnitrek">
 <a class="navigace-znacka" href="${k}index.html" aria-label="ateliér IDEJ — domů">${znacka({ varianta: "samotna" })}</a>
-${odkaz("index.html#co-delam", t.navigace.sluzby)}
-${odkaz("index.html#prace", t.navigace.prace)}
-${odkaz("index.html#postup", t.navigace.postup)}
-${odkaz("index.html#o-mne", t.navigace.oMne)}
-${odkaz("index.html#kontakt", t.navigace.kontakt, "cil")}
+${sekce.slice(0, -1).map((s) => odkaz(s)).join("\n")}
+${odkaz(sekce[sekce.length - 1], "cil")}
+</div>
+</nav>`;
+}
+
+/* Na telefonu se lišta nahoře nevejde — zbyl by z ní jeden odkaz. Místo ní
+   je u palce dvojtlačítko: vlevo obsah bloku, vpravo rovnou kontakt.
+   Obsah se otevře jako další list papíru přes celou obrazovku. */
+export function obsah(t, k = "") {
+  const sekce = sekceWebu(t);
+  return `<div class="palec" aria-hidden="false">
+<button class="palec-obsah" type="button" aria-expanded="false" aria-controls="obsah-bloku">
+<span class="palec-cary" aria-hidden="true"></span>Obsah</button>
+<a class="palec-cil" href="${k}index.html#kontakt">${t.navigace.kontakt}</a>
+</div>
+<nav class="obsah-list" id="obsah-bloku" aria-label="Obsah bloku" hidden>
+<div class="obsah-vnitrek">
+<p class="stitek">Obsah</p>
+<ol class="obsah-seznam">
+${sekce.map((s) => `<li><a href="${k}index.html#${s.kotva}" data-kotva="${s.kotva}">
+<span class="obsah-cislo">${s.cislo}</span><span class="obsah-nazev">${s.nazev}</span></a></li>`).join("\n")}
+</ol>
+<a class="obsah-domu" href="${k}index.html">Začátek bloku</a>
+<button class="obsah-zavrit" type="button">Zavřít</button>
 </div>
 </nav>`;
 }
@@ -175,6 +208,7 @@ export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", ak
 </div>
 <div class="setmeni" aria-hidden="true"></div>
 ${navigace(t, aktivni, k)}
+${obsah(t, k)}
 ${pravitko()}
 ${defs()}
 <main class="blok" id="zacatek">

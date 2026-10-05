@@ -12,6 +12,12 @@ to se před očima opravdu píše. Obrázky na webu jsou skutečné skici archit
 dopsané kresby zůstaly jen jako bledé vodoznaky na pozadí listů. Značka je vytažená
 ze zadaného PDF — při otevření se objede a pak se pomalu otáčí.
 
+## Mobil
+Navigaci na telefonu dělá `.palec` (Obsah / Kontakt) + list obsahu, úvodní list
+má `100svh` a počítá se `safe-area-inset`. Scroll-driven animace a přechody
+stránek jsou v `@supports` — nejsou Baseline. Značka se kreslí jednou do `<defs>`
+a instance ji berou přes `<use>`; opsaná dělala polovinu HTML.
+
 ## Jak to postavit
     uv sync
     node build.mjs                       # -> out/

@@ -555,7 +555,6 @@ p:last-child { margin-bottom: 0; }
 }
 
 @media (max-width: 920px) { .skicak { grid-template-columns: repeat(2, 1fr); } }
-@media (max-width: 560px) { .skicak { grid-template-columns: 1fr; } }
 
 /* ----------------------------------------------------------------- práce */
 .filtry { display: flex; flex-wrap: wrap; gap: 8px; margin: 2.4em 0 32px; }
@@ -955,8 +954,6 @@ p:last-child { margin-bottom: 0; }
 }
 
 @media (max-width: 560px) {
-  .navigace a:not(.cil) { display: none; }
-  .navigace-vnitrek { padding-left: 10px; }
   h1.claim { max-width: none; }
 }
 
@@ -1131,15 +1128,6 @@ h3.rukou {
   .uvod { grid-template-columns: minmax(0, 1fr); min-height: auto; }
   .uvod-text, .uvod-dolu { grid-column: 1; }
   .uvod-dolu { grid-row: auto; }
-  /* na úzkém okně je text nad kruhem, ustupovat nemusí */
-  .uvod-znacka {
-    width: 118%;
-    right: -32%;
-    top: 56%;
-    opacity: 0.5;
-    -webkit-mask-image: none;
-    mask-image: none;
-  }
   .list-pozadi { opacity: 0.12; }
   .list-pozadi--vpravo { width: 70%; right: -14%; }
   .list-pozadi--vlevo { width: 66%; left: -16%; }
@@ -1549,3 +1537,374 @@ body.exponat-aktivni .setmeni { opacity: 1; }
 
 .paticka-sbirky { margin-top: 0.4em; }
 .paticka-sbirky span { color: var(--tuha-3); }
+
+/* =====================================================================
+   TELEFON
+   Lišta nahoře se na úzkém okně nevejde a zbyl by z ní jeden odkaz.
+   Místo ní je u palce dvojtlačítko a obsah jako další list papíru.
+   ===================================================================== */
+
+.palec { display: none; }
+
+@media (max-width: 700px) {
+  .navigace { display: none !important; }
+
+  .palec {
+    position: fixed;
+    left: 50%;
+    bottom: calc(14px + env(safe-area-inset-bottom, 0px));
+    transform: translateX(-50%);
+    z-index: 70;
+    display: flex;
+    align-items: stretch;
+    gap: 4px;
+    padding: 5px;
+    border-radius: 999px;
+    background: rgba(250, 246, 238, 0.92);
+    border: 1px solid var(--linka);
+    box-shadow: 0 14px 30px -16px rgba(52, 40, 24, 0.7);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+  }
+  /* při psaní do formuláře by lišta seděla na klávesnici */
+  body.pise-se .palec { opacity: 0; pointer-events: none; }
+
+  .palec-obsah,
+  .palec-cil {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+    min-height: 46px;
+    padding: 0 20px;
+    border: 0;
+    border-radius: 999px;
+    background: none;
+    font-family: var(--pismo);
+    font-size: 0.95rem;
+    color: var(--tuha-2);
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform 0.18s ease, background 0.18s ease;
+  }
+  .palec-obsah:active,
+  .palec-cil:active { transform: scale(0.95); }
+  .palec-cil { background: var(--tuha); color: var(--papir); }
+
+  /* tři čáry jako řádky na papíře, ne jako hamburger z aplikace */
+  .palec-cary {
+    width: 17px;
+    height: 11px;
+    border-top: 1.6px solid currentColor;
+    border-bottom: 1.6px solid currentColor;
+    position: relative;
+  }
+  .palec-cary::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 4px;
+    top: 4px;
+    border-top: 1.6px solid currentColor;
+  }
+}
+
+/* ------------------------------------------------------------ list obsahu */
+.obsah-list {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  background: var(--papir);
+  background-image: url("vlakno.svg");
+  background-size: 200px 200px;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  padding: calc(env(safe-area-inset-top, 0px) + 34px) 26px
+           calc(env(safe-area-inset-bottom, 0px) + 34px);
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity 0.26s ease, transform 0.3s cubic-bezier(0.2, 0.8, 0.3, 1);
+}
+.obsah-list.vidno { opacity: 1; transform: none; }
+@starting-style { .obsah-list.vidno { opacity: 0; transform: translateY(14px); } }
+
+.obsah-vnitrek {
+  max-width: 460px;
+  margin: 0 auto;
+  min-height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.obsah-seznam {
+  list-style: none;
+  margin: 1.2em 0 auto;
+  padding: 0;
+}
+.obsah-seznam li { border-bottom: 1px solid var(--linka); }
+.obsah-seznam a {
+  display: flex;
+  align-items: baseline;
+  gap: 16px;
+  min-height: 62px;
+  padding: 14px 2px;
+  text-decoration: none;
+  color: var(--tuha);
+}
+.obsah-cislo {
+  font-family: var(--mono);
+  font-size: 0.74rem;
+  letter-spacing: 0.14em;
+  color: var(--oranz);
+  min-width: 2.2em;
+}
+.obsah-nazev {
+  font-family: var(--rukou);
+  font-weight: 500;
+  font-size: 2rem;
+  line-height: 1.1;
+}
+.obsah-seznam a[aria-current="true"] .obsah-nazev { text-decoration: underline; text-underline-offset: 5px; }
+.obsah-seznam a:active { background: rgba(255, 128, 0, 0.08); }
+
+.obsah-domu {
+  margin-top: 1.6em;
+  font-size: 0.92rem;
+  color: var(--tuha-2);
+}
+.obsah-zavrit {
+  margin-top: 18px;
+  min-height: 48px;
+  border: 1px solid var(--linka);
+  border-radius: 999px;
+  background: none;
+  font: inherit;
+  font-size: 0.95rem;
+  color: var(--tuha-2);
+  cursor: pointer;
+}
+
+/* --------------------------------------------------- úvodní list na mobilu */
+@media (max-width: 920px) {
+  .uvod {
+    /* svh, ne vh: s vh by se list schoval pod adresní řádek prohlížeče */
+    min-height: 100svh;
+    align-content: space-between;
+    padding-top: max(clamp(70px, 10vw, 130px), calc(env(safe-area-inset-top, 0px) + 72px));
+    /* dole musí zbýt místo na plovoucí lištu, jinak na ní sedí pobídka */
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 112px);
+  }
+  .uvod-text { align-self: center; margin-top: auto; }
+  .uvod-dolu { margin-top: auto; }
+  /* Kruh patří pod claim, ne přes něj. Nahoře se rozplyne, aby se text
+     četl i tam, kde se kříží s tahem. */
+  .uvod-znacka {
+    width: 148%;
+    right: -40%;
+    top: auto;
+    bottom: -14%;
+    transform: none;
+    opacity: 0.42;
+    --ustup: linear-gradient(to bottom, transparent 0 6%, rgba(0, 0, 0, 0.5) 20%, #000 42%);
+    -webkit-mask-image: var(--ustup);
+    mask-image: var(--ustup);
+  }
+  .uvod-dolu { margin-top: clamp(28px, 6vw, 60px); }
+}
+
+/* ------------------------------------------- čitelnost a ovladatelnost */
+@media (max-width: 700px) {
+  /* na dvou sloupcích je skicák poloviční a pořád se v něm dá vybírat */
+  .skicak { grid-template-columns: repeat(2, 1fr); gap: 18px 14px; }
+
+  /* kotva pod hlavičkou: nadpis sekce nesmí skončit u horní hrany */
+  html { scroll-padding-top: 18px; }
+
+  /* filtry se vejdou na jeden tah prstem místo tří řádků */
+  .filtry {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    margin-inline: calc(clamp(22px, 5vw, 60px) * -1);
+    padding-inline: clamp(22px, 5vw, 60px);
+  }
+  .filtry::-webkit-scrollbar { display: none; }
+  .filtr { scroll-snap-align: start; min-height: 44px; flex: 0 0 auto; }
+
+  .skica-popis { padding: 6px 0 10px; }
+  .skica-odkaz { display: block; }
+
+  /* poslední list končí nad plovoucí lištou */
+  .blok { padding-bottom: calc(96px + env(safe-area-inset-bottom, 0px)); }
+}
+
+/* zaškrtávátko a výběr souboru se musí dát trefit prstem */
+.souhlas {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-height: 44px;
+  padding: 6px 0;
+  cursor: pointer;
+}
+.souhlas input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  flex: 0 0 auto;
+  accent-color: var(--oranz);
+}
+
+/* ---------------------------------------------------------- dotyk obecně */
+@media (hover: none) {
+  /* šedý blik přes celý prvek při klepnutí vypadá jako chyba */
+  a, button, label, summary, input, textarea, select {
+    -webkit-tap-highlight-color: rgba(255, 128, 0, 0.14);
+    touch-action: manipulation;
+  }
+  .tlacitko:active,
+  .filtr:active,
+  .skica-list:active .skica-obraz { transform: scale(0.97); }
+  .tlacitko, .filtr { transition: transform 0.16s ease, background 0.2s, border-color 0.2s, color 0.2s; }
+}
+
+/* =====================================================================
+   POHYB
+   Všechno, co není Baseline (scroll-driven animace, přechody stránek),
+   je schválně až v @supports: kdo to neumí, nepřijde o nic podstatného.
+   A kdo si vypnul pohyb v systému, nedostane nic z toho.
+   ===================================================================== */
+
+/* ---------------------------------------- přechod mezi listy a projektem */
+/* Klepnutí na skicu ji na listu projektu najde znovu — obrázek se tam
+   přenese, místo aby stránka blikla. Jména nese `view-transition-name`
+   odvozené od skici, viz obrazekSkici() a exponat(). */
+@view-transition { navigation: auto; }
+
+@media (prefers-reduced-motion: no-preference) {
+  ::view-transition-group(*) { animation-duration: 0.42s; }
+  ::view-transition-old(root) { animation: zmizni 0.22s ease both; }
+  ::view-transition-new(root) { animation: objevSe 0.3s ease both; }
+}
+@keyframes zmizni { to { opacity: 0; } }
+@keyframes objevSe { from { opacity: 0; } }
+
+/* ------------------------------------------------ příchod obsahu rolováním */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .skica-list,
+    .fotka,
+    .sluzba,
+    .postup-krok,
+    .o-nas-blok,
+    .exponat {
+      animation: prijdi linear both;
+      animation-timeline: view();
+      animation-range: entry 4% cover 24%;
+    }
+    @keyframes prijdi {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: none; }
+    }
+  }
+}
+
+/* --------------------------------------------- kruh odplouvá s rolováním */
+@supports (animation-timeline: scroll()) {
+  @media (max-width: 920px) and (prefers-reduced-motion: no-preference) {
+    .uvod-znacka {
+      animation: odplouva linear both;
+      animation-timeline: scroll(root);
+      animation-range: 0 100svh;
+    }
+    @keyframes odplouva {
+      to { transform: translateY(-9%) scale(1.07); opacity: 0.14; }
+    }
+  }
+}
+
+/* ---------------------------------------------------- typografie a detaily */
+/* `balance` srovná nadpis na dva podobně dlouhé řádky, `pretty` nenechá
+   v odstavci osamocené slovo na posledním řádku. Oboje je Baseline 2024. */
+h1, h2, h3, .claim, .nadpis, .obsah-nazev { text-wrap: balance; }
+p, .vedouci, .poznamka, li { text-wrap: pretty; }
+
+/* zavírání lupy musí jít trefit palcem, ne jen myší */
+.svetelny-zavrit {
+  top: calc(env(safe-area-inset-top, 0px) + 10px);
+  right: 10px;
+  width: 48px;
+  height: 48px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  background: rgba(34, 31, 27, 0.5);
+}
+.svetelny-stul { padding-bottom: calc(env(safe-area-inset-bottom, 0px) + clamp(16px, 4vw, 54px)); }
+
+/* prohlížeč nemá při přetažení ukazovat bílý podklad za papírem */
+html { overscroll-behavior-y: none; background: var(--stul); }
+
+@media (max-width: 700px) {
+  /* pobídka k rolování je odkaz — musí mít co chytit */
+  .uvod-dolu { min-height: 46px; align-items: center; }
+  /* sekce začínají výš, na telefonu je svislého místa málo */
+  .sekce { padding-top: calc(var(--hrana-vyska) + 2px); }
+  .sekce-hlava { margin-bottom: 14px; }
+  /* popisek pod skicou je odkaz na projekt — ať je vidět, že se dá klepnout */
+  .skica-popis a { text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--linka); }
+}
+
+/* ------------------------------------------------- administrace na telefonu */
+/* Plovoucí lišta míří na sekce webu — v administraci nemá co dělat. */
+body.admin .palec,
+body.admin .obsah-list { display: none !important; }
+
+@media (max-width: 700px) {
+  /* devět karet pod sebou je půl obrazovky rolování, než začne obsah */
+  .admin-nav {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    margin-inline: calc(clamp(22px, 5vw, 60px) * -1);
+    padding-inline: clamp(22px, 5vw, 60px);
+  }
+  .admin-nav::-webkit-scrollbar { display: none; }
+  .admin-nav-polozka {
+    flex: 0 0 auto;
+    scroll-snap-align: start;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    padding: 10px 16px;
+  }
+  .admin-nav-polozka small { display: none; }
+  .admin-nav-polozka span { font-size: 0.92rem; white-space: nowrap; }
+
+  .admin-dvojice { grid-template-columns: 1fr; }
+  .admin-karta input,
+  .admin-karta textarea,
+  .admin-karta select { font-size: 16px; }   /* pod 16px iOS stránku přiblíží */
+  .admin-mini { min-height: 38px; min-width: 38px; }
+}
+
+@media (max-width: 700px) {
+  /* Odkazy v textu a v patičce se prstem trefují hůř než myší — dostanou
+     výšku řádku, na kterou se dá klepnout, aniž by se rozsypala sazba. */
+  .skica-popis a { min-height: 40px; display: flex; align-items: center; }
+  .paticka a,
+  .paticka-sbirky a { display: inline-block; padding: 7px 0; }
+  .paticka p { margin-bottom: 0.2em; }
+}
+
+@media (max-width: 700px) {
+  /* Pauzák je na velké obrazovce průsvitný tak akorát. Na telefonu, kde je
+     list úzký a dlouhý, z prázdného místa vypadá jako díra mezi listy —
+     materiál se tedy pozná dál, ale papír je hustší. */
+  .list--pauzak { background-color: rgba(238, 240, 235, 0.95); }
+  .list--pauzak::before { opacity: 0.4; }
+}

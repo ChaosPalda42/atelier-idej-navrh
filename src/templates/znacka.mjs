@@ -26,10 +26,21 @@ const KR = [STRED[0] - POLOMER, STRED[1] - POLOMER, 2 * POLOMER, 2 * POLOMER];
 
 let poradi = 0;
 
+/* Kruh má 69 tahů ve třech barvách. Na stránce je pětkrát (lišta, úvod,
+   hlavička, načítání, razítko) a doslova opsaný dělal polovinu HTML —
+   kreslí se proto jednou do <defs> a instance ho jen odkazují. */
+export const TAHY_ID = "znacka-tahy";
+
+export function defsZnacky() {
+  return `<g id="${TAHY_ID}" fill="none" stroke-linecap="round" stroke-linejoin="round">`
+    + ZNACKA.kruh.tahy
+      .map((t) => `<path d="${t.d}" stroke="${t.barva}" stroke-width="${t.sirka}"/>`)
+      .join("")
+    + "</g>";
+}
+
 function tahyKruhu() {
-  return ZNACKA.kruh.tahy
-    .map((t) => `<path d="${t.d}" stroke="${t.barva}" stroke-width="${t.sirka}"/>`)
-    .join("");
+  return `<use href="#${TAHY_ID}"/>`;
 }
 
 /** Kruh i s maskou, kterou se dá „nakreslit" jedním objezdem. */
@@ -46,7 +57,7 @@ function kruh({ kresli = false }) {
 <circle class="znacka-objezd" cx="${STRED[0]}" cy="${STRED[1]}" r="100" fill="none" stroke="#fff" stroke-width="300"/>
 </mask>`
     : "";
-  return `${maska}<g class="znacka-kruh" fill="none" stroke-linecap="round" stroke-linejoin="round"${kresli ? ` mask="url(#${id})"` : ""}>${tahyKruhu()}</g>`;
+  return `${maska}<g class="znacka-kruh"${kresli ? ` mask="url(#${id})"` : ""}>${tahyKruhu()}</g>`;
 }
 
 /**
@@ -102,7 +113,7 @@ export function razitko(firma) {
 <path d="M0.5 74h199M120.5 0.5v73.5M0.5 92h199"/>
 </g>
 <g transform="translate(${posunX.toFixed(2)} ${posunY.toFixed(2)}) scale(${mer})">
-<g class="znacka-kruh" fill="none" stroke-linecap="round" stroke-linejoin="round">${tahyKruhu()}</g>
+<g class="znacka-kruh">${tahyKruhu()}</g>
 </g>
 <g fill="var(--tuha)" font-family="var(--pismo)" font-size="9.5">
 <text x="128" y="20">ateliér IDEJ</text>

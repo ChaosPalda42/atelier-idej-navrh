@@ -597,6 +597,98 @@
     });
   }
 
+  /* ------------------------------------------------------------- baterie */
+  /* Značka se otáčí pořád dokola. Mimo obrazovku je to jen práce pro grafiku
+     a na telefonu ubraná baterie — rotace se zastaví, jakmile kruh zmizí
+     z dohledu. Sleduje se obal, ne <g>: vnitřek SVG nemá vlastní rozměr. */
+  function setriBaterii() {
+    var kruhy = $$(".znacka-kruh");
+    if (!kruhy.length || !("IntersectionObserver" in window)) return;
+    var hlidac = new IntersectionObserver(function (zaznamy) {
+      zaznamy.forEach(function (z) {
+        (z.target.__kruhy || []).forEach(function (k) {
+          k.style.animationPlayState = z.isIntersecting ? "" : "paused";
+        });
+      });
+    }, { rootMargin: "120px" });
+
+    kruhy.forEach(function (k) {
+      var svg = k.closest("svg");
+      var cil = (svg && svg.parentElement) || svg || k;
+      if (!cil.__kruhy) { cil.__kruhy = []; hlidac.observe(cil); }
+      cil.__kruhy.push(k);
+    });
+  }
+
+  /* ------------------------------------------------- obsah bloku (telefon) */
+  /* Na telefonu nahrazuje lištu: dvojtlačítko u palce a obsah přes celou
+     obrazovku. Otevřený obsah zamkne rolování pod sebou, jinak se při
+     zavření vrátíte někam úplně jinam. */
+  function obsahBloku() {
+    var tlacitko = $(".palec-obsah");
+    var list = $(".obsah-list");
+    if (!tlacitko || !list) return;
+    var odkazy = $$("a[data-kotva]", list);
+    var vracenaY = 0;
+
+    function otevri() {
+      vracenaY = window.scrollY;
+      oznacAktivni();
+      list.hidden = false;
+      // dvě snímky, aby přechod z @starting-style opravdu naběhl
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { list.classList.add("vidno"); });
+      });
+      tlacitko.setAttribute("aria-expanded", "true");
+      document.body.style.overflow = "hidden";
+      var prvni = odkazy[0];
+      if (prvni) prvni.focus({ preventScroll: true });
+    }
+
+    function zavri(vratFokus) {
+      list.classList.remove("vidno");
+      tlacitko.setAttribute("aria-expanded", "false");
+      document.body.style.overflow = "";
+      window.setTimeout(function () { list.hidden = true; }, 260);
+      if (vratFokus) tlacitko.focus({ preventScroll: true });
+    }
+
+    /* Která sekce je zrovna na obrazovce — ať je v obsahu vidět, kde člověk je. */
+    function oznacAktivni() {
+      var nejlepsi = null, nejmensi = Infinity;
+      odkazy.forEach(function (a) {
+        var cil = document.getElementById(a.dataset.kotva);
+        if (!cil) return;
+        var odstup = Math.abs(cil.getBoundingClientRect().top - innerHeight * 0.3);
+        if (odstup < nejmensi) { nejmensi = odstup; nejlepsi = a; }
+      });
+      odkazy.forEach(function (a) {
+        if (a === nejlepsi) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      });
+    }
+
+    tlacitko.addEventListener("click", function () {
+      if (list.hidden) otevri(); else zavri(true);
+    });
+    $(".obsah-zavrit", list).addEventListener("click", function () { zavri(true); });
+    list.addEventListener("click", function (e) {
+      if (e.target.closest("a")) zavri(false);
+    });
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape" && !list.hidden) zavri(true);
+    });
+    void vracenaY;
+  }
+
+  /* Na telefonu by plovoucí lišta seděla na klávesnici. */
+  function uhniKlavesnici() {
+    $$("input, textarea, select").forEach(function (pole) {
+      pole.addEventListener("focus", function () { document.body.classList.add("pise-se"); });
+      pole.addEventListener("blur", function () { document.body.classList.remove("pise-se"); });
+    });
+  }
+
   /* ------------------------------------------------------------- lightbox */
   function svetelnyStul() {
     var fotky = $$("[data-lightbox]");
@@ -709,6 +801,9 @@
     vyvolavani();
     formular();
     svetelnyStul();
+    obsahBloku();
+    uhniKlavesnici();
+    setriBaterii();
 
     var cele = $$("[data-psat]");
     cele.forEach(zaloz);

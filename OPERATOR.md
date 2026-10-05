@@ -591,3 +591,51 @@ nemá klikat „+ odstavec“, když chce prostě napsat dva.
 
 Vyhledání projektu ke skice je jednořádkový `find`, takže zůstalo v UI —
 kontrakt by stál víc než ta oprava. Všechno, co mění stav, jde dál přes C-006.
+
+## Dvacáté kolo (6. 10. 2026) — mobil
+Michael: *„mobilní verze je extra důležitá, musí to být pecka, plně
+optimalizované."* Audit na 375 px našel šest věcí, dvě z nich zásadní:
+
+| nález | stav |
+|---|---|
+| v navigaci byl na telefonu **jediný odkaz** (`.navigace a:not(.cil){display:none}`) | nahrazeno |
+| úvodní list měl **333 px místo celé výšky** (`min-height:auto` v mobilním dotazu) | 100svh |
+| kruh ležel **přes claim** — maska byla na mobilu vypnutá | maska zpět, kruh dolů |
+| skicák 1 sloupec → stránka 11 540 px | 2 sloupce, 9 065 px |
+| dotykové cíle 18–39 px | ≥ 40 px |
+| rotace značky běžela i mimo obrazovku | pauza přes IntersectionObserver |
+
+**Navigace na telefonu.** Lišta nahoře se nevejde, tak je u palce dvojtlačítko
+`.palec` (Obsah / Kontakt) a obsah se otevře jako další list přes celou
+obrazovku — v duchu bloku, ne jako zásuvka z aplikace. Podtržené je to, kde
+člověk zrovna je. Při psaní do formuláře lišta zmizí (`body.pise-se`), jinak
+by seděla na klávesnici.
+
+**`100svh`, ne `100vh`.** S `vh` se spodek úvodního listu schová pod adresní
+řádek prohlížeče a pobídka k rolování je nedostupná. Spodní odsazení počítá
+i s `env(safe-area-inset-bottom)` a s výškou plovoucí lišty.
+
+**Co se ověřovalo a nebylo Baseline:** `animation-timeline` (scroll-driven
+animace) ani `@view-transition` Safari neumí — obojí je proto v `@supports`
+a bez nich web funguje úplně stejně. `text-wrap: pretty/balance` Baseline je,
+takže jde napevno. Všechen nový pohyb je navíc uvnitř
+`@media (prefers-reduced-motion: no-preference)`.
+
+**Přechod mezi stránkami.** Dlaždice skici a tatáž skica na listu projektu
+nesou stejné `view-transition-name` (`skica-<základ>`), takže se při prokliku
+přenese místo bliknutí. Jména musí být v dokumentu unikátní — proto je nese
+jen mřížka a list projektu, ne kresby u služeb ani hlavička.
+
+**Největší úspora byla jinde, než bych čekal.** Kruh značky má 69 tahů a na
+stránce je pětkrát (lišta, úvod, hlavička, načítání, razítko) — doslova
+opsaný dělal **48 % index.html**. Teď se kreslí jednou do `<defs>` a instance
+ho odkazují přes `<use>`: **200 → 123 kB** (gzip 37 → 29 kB). Rám kruhu se
+tím nezměnil, rezervy při otáčení sedí na desetinu stejně jako předtím.
+
+**Pauzák na telefonu.** Na úzkém dlouhém listu vypadalo prázdné místo
+průsvitného pauzáku jako díra mezi listy. Materiál se pozná dál, ale papír je
+pod 700 px hustší (0,95 místo 0,76).
+
+Administrace na telefonu: devět karet rozcestníku pod sebou zabralo půl
+obrazovky, než začal obsah — teď je to řádek, který se posouvá do strany.
+Plovoucí lišta webu se v administraci schová, mířila by na cizí sekce.
