@@ -55,10 +55,7 @@ Co si na ukázce projít
  - administrace.html ....... demo administrace. Není to jedna dlouhá stránka:
                              má vlastní list na texty, na skupiny práce,
                              na postup, na skici, na PROJEKTY, na poptávky,
-                             na kontakt a na zálohu. Na listu Skici se dá
-                             nahrát nová skica, na listu Projekty se mění
-                             texty projektů, vybírají jejich skici a nahrávají
-                             fotografie. Co kde změníte, objeví se na webu.
+                             na kontakt a na zálohu. Co kde změníte, objeví se na webu.
                              Odeslaná poptávka se objeví v Poptávkách.
 
 Značka
@@ -113,6 +110,20 @@ Dál: názvy a popisy čtyř skupin práce, texty na jejich listech, kroky postu
 popisky u jednotlivých skic, pořadí a názvy skic (i jejich otočení a skrytí),
 kontaktní údaje a došlé poptávky.
 Celý obsah se dá vyvézt do souboru a zase načíst.
+
+JAK DOPLNIT, ŽE SE POSTAVILO
+----------------------------
+Pod každou skicou v administraci (list **Skici**) je oddíl **„Jak to dopadlo“**:
+text o realizaci a fotografie hotové stavby. Nic jiného hledat nemusíte —
+začíná se od skici, protože tu máte první, a výsledek k ní přibude, až bude.
+
+Co napíšete a nahrajete, se objeví na listu toho projektu, pod který skica
+patří; odkaz „Otevřít list projektu“ je hned vedle. Když skica k žádnému
+projektu nepatří (třeba protože jste ji právě nahráli), tlačítkem se jeden
+založí.
+
+Celý projekt — název, místo, rok, které skici k němu patří — se dá upravit
+i na listu **Projekty**. Jsou to dva vchody do téhož.
 
 Nahrávání obrázků: v ukázce se nahrané soubory ukládají do vašeho prohlížeče,
 takže je uvidíte jen vy a jen na tomhle počítači. Na ostrém webu je po uložení

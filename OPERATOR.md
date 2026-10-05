@@ -573,3 +573,21 @@ Pole projektu se na webu značí `data-projekt="<slug>"` + `data-pole`, ne
 pořadovým číslem — po přeřazení v administraci by index ukazoval na cizí
 projekt. Texty projektů tím zmizely z listu „Texty webu": dva zdroje pravdy
 pro jednu větu jsou past.
+
+## Doladění (5. 10. 2026): výsledek se zadává od skici
+Michael: *„k té skice pak budu potřebovat nahrát, jak to dopadlo — obrázky
+a nějaký text."* Datově to je projekt, který už máme; chybělo to z druhé
+strany. Architekt má nejdřív skicu a hotovou stavbu až za rok, takže vchod
+musí být u skici, ne u projektu.
+
+Pod každou skicou je proto oddíl **„Jak to dopadlo“**: textové pole a nahrávání
+fotek, které zapisují do projektu, pod který skica patří (`projektKeSkice()`
+hledá podle `skici[]`). Když žádný není, tlačítko ho založí a rovnou k ní
+přiváže. List **Projekty** zůstává — je to druhý vchod do stejných dat, ne
+druhá kopie.
+
+Text se zadává jako jeden blok a dělí na odstavce prázdným řádkem; architekt
+nemá klikat „+ odstavec“, když chce prostě napsat dva.
+
+Vyhledání projektu ke skice je jednořádkový `find`, takže zůstalo v UI —
+kontrakt by stál víc než ta oprava. Všechno, co mění stav, jde dál přes C-006.

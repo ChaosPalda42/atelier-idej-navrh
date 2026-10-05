@@ -15,7 +15,7 @@ export const LISTY = [
   { id: "postup", soubor: "administrace/postup.html", nazev: "Jak to probíhá",
     popis: "Kroky od schůzky po dozor na stavbě." },
   { id: "skici", soubor: "administrace/skici.html", nazev: "Skici",
-    popis: "Pořadí, názvy a zařazení skic ve skicáku." },
+    popis: "Skicák — a u každé skici i to, jak nakonec dopadla." },
   { id: "projekty", soubor: "administrace/projekty.html", nazev: "Projekty",
     popis: "Ukázky prací — texty, zařazené skici a fotografie." },
   { id: "poptavky", soubor: "administrace/poptavky.html", nazev: "Poptávky",
@@ -184,7 +184,9 @@ export function administrace(site, t, skici = []) {
     postup: `<div id="admin-pole" data-sada="postup"></div>`,
     skici: `<div class="admin-radek"><p class="vedouci">Přetahovat se tu nedá, ale pořadí se dá posouvat šipkami. Skrytá skica na webu není.</p></div>
 <div id="admin-skici" class="admin-seznam"></div>
-<p class="admin-poznamka-demo">Nahraná skica se v ukázce objeví na webu rovnou. Drží se
+<p class="admin-poznamka-demo">U každé skici je dole „Jak to dopadlo“ — text o realizaci
+a fotografie hotové stavby. Zapisuje se to do projektu, pod který skica patří; když žádný
+nemá, založí se.<br><br>Nahraná skica se v ukázce objeví na webu rovnou. Drží se
 ale jen v tomhle prohlížeči — na ostrém webu ji po uložení zpracuje server stejně jako
 těch jedenáct stávajících (vybělí papír, udělá průhlednost a tři velikosti).</p>`,
     projekty: `<div class="admin-radek"><p class="vedouci">Každý projekt má texty, skici, ze kterých vznikl, a fotografie realizace.</p></div>

@@ -220,6 +220,7 @@
       karta.appendChild(skupina);
 
       if (p.obrazek) karta.appendChild(nahled(p.obrazek));
+      karta.appendChild(jakToDopadlo(p));
       kam.appendChild(karta);
     });
 
@@ -230,6 +231,93 @@
       });
       uloz();
     }));
+  }
+
+  /* ------------------------------------------- jak to dopadlo (u skici) */
+  /* Architekt má nejdřív skicu a teprve později hotovou stavbu. Výsledek se
+     proto zadává od skici, ne od projektu: fotky a text se zapisují do
+     projektu, pod který skica patří, a když žádný není, vyrobí se. */
+  function projektKeSkice(slugSkici) {
+    return (stav.projekty || []).find(function (pr) {
+      return (pr.skici || []).indexOf(slugSkici) >= 0;
+    }) || null;
+  }
+
+  function jakToDopadlo(skica) {
+    var obal = prvek("div", "admin-vysledek");
+    var projekt = projektKeSkice(skica.slug);
+
+    var hlavicka = prvek("div", "admin-radek");
+    hlavicka.appendChild(prvek("span", "admin-pole-popis", "Jak to dopadlo"));
+    if (projekt) {
+      var odkaz = document.createElement("a");
+      odkaz.className = "admin-mini";
+      odkaz.href = D.korenAdmin + "prace/" + projekt.slug + ".html";
+      odkaz.textContent = "Otevřít list projektu";
+      hlavicka.appendChild(odkaz);
+    }
+    obal.appendChild(hlavicka);
+
+    if (!projekt) {
+      var zalozit = prvek("button", "tlacitko lehke", "+ Doplnit, jak to dopadlo");
+      zalozit.addEventListener("click", function () {
+        stav = A.pridejProjekt(stav, {
+          nazev: skica.nazev || "Nový projekt", typ: skica.typ || "",
+          misto: "", rok: new Date().getFullYear(), anotace: "",
+          text: [""], skici: [skica.slug], fotky: [], vlastni: true,
+        });
+        uloz();
+      });
+      obal.appendChild(zalozit);
+      return obal;
+    }
+
+    var popis = prvek("label", "admin-pole");
+    popis.appendChild(prvek("span", "admin-pole-popis", "Text k realizaci"));
+    var plocha = document.createElement("textarea");
+    plocha.value = (projekt.text || []).join("\n\n");
+    plocha.placeholder = "Co z návrhu nakonec vzniklo.";
+    plocha.addEventListener("change", function () {
+      var odstavce = plocha.value.split(/\n\s*\n/).map(function (o) { return o.trim(); })
+        .filter(function (o) { return o.length; });
+      stav = A.upravProjekt(stav, projekt.slug, { text: odstavce.length ? odstavce : [""] });
+      uloz();
+    });
+    popis.appendChild(plocha);
+    obal.appendChild(popis);
+
+    var fotky = prvek("div", "admin-pole");
+    fotky.appendChild(prvek("span", "admin-pole-popis", "Fotografie realizace"));
+    var rada = prvek("div", "admin-fotky");
+    (projekt.fotky || []).forEach(function (id) {
+      var box = prvek("figure", "admin-fotka");
+      if (String(id).indexOf("nahrane-") === 0) box.appendChild(nahled(id));
+      else {
+        var obraz = document.createElement("img");
+        obraz.className = "admin-nahled";
+        obraz.src = D.korenAdmin + "obrazky/" + id + "-520.jpg";
+        obraz.alt = "";
+        box.appendChild(obraz);
+      }
+      var pryc = prvek("button", "admin-mini", "×");
+      pryc.title = "Odebrat fotografii";
+      pryc.addEventListener("click", function () {
+        stav = A.upravProjekt(stav, projekt.slug, {
+          fotky: (projekt.fotky || []).filter(function (x) { return x !== id; }),
+        });
+        if (String(id).indexOf("nahrane-") === 0) OBRAZKY.smaz(id);
+        uloz();
+      });
+      box.appendChild(pryc);
+      rada.appendChild(box);
+    });
+    rada.appendChild(nahravani("+ Nahrát fotografii", function (id) {
+      stav = A.upravProjekt(stav, projekt.slug, { fotky: (projekt.fotky || []).concat([id]) });
+      uloz();
+    }));
+    fotky.appendChild(rada);
+    obal.appendChild(fotky);
+    return obal;
   }
 
   /* ------------------------------------------------------------- obrázky */
