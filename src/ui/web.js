@@ -330,7 +330,8 @@
 
   /* ------------------------------- exponát: okolí ztmavne, kresba zůstane */
   function exponaty() {
-    var kusy = $$(".exponat");
+    // Skici na listu projektu mají `data-klid` — tam se nezvýrazňuje.
+    var kusy = $$(".exponat:not([data-klid])");
     if (!kusy.length) return;
     var zhasnuto = null;
 

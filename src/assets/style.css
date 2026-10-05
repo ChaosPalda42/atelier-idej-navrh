@@ -1208,6 +1208,22 @@ body.exponat-aktivni .setmeni { opacity: 1; }
   transition: opacity 0.25s ease;
 }
 
+/* Na listu projektu se skici nezvýrazňují: jsou tam samy za sebe, vedle
+   fotek, a není z čeho je vytahovat. Proto jsou rovnou plné, nezvětšují se
+   a okolí se nesetmívá — klepnutím se pořád otevře původní sken. */
+.exponat[data-klid] .exponat-ram,
+.exponat[data-klid]:hover .exponat-ram,
+.exponat[data-klid]:focus-within .exponat-ram {
+  opacity: 1;
+  filter: none;
+  transform: rotate(var(--natoceni));
+}
+.exponat[data-klid] .exponat-ram::before { display: none; }
+.exponat[data-klid]:hover,
+.exponat[data-klid]:focus-within { z-index: auto; }
+.exponat[data-klid]:hover .exponat-popis,
+.exponat[data-klid]:focus-within .exponat-popis { opacity: 1; }
+
 /* skica na listu sbírky */
 .exponat--vystava { --natoceni: -0.7deg; }
 

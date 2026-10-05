@@ -477,3 +477,15 @@ výstupní složku, musí poznat vlastní soubory** — složku s ním sdílí n
 **Na tomhle Macu pozor:** `npx decap-server` poslouchá na 8081, což je port
 llama-serveru. Při zkoušení správy lokálně mu dát jiný (`PORT=8083 npx
 decap-server` a stejný port v `local_backend`).
+
+## Doladění (5. 10. 2026): skici na listu projektu v klidu
+Architekt: *„u listu projektu zruš to zvětšování a ztmavování, tam už to ty
+skici nepotřebují."* Má pravdu — zvýraznění vzniklo pro skici rozeseté v textu,
+kde se musely z listu vytáhnout. Na listu projektu stojí samy za sebe vedle
+fotek, není z čeho je vytahovat.
+
+Exponát proto umí režim `klid` (`data-klid`): kresba je rovnou plná (bez
+`opacity: .78` a `saturate(.78)`), pod myší se nic neděje, okolí se nesetmívá.
+`exponaty()` ve web.js si je rovnou nevybírá (`.exponat:not([data-klid])`),
+takže se na ně zvětšení ani nenavěsí. Klepnutím se pořád otevře původní sken —
+to je lupa, ne zvýraznění. Na listech sbírek zůstává efekt beze změny.

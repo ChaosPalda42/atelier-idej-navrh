@@ -55,13 +55,13 @@ ${vnitrek}
 
 /** Exponát — skica na listu sbírky. Bez papíru, takže je součástí listu;
     teprve pod myší se zvýrazní a dá se na ni kliknout. */
-function exponat(s, misto = {}, { k = "" } = {}) {
+function exponat(s, misto = {}, { k = "", klid = false } = {}) {
   if (!s) return "";
   const cesta = (jmeno) => `${k}obrazky/${jmeno}`;
   const srcset = s.varianty.map((v) => `${cesta(v.soubor)} ${v.sirka}w`).join(", ");
   const sken = cesta((s.sken || s.varianty[s.varianty.length - 1]).soubor);
   return `<figure class="exponat exponat--vystava" data-slug="${esc(s.zaklad)}"
- data-typ="${esc(s.skupina)}" data-otoceni="0" style="--w:${s.sirka};--h:${s.vyska}">
+ data-typ="${esc(s.skupina)}" data-otoceni="0"${klid ? " data-klid" : ""} style="--w:${s.sirka};--h:${s.vyska}">
 <span class="exponat-ram">
 <img src="${cesta(s.varianty[0].soubor)}" srcset="${srcset}" sizes="(max-width: 920px) 88vw, 54vw"
  width="${s.sirka}" height="${s.vyska}" alt="Skica — ${esc(s.popis)}" loading="lazy"
@@ -287,7 +287,7 @@ ${mojeFotky.length ? `<section class="list projekt-fotky" data-psat>
 
 ${mojeSkici.length ? `<section class="list projekt-skici" data-psat>
 <h2 class="nadpis rukou" data-text="projekt.skici">${esc(t.projekt.skici)}</h2>
-<div class="vystava-rada">${mojeSkici.map((s) => exponat(s, { poznamka: s.popis }, { k: "../" })).join("\n")}</div>
+<div class="vystava-rada">${mojeSkici.map((s) => exponat(s, { poznamka: s.popis }, { k: "../", klid: true })).join("\n")}</div>
 <nav class="sousedi">
 <a href="${esc(okolo.predchozi.slug)}.html"><span class="stitek" data-text="projekt.predchozi">${esc(t.projekt.predchozi)}</span>${esc(okolo.predchozi.nazev)}</a>
 <a href="${esc(okolo.dalsi.slug)}.html" style="text-align:right"><span class="stitek" data-text="projekt.dalsi">${esc(t.projekt.dalsi)}</span>${esc(okolo.dalsi.nazev)}</a>
