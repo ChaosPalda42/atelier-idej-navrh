@@ -18,6 +18,7 @@ from __future__ import annotations
 
 import json
 import re
+import sys
 import unicodedata
 from pathlib import Path
 
@@ -27,8 +28,15 @@ from tools.fotky import nazev_varianty, prumerna_barva, srcset, zmensi
 
 KOREN = Path(__file__).resolve().parents[1]
 ZDROJ = KOREN / "podklady" / "prace" / "WEB"
+# Skici nahrané správou webu. Na rozdíl od `podklady/` je tahle složka
+# v repozitáři — jinak by se nahraná skica neměla jak dostat na server.
+NAHRANE = KOREN / "zdroje" / "skici"
 VEN = KOREN / "data" / "obrazky"
 SIRKY = (520, 1040, 1600)
+
+# soubory, které tenhle nástroj vyrábí: „01-rodinne-domy-520.png",
+# „z-neco-sken-1040.jpg" a razítko
+MOJE = re.compile(r"^(\d{2}-|z-|razitko\.)")
 
 # ze jména souboru se pozná, do které skupiny skica patří
 SKUPINY = {
@@ -197,15 +205,98 @@ def zpracuj_razitko() -> str:
     return "razitko.png"
 
 
+def zpracuj_nahranou(popisek: Path) -> dict | None:
+    """Skica nahraná správou webu: obrázek + JSON s popisem vedle něj.
+
+    Projde stejnou cestou jako skici z podkladů, jen jméno a zařazení si
+    nevymýšlí z názvu souboru — bere je z popisku, který zapsala správa.
+    """
+    udaje = json.loads(popisek.read_text(encoding="utf-8"))
+    obrazek = popisek.parent / udaje.get("soubor", "")
+    if not obrazek.exists():
+        print(f"  ! {popisek.name}: chybí obrázek {udaje.get('soubor')!r}")
+        return None
+
+    zaklad = f"z-{popisek.stem}"
+    with Image.open(obrazek) as nactena:
+        rovne = ImageOps.exif_transpose(nactena).convert("RGB")
+    kresba = pruhledne(vybel_papir(rovne))
+
+    VEN.mkdir(parents=True, exist_ok=True)
+    varianty, puvodni = [], []
+    for sirka in SIRKY:
+        if sirka > kresba.size[0] and varianty:
+            continue
+        cil = min(sirka, kresba.size[0])
+        zmensena = zmensi(kresba, cil)
+        soubor = f"{zaklad}-{zmensena.size[0]}.png"
+        zmensena.quantize(colors=96, method=Image.Quantize.FASTOCTREE).save(
+            VEN / soubor, optimize=True)
+        if not any(v["sirka"] == zmensena.size[0] for v in varianty):
+            varianty.append({"soubor": soubor, "sirka": zmensena.size[0]})
+        if cil >= 900:
+            skutecna = zmensi(rovne, cil)
+            jmeno = nazev_varianty(zaklad + "-sken", skutecna.size[0])
+            skutecna.save(VEN / jmeno, quality=84, optimize=True)
+            if not any(v["sirka"] == skutecna.size[0] for v in puvodni):
+                puvodni.append({"soubor": jmeno, "sirka": skutecna.size[0]})
+
+    skupina = udaje.get("skupina") or "studie"
+    return {
+        "zaklad": zaklad,
+        "popis": udaje.get("popis") or NAZVY.get(skupina, "Skica"),
+        "skupina": skupina,
+        "sirka": kresba.size[0],
+        "vyska": kresba.size[1],
+        "barva": prumerna_barva(rovne),
+        "varianty": varianty,
+        "srcset": srcset(varianty),
+        "sken": puvodni[-1] if puvodni else (varianty[-1] if varianty else None),
+    }
+
+
+def nactiNahrane() -> list[dict]:
+    if not NAHRANE.exists():
+        return []
+    hotove = []
+    for popisek in sorted(NAHRANE.glob("*.json")):
+        zaznam = zpracuj_nahranou(popisek)
+        if zaznam:
+            hotove.append(zaznam)
+    return hotove
+
+
+def jen_nahrane() -> int:
+    """Režim pro nasazení: podklady na serveru nejsou, jede se jen přes
+    `zdroje/skici` a výsledek se slije s tím, co už v manifestu je."""
+    manifest = VEN / "seznam.json"
+    stary = json.loads(manifest.read_text(encoding="utf-8")) if manifest.exists() else []
+    nove = nactiNahrane()
+    podle = {z["zaklad"]: z for z in stary}
+    for z in nove:
+        podle[z["zaklad"]] = z
+    seznam = list(podle.values())
+    manifest.write_text(json.dumps(seznam, ensure_ascii=False, indent=1), encoding="utf-8")
+    print(f"nahraných skic: {len(nove)}; v manifestu celkem {len(seznam)}")
+    return 0
+
+
 def main(argv=None) -> int:
+    argv = list(argv) if argv is not None else sys.argv[1:]
+    if "--jen-nahrane" in argv:
+        return jen_nahrane()
     soubory = sorted(p for p in ZDROJ.iterdir() if p.suffix.lower() in (".jpg", ".jpeg", ".png"))
     if not soubory:
         print(f"v {ZDROJ} nic není")
         return 1
     if VEN.exists():
+        # Mazat jen to, co vyrábí tenhle nástroj. Ve složce bydlí i plotny
+        # z tools/ukazky.py — ty by plný běh jinak smetl s sebou.
         for stary in list(VEN.glob("*.jpg")) + list(VEN.glob("*.png")):
-            stary.unlink()
+            if MOJE.match(stary.name):
+                stary.unlink()
     seznam = [zpracuj(p, i + 1) for i, p in enumerate(soubory)]
+    seznam += nactiNahrane()
     razitko = zpracuj_razitko()
     if razitko:
         print("razítko ->", razitko)

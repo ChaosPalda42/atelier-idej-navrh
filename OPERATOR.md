@@ -441,3 +441,39 @@ Tři věci, na které kontrakt nestačil a musely se dodělat ručně:
 Poučení do dalších kontraktů: **u nástroje, co něco zapisuje, patří cesta do
 kontraktu** — jinak si ji worker vymyslí a akceptační test, který si cíl
 přepisuje, to nemá jak chytit.
+
+## Sedmnácté kolo (5. 10. 2026) — správa webu přes git
+Architekt se ptá, jak si bude přidávat skici. Michael zvolil opravdový admin
+přes git, ne demo v prohlížeči.
+
+**Proč ne localStorage.** Administrace drží stav v jednom klíči (~5 MB na
+doménu). Jedna skica v base64 má přes půl mega, takže po třech čtyřech je plno
+a `setItem` tiše spadne. A hlavně: cokoli uloženého v prohlížeči se na veřejný
+web nedostane.
+
+**Jak to teď jede.** `/sprava/` je Decap CMS. Nahraná skica se uloží do
+`zdroje/skici/` (obrázek + JSON s popisem a zařazením), tím se spustí
+nasazení, v něm `tools/skici.py --jen-nahrane` skicu vybělí, zprůhlední
+a zmenší, slije ji s manifestem a web se sestaví znovu. Režim `--jen-nahrane`
+existuje proto, že na serveru není `podklady/` — plný běh by manifest vymazal.
+
+**Schéma se generuje z dat** (`src/templates/sprava.mjs`). CMS chce vyjmenovat
+každé pole; texty jich mají přes devadesát. Ručně psaný `config.yml` by se
+rozešel s daty při první změně, takhle se skládá ze stejných dat jako web
+a demo administrace. Hlídá to `tests/test_sprava.py` — mimo jiné že **každý
+klíč z texty.json jde ve správě přepsat**; rozbité YAML se jinak nijak
+neprojeví, jen se správa po otevření zasekne na prázdné stránce.
+
+Co musí zařídit Michael (zvenčí to nejde): OAuth aplikaci na GitHubu
+a přihlašovací můstek, jeho adresu pak jako proměnnou `SPRAVA_MOST`
+v nastavení repozitáře. Návod je v `dokumenty/SPRAVA-WEBU.txt`.
+
+**Past, do které jsem spadl:** `tools/skici.py` na začátku plného běhu mazal
+z `data/obrazky` *všechny* .jpg a .png — tedy i plotny z `tools/ukazky.py`.
+Projevilo se to až v kontrole webu jako chybějící obrázek na listu projektu.
+Teď maže jen to, co samo vyrábí (`MOJE`). Pravidlo: **nástroj, který uklízí
+výstupní složku, musí poznat vlastní soubory** — složku s ním sdílí někdo jiný.
+
+**Na tomhle Macu pozor:** `npx decap-server` poslouchá na 8081, což je port
+llama-serveru. Při zkoušení správy lokálně mu dát jiný (`PORT=8083 npx
+decap-server` a stejný port v `local_backend`).

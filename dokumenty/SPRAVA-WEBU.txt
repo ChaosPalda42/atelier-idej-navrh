@@ -1,0 +1,62 @@
+Správa webu — jak si přidat skicu nebo projekt
+==============================================
+
+Web je statický: žádná databáze, žádný server, nic, co by se dalo hacknout
+nebo co by stálo měsíční paušál. Obsah proto nebydlí v databázi, ale přímo
+v projektu webu. Správa do něj zapisuje za vás a web se do dvou minut
+sestaví znovu sám.
+
+Kde to je
+---------
+    https://<adresa webu>/sprava/
+
+Přihlašujete se účtem na GitHubu, kde web bydlí.
+
+Co s tím jde
+------------
+ - **Skici** — nová skica = popis, zařazení do skupiny a fotka papíru.
+   Po uložení se skica sama vybílí (zmizí žloutnutí a stín skenu), zprůhlední
+   (zůstane jen tah pera, takže leží přímo na papíře webu) a zmenší do tří
+   velikostí pro telefon i velkou obrazovku. Nic z toho neděláte vy.
+ - **Texty webu** — všechno, co je na stránce napsané, po sekcích.
+ - **Služby, postup, sbírky a projekty** — včetně fotografií u projektů.
+
+Jak to funguje uvnitř
+---------------------
+Správa uloží změnu do projektu webu, tím se spustí sestavení: obrázky projdou
+zpracováním, stránky se vygenerují znovu a nasadí. Historie se vede sama —
+u každé změny je vidět, kdo ji udělal a kdy, a dá se vrátit zpátky.
+
+CO JE JEŠTĚ POTŘEBA ZAŘÍDIT
+---------------------------
+Správa je připravená, ale přihlašování ne — to se nedá udělat zevnitř webu.
+Chybí dvě věci, obě jednorázově:
+
+1. **Přihlašovací aplikace na GitHubu**
+   Settings → Developer settings → OAuth Apps → New OAuth App.
+   Callback URL nastavit na adresu můstku z bodu 2.
+   Vznikne Client ID a Client Secret.
+
+2. **Přihlašovací můstek**
+   Malá služba, která přihlášení vyřídí — zdarma na Cloudflare Workers nebo
+   Netlify. Dostane Client ID a Secret z bodu 1.
+   Jeho adresu pak zapsat v nastavení repozitáře jako proměnnou
+   `SPRAVA_MOST` (Settings → Secrets and variables → Actions → Variables).
+   Sestavení si ji samo dosadí do nastavení správy.
+
+Dokud můstek není, jde si správa vyzkoušet jen na vlastním počítači:
+
+    npx decap-server          # v jednom okně
+    npx serve out             # ve druhém, pak otevřít /sprava/
+
+Na co si dát pozor
+------------------
+ - Správa se načítá z veřejné knihovny (decap-cms z unpkg.com). Je to jediné
+   místo celého webu, které sahá ven — samotné stránky, které vidí návštěvník,
+   si nenačítají nic z cizích serverů. Kdyby to vadilo, knihovna se dá uložit
+   přímo do projektu.
+ - Stránka správy má `noindex`, takže ji vyhledávače neberou. Není ale
+   tajná — kdo zná adresu, uvidí přihlašovací obrazovku. Měnit obsah může
+   jen ten, koho na GitHubu k projektu pustíte.
+ - Demo administrace (`administrace.html`) je něco jiného: slouží k ukázce,
+   změny si drží jen ve vašem prohlížeči a na veřejný web se nepromítnou.

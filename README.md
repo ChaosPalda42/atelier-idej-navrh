@@ -15,7 +15,7 @@ ze zadaného PDF — při otevření se objede a pak se pomalu otáčí.
 ## Jak to postavit
     uv sync
     node build.mjs                       # -> out/
-    uv run pytest -q                     # 107 akceptačních testů
+    uv run pytest -q                     # 112 akceptačních testů
     uv run python -m tools.kontrola_webu out
     ./tools/pack.sh                      # balíček pro klienta
 
@@ -36,6 +36,12 @@ Složka `data/kresby/` je zatím prázdná — ukázkový půdorys, který v ní
 a šel pryč. Jakmile v ní nějaký výkres bude, stačí ho u služby v `data/site.json`
 odkázat klíčem `vykres` a objeví se na listu té sbírky.
 Podrobný návod pro klienta je v `dokumenty/JAK-DODAT-VYKRESY.txt`.
+
+## Správa webu
+`/sprava/` je Decap CMS nad tímhle repozitářem. Nastavení se **generuje z dat**
+(`src/templates/sprava.mjs`), takže nová služba, krok nebo projekt se v něm objeví
+samy. Nahraná skica jde do `zdroje/skici/` a nasazení ji prožene `tools/skici.py
+--jen-nahrane`. Chybí přihlašovací můstek — viz `dokumenty/SPRAVA-WEBU.txt`.
 
 ## Zástupné fotografie
 Dokud architekt nepošle fotky realizací, mají listy projektů kreslené plotny:
