@@ -30,10 +30,6 @@ jobs:
           uv sync
           uv run python -m tools.skici --jen-nahrane
       - name: Sestavit web
-        env:
-          SPRAVA_REPO: ${{ github.repository }}
-          SPRAVA_VETEV: ${{ github.ref_name }}
-          SPRAVA_MOST: ${{ vars.SPRAVA_MOST }}
         run: node build.mjs
       - name: Akceptační testy
         run: uv run pytest -q

@@ -1366,6 +1366,87 @@ body.exponat-aktivni .setmeni { opacity: 1; }
     rgba(120, 132, 120, 0.36) 91%, rgba(120, 132, 120, 0.12));
 }
 
+/* ---------------------------------------- administrace: projekty a obrázky */
+.admin-dvojice {
+  display: grid;
+  grid-template-columns: 1fr 140px;
+  gap: 0 14px;
+}
+.admin-volby {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 16px;
+  padding: 6px 0 2px;
+}
+.admin-volba {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.88rem;
+  color: var(--tuha-2);
+}
+.admin-volba input { width: auto; margin: 0; }
+
+.admin-fotky {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  gap: 10px;
+  padding-top: 6px;
+}
+.admin-fotka {
+  position: relative;
+  margin: 0;
+  width: 104px;
+}
+.admin-nahled {
+  width: 104px;
+  height: 70px;
+  object-fit: cover;
+  display: block;
+  border: 1px solid var(--linka);
+  background: #fff;
+}
+.admin-fotka .admin-mini {
+  position: absolute;
+  top: -8px;
+  right: -8px;
+  width: 22px;
+  height: 22px;
+  padding: 0;
+  line-height: 1;
+  border-radius: 50%;
+  background: var(--papir);
+}
+
+/* výběr souboru vypadá jako tlačítko, ne jako rozbitý formulář */
+.admin-nahrat {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 104px;
+  height: 70px;
+  border: 1px dashed var(--linka);
+  border-radius: 3px;
+  font-size: 0.8rem;
+  text-align: center;
+  color: var(--tuha-3);
+  cursor: pointer;
+  transition: border-color 0.2s, color 0.2s;
+}
+.admin-nahrat:hover { border-color: var(--oranz); color: var(--tuha); }
+.admin-nahrat--pracuje { opacity: 0.5; cursor: progress; }
+.admin-nahrat--chyba { border-color: var(--cervena); color: var(--cervena); }
+
+.admin-poznamka-demo {
+  margin-top: 1.6em;
+  padding: 12px 16px;
+  border-left: 2px solid var(--oranz);
+  font-size: 0.9rem;
+  color: var(--tuha-2);
+  background: rgba(255, 128, 0, 0.05);
+}
+
 /* ------------------------------------------------------------ načítání */
 /* Na prázdném papíře se nakreslí kruh, pak odletí na své místo v záhlaví. */
 .nacitani {

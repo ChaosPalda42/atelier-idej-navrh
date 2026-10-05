@@ -16,6 +16,8 @@ export const LISTY = [
     popis: "Kroky od schůzky po dozor na stavbě." },
   { id: "skici", soubor: "administrace/skici.html", nazev: "Skici",
     popis: "Pořadí, názvy a zařazení skic ve skicáku." },
+  { id: "projekty", soubor: "administrace/projekty.html", nazev: "Projekty",
+    popis: "Ukázky prací — texty, zařazené skici a fotografie." },
   { id: "poptavky", soubor: "administrace/poptavky.html", nazev: "Poptávky",
     popis: "Co lidé poslali formulářem." },
   { id: "kontakt", soubor: "administrace/kontakt.html", nazev: "Kontakt",
@@ -102,10 +104,6 @@ export function schema(site, t, skici) {
       skupinaTextu("Skicák", ["vystavka.odkazy", "vystavka.popisek"]),
       skupinaTextu("Listy projektů", ["projekt.zpet", "projekt.skici", "projekt.fotky",
         "projekt.predchozi", "projekt.dalsi", "projekt.zastupne"]),
-      ...(site.projekty || []).map((pr, i) => skupinaTextu(`Projekt — ${pr.nazev}`, [
-        `site.projekty.${i}.nazev`, `site.projekty.${i}.misto`, `site.projekty.${i}.anotace`,
-        ...pr.text.map((_, j) => `site.projekty.${i}.text.${j}`),
-      ])),
       skupinaTextu("Navigace", ["navigace.sluzby", "navigace.prace", "navigace.postup",
         "navigace.oMne", "navigace.kontakt"]),
       skupinaTextu("Patička a hlava stránky", ["paticka.ukazka", "web.titulek", "web.popis"]),
@@ -185,7 +183,15 @@ export function administrace(site, t, skici = []) {
     sluzby: `<div id="admin-pole" data-sada="sluzby"></div>`,
     postup: `<div id="admin-pole" data-sada="postup"></div>`,
     skici: `<div class="admin-radek"><p class="vedouci">Přetahovat se tu nedá, ale pořadí se dá posouvat šipkami. Skrytá skica na webu není.</p></div>
-<div id="admin-skici" class="admin-seznam"></div>`,
+<div id="admin-skici" class="admin-seznam"></div>
+<p class="admin-poznamka-demo">Nahraná skica se v ukázce objeví na webu rovnou. Drží se
+ale jen v tomhle prohlížeči — na ostrém webu ji po uložení zpracuje server stejně jako
+těch jedenáct stávajících (vybělí papír, udělá průhlednost a tři velikosti).</p>`,
+    projekty: `<div class="admin-radek"><p class="vedouci">Každý projekt má texty, skici, ze kterých vznikl, a fotografie realizace.</p></div>
+<div id="admin-projekty" class="admin-seznam"></div>
+<p class="admin-poznamka-demo">Úpravy textů i fotografie se v ukázce projeví na listech
+projektů. Úplně nový projekt dostane vlastní list až na ostrém webu — tam ho po uložení
+vygeneruje server.</p>`,
     poptavky: `<p class="vedouci">Vyzkoušejte si to — odešlete poptávku na webu a objeví se tady.</p>
 <div id="admin-poptavky" class="admin-seznam"></div>`,
     kontakt: `<div id="admin-kontakt" class="admin-seznam"></div>`,

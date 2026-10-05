@@ -12,6 +12,10 @@ SITE = {
         {"slug": "beta", "nazev": "Beta", "typ": "komercni", "rok": 2023},
         {"slug": "gama", "nazev": "Gama", "typ": "studie", "rok": 2026},
     ],
+    "projekty": [
+        {"slug": "dum", "nazev": "Dům", "rok": 2026, "skici": ["alfa"], "fotky": []},
+        {"slug": "hala", "nazev": "Hala", "rok": 2025, "skici": [], "fotky": ["f1"]},
+    ],
 }
 
 
@@ -26,11 +30,14 @@ def js():
 def test_vychozi_stav(js):
     assert js("out(m.vychoziStav(A.s));") == {
         "prace": SITE["prace"],
+        "projekty": SITE["projekty"],
         "texty": {},
         "poptavky": [],
         "kontakt": SITE["firma"],
     }
-    assert js("out(m.vychoziStav({}));") == {"prace": [], "texty": {}, "poptavky": [], "kontakt": {}}
+    assert js("out(m.vychoziStav({}));") == {
+        "prace": [], "projekty": [], "texty": {}, "poptavky": [], "kontakt": {},
+    }
     assert js("""
         const stav = m.vychoziStav(A.s);
         stav.prace.push({ slug: "x" });
@@ -148,3 +155,96 @@ def test_export_import(js):
         "Tohle nevypadá jako záloha administrace."
     assert js('out(m.importuj(JSON.stringify({ prace: [] })).stav);') == \
         {"prace": [], "texty": {}, "poptavky": [], "kontakt": {}}
+
+
+# --------------------------------------------------------------- projekty
+
+def test_pridej_projekt(js):
+    """Nový projekt jde na začátek a slug se odvodí z názvu."""
+    v = js("""
+        const stav = m.pridejProjekt(m.vychoziStav(A.s), { nazev: "Vila u Lesa" });
+        out(stav.projekty.map((p) => p.slug));
+    """)
+    assert v == ["vila-u-lesa", "dum", "hala"]
+    assert js("""
+        const stav = m.pridejProjekt(m.vychoziStav(A.s), { nazev: "Dům" });
+        out(stav.projekty[0].slug);
+    """) == "dum-2"
+    assert js("""
+        const z = m.vychoziStav(A.s);
+        m.pridejProjekt(z, { nazev: "Nový" });
+        out(z.projekty.length);
+    """) == 2, "původní stav se měnit nesmí"
+
+
+def test_uprav_a_smaz_projekt(js):
+    assert js("""
+        const stav = m.upravProjekt(m.vychoziStav(A.s), "hala", { misto: "Brno", rok: 2024 });
+        const p = stav.projekty.find((x) => x.slug === "hala");
+        out([p.misto, p.rok, p.nazev]);
+    """) == ["Brno", 2024, "Hala"]
+    assert js("""
+        out(m.upravProjekt(m.vychoziStav(A.s), "nic", { misto: "X" }).projekty.map((p) => p.slug));
+    """) == ["dum", "hala"]
+    assert js("""
+        out(m.smazProjekt(m.vychoziStav(A.s), "dum").projekty.map((p) => p.slug));
+    """) == ["hala"]
+
+
+def test_presun_projekt(js):
+    assert js('out(m.presunProjekt(m.vychoziStav(A.s), "hala", -1).projekty.map((p) => p.slug));') == ["hala", "dum"]
+    assert js('out(m.presunProjekt(m.vychoziStav(A.s), "dum", -1).projekty.map((p) => p.slug));') == ["dum", "hala"]
+    assert js('out(m.presunProjekt(m.vychoziStav(A.s), "hala", 1).projekty.map((p) => p.slug));') == ["dum", "hala"]
+
+
+SOUBOR = [
+    {"slug": "dum", "nazev": "Dům", "rok": 2026, "fotky": ["a"]},
+    {"slug": "hala", "nazev": "Hala", "rok": 2025, "fotky": []},
+    {"slug": "novy", "nazev": "Nový z webu", "rok": 2027, "fotky": []},
+]
+
+
+def test_srovnani_nic_nezahodi(js):
+    """Uložený stav může být starší než web. Co o tom neví, nesmí zmizet."""
+    v = js("out(m.srovnejSeznam(A.u, A.f).map((p) => p.slug));",
+           u=[{"slug": "hala", "nazev": "Hala jinak"}], f=SOUBOR)
+    assert v == ["hala", "dum", "novy"], "neznámé položky se přidají na konec, nic se neztratí"
+
+
+def test_srovnani_prebiji_ulozene(js):
+    v = js("out(m.srovnejSeznam(A.u, A.f));",
+           u=[{"slug": "dum", "nazev": "Přejmenovaný"}], f=SOUBOR)
+    assert v[0]["nazev"] == "Přejmenovaný"
+    assert v[0]["rok"] == 2026, "co uložený stav neřeší, se doplní ze souboru"
+    assert v[0]["fotky"] == ["a"]
+
+
+def test_srovnani_vlastni_polozky(js):
+    """Co si uživatel přidal sám, ze souboru nepřijde — a přesto zůstane."""
+    v = js("out(m.srovnejSeznam(A.u, A.f));",
+           u=[{"slug": "moje", "nazev": "Moje"}], f=SOUBOR)
+    assert [p["slug"] for p in v] == ["moje", "dum", "hala", "novy"]
+    assert v[0]["vlastni"] is True
+
+
+def test_srovnani_respektuje_smazano(js):
+    v = js("out(m.srovnejSeznam(A.u, A.f).map((p) => p.slug));",
+           u=[{"slug": "dum", "smazano": True}], f=SOUBOR)
+    assert v == ["hala", "novy"]
+
+
+def test_srovnani_smazano_plati_i_u_souboru(js):
+    """Pravidlo o `smazano` platí v obou větvích, ne jen u uložených."""
+    v = js("out(m.srovnejSeznam([], A.f).map((p) => p.slug));",
+           f=[{"slug": "a"}, {"slug": "b", "smazano": True}, {"slug": "c"}])
+    assert v == ["a", "c"]
+
+
+def test_srovnani_bez_ulozeneho(js):
+    assert js("out(m.srovnejSeznam(null, A.f).map((p) => p.slug));", f=SOUBOR) == ["dum", "hala", "novy"]
+    assert js("out(m.srovnejSeznam(A.f, []).map((p) => p.slug));", f=SOUBOR) == ["dum", "hala", "novy"]
+    assert js("""
+        const vysledek = m.srovnejSeznam(A.f, []);
+        vysledek[0].nazev = "jinak";
+        out(A.f[0].nazev);
+    """, f=SOUBOR) == "Dům", "vstupy se měnit nesmí"

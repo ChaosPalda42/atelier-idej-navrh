@@ -539,3 +539,37 @@ jen na nepřitlumené kusy — u přitlumených je překryv s textem záměr. Hl
 i to, že každý přesahující kus má nad sebou ořezový rám: pět jich přesahuje,
 čtyři ořezává `.pozadi-ram` a jeden (pravítko na úvodním listu) `.uvod`
 vlastním `overflow: hidden`.
+
+## Devatenácté kolo (5. 10. 2026) — projekty a nahrávání patří do administrace
+Michael: *„už tam máme demo administraci, tak ta úprava a nahrávání jeho
+projektů by měla probíhat tam."* Má pravdu a **Decap CMS (`/sprava/`) proto
+končí** — dvě administrace vedle sebe jsou horší než jedna. Zůstává druhá
+cesta přes repozitář: skica položená do `zdroje/skici/` (obrázek + JSON)
+projde při nasazení `tools/skici.py --jen-nahrane`.
+
+**C-006 rozšířena** (zelená, 121 testů): `pridejProjekt`, `upravProjekt`,
+`smazProjekt`, `presunProjekt` a hlavně `srovnejSeznam(ulozene, zeSouboru)` —
+obecné slévání uloženého stavu se stavem webu. Nahradilo `srovnejSeSkicami()`
+z admin.js, které **zahazovalo položky, o kterých soubor neví** — tedy přesně
+to, co si uživatel sám nahraje. Teď se použije na skici i na projekty.
+
+**Obrázky do IndexedDB, ne do localStorage.** Jedna skica v base64 má přes půl
+mega, úložiště má kolem pěti. Ve stavu zůstane jen id (`nahrane-<čas>-<náhoda>`),
+soubor bydlí v IndexedDB a web si ho k id došahá sám.
+
+Tři věci, na kterých to zakoplo:
+- **Průhlednost.** Canvas zmenšoval do JPEG, takže z průhledného PNG byla
+  **černá plocha**. PNG teď zůstává PNG; skica musí ležet na papíře, ne
+  v černém rámečku.
+- **`loading="lazy"` na doplněném obrázku.** Dlaždice se klonuje z existující,
+  která má `lazy`. Prohlížeč u ní už jednou rozhodl, že se načítat nebude,
+  a nová adresa ho neprobudí — obrázek zůstal prázdný i po odrolování.
+  Doplněné obrázky proto `loading` ztrácejí.
+- **Čísla u filtrů** se počítají při sestavení. Po nahrání skici tvrdila něco
+  jiného, než bylo vidět (12 dlaždic, u filtru 11). Přepočítávají se z toho,
+  co je v mřížce opravdu vidět.
+
+Pole projektu se na webu značí `data-projekt="<slug>"` + `data-pole`, ne
+pořadovým číslem — po přeřazení v administraci by index ukazoval na cizí
+projekt. Texty projektů tím zmizely z listu „Texty webu": dva zdroje pravdy
+pro jednu větu jsou past.

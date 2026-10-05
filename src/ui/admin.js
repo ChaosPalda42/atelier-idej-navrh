@@ -15,19 +15,16 @@
 
   /* -------------------------------------------------------- stav a ukládání */
   function vychozi() {
-    return A.vychoziStav({ firma: D.firma, prace: D.skici });
+    return A.vychoziStav({ firma: D.firma, prace: D.skici, projekty: D.site.projekty });
   }
 
-  /** Uložený stav může být starší než web — srovná se se skutečným seznamem skic. */
-  function srovnejSeSkicami(ulozeny) {
-    var zname = {};
-    D.skici.forEach(function (s) { zname[s.slug] = s; });
-    var mam = {};
-    (ulozeny.prace || []).forEach(function (p) { if (p && p.slug) mam[p.slug] = true; });
-
-    var prace = (ulozeny.prace || []).filter(function (p) { return p && zname[p.slug]; });
-    D.skici.forEach(function (s) { if (!mam[s.slug]) prace.push(s); });
-    return Object.assign({}, ulozeny, { prace: prace });
+  /** Uložený stav může být starší než web. Srovnání (C-006) nikdy nic nezahodí:
+      co je jen v souboru, přibyde; co si uživatel přidal sám, zůstane. */
+  function srovnej(ulozeny) {
+    return Object.assign({}, ulozeny, {
+      prace: A.srovnejSeznam(ulozeny.prace, D.skici),
+      projekty: A.srovnejSeznam(ulozeny.projekty, D.site.projekty || []),
+    });
   }
 
   function nacti() {
@@ -35,7 +32,7 @@
       var ulozene = localStorage.getItem(KLIC);
       if (ulozene) {
         var v = A.importuj(ulozene);
-        if (v.stav) return srovnejSeSkicami(v.stav);
+        if (v.stav) return srovnej(v.stav);
       }
     } catch (e) { /* soukromé okno */ }
     return vychozi();
@@ -221,8 +218,292 @@
       });
       skupina.appendChild(vyber);
       karta.appendChild(skupina);
+
+      if (p.obrazek) karta.appendChild(nahled(p.obrazek));
       kam.appendChild(karta);
     });
+
+    kam.appendChild(nahravani("+ Nahrát novou skicu", function (id, rozmery) {
+      stav = A.pridejPraci(stav, {
+        nazev: "Nová skica", typ: (D.site.skupiny[0] || {}).id || "",
+        obrazek: id, sirka: rozmery.sirka, vyska: rozmery.vyska, vlastni: true,
+      });
+      uloz();
+    }));
+  }
+
+  /* ------------------------------------------------------------- obrázky */
+  /* Nahrané obrázky nemůžou do localStorage — jedna skica v base64 má přes
+     půl mega a úložiště má kolem pěti. Jdou proto do IndexedDB, kde je
+     místa dost, a ve stavu zůstane jen jejich id. */
+  var OBRAZKY = (function () {
+    var DB = "idej-obrazky", SKLAD = "soubory", spojeni = null;
+
+    function otevri() {
+      if (spojeni) return spojeni;
+      spojeni = new Promise(function (hotovo, chyba) {
+        var zadost = indexedDB.open(DB, 1);
+        zadost.onupgradeneeded = function () {
+          if (!zadost.result.objectStoreNames.contains(SKLAD)) {
+            zadost.result.createObjectStore(SKLAD, { keyPath: "id" });
+          }
+        };
+        zadost.onsuccess = function () { hotovo(zadost.result); };
+        zadost.onerror = function () { chyba(zadost.error); };
+      });
+      return spojeni;
+    }
+
+    function prikaz(rezim, co) {
+      return otevri().then(function (db) {
+        return new Promise(function (hotovo, chyba) {
+          var t = db.transaction(SKLAD, rezim);
+          var v = co(t.objectStore(SKLAD));
+          t.oncomplete = function () { hotovo(v && v.result); };
+          t.onerror = function () { chyba(t.error); };
+        });
+      });
+    }
+
+    /* Zmenšení v prohlížeči: fotka z mobilu má klidně 4000 px a do ukázky
+       je to zbytečné. Poměr stran se nemění.
+
+       PNG zůstává PNG: skici mají průhledné pozadí, aby ležely přímo na
+       papíře listu. Převod na JPEG by z průhledna udělal ČERNOU. */
+    function zmensi(soubor, maxSirka) {
+      return new Promise(function (hotovo, chyba) {
+        var cteni = new FileReader();
+        cteni.onerror = function () { chyba(cteni.error); };
+        cteni.onload = function () {
+          var obraz = new Image();
+          obraz.onerror = function () { chyba(new Error("obrázek nejde přečíst")); };
+          obraz.onload = function () {
+            var mer = Math.min(1, maxSirka / obraz.naturalWidth);
+            var w = Math.round(obraz.naturalWidth * mer);
+            var h = Math.round(obraz.naturalHeight * mer);
+            var platno = document.createElement("canvas");
+            platno.width = w; platno.height = h;
+            platno.getContext("2d").drawImage(obraz, 0, 0, w, h);
+            var pruhledne = soubor.type === "image/png" || soubor.type === "image/webp";
+            platno.toBlob(function (blob) {
+              hotovo({ blob: blob, sirka: w, vyska: h });
+            }, pruhledne ? "image/png" : "image/jpeg", 0.86);
+          };
+          obraz.src = cteni.result;
+        };
+        cteni.readAsDataURL(soubor);
+      });
+    }
+
+    return {
+      uloz: function (soubor) {
+        return zmensi(soubor, 1600).then(function (v) {
+          var id = "nahrane-" + Date.now() + "-" + Math.random().toString(36).slice(2, 7);
+          return prikaz("readwrite", function (sklad) {
+            sklad.put({ id: id, blob: v.blob, sirka: v.sirka, vyska: v.vyska, nazev: soubor.name });
+          }).then(function () { return { id: id, sirka: v.sirka, vyska: v.vyska }; });
+        });
+      },
+      nacti: function (id) {
+        return prikaz("readonly", function (sklad) { return sklad.get(id); });
+      },
+      smaz: function (id) {
+        return prikaz("readwrite", function (sklad) { sklad.delete(id); });
+      },
+    };
+  })();
+
+  /** Náhled nahraného obrázku; vrátí <img>, který se doplní, až se načte. */
+  function nahled(id, trida) {
+    var obraz = document.createElement("img");
+    obraz.className = trida || "admin-nahled";
+    obraz.alt = "";
+    OBRAZKY.nacti(id).then(function (zaznam) {
+      if (zaznam) obraz.src = URL.createObjectURL(zaznam.blob);
+    });
+    return obraz;
+  }
+
+  /** Tlačítko pro výběr souboru. `hotovo(id, rozmery)` po uložení. */
+  function nahravani(popisek, hotovo) {
+    var obal = prvek("label", "admin-nahrat");
+    obal.appendChild(prvek("span", "", popisek));
+    var vstup = document.createElement("input");
+    vstup.type = "file";
+    vstup.accept = "image/*";
+    vstup.hidden = true;
+    vstup.addEventListener("change", function () {
+      var soubor = vstup.files && vstup.files[0];
+      if (!soubor) return;
+      obal.classList.add("admin-nahrat--pracuje");
+      OBRAZKY.uloz(soubor).then(function (v) {
+        obal.classList.remove("admin-nahrat--pracuje");
+        vstup.value = "";
+        hotovo(v.id, v);
+      }).catch(function () {
+        obal.classList.remove("admin-nahrat--pracuje");
+        obal.classList.add("admin-nahrat--chyba");
+      });
+    });
+    obal.appendChild(vstup);
+    return obal;
+  }
+
+  /* ------------------------------------------------------------ projekty */
+  function vykresliProjekty() {
+    var kam = $("#admin-projekty");
+    if (!kam) return;
+    kam.innerHTML = "";
+
+    var skupiny = D.site.skupiny.map(function (s) { return { id: s.id, nazev: s.nazev }; });
+    var vsechnySkici = (stav.prace || []).map(function (p) {
+      return { slug: p.slug, nazev: p.nazev || p.slug };
+    });
+
+    function pole(karta, popis, hodnota, zapis, druh) {
+      var l = prvek("label", "admin-pole");
+      l.appendChild(prvek("span", "admin-pole-popis", popis));
+      var vstup = document.createElement(druh === "text" ? "textarea" : "input");
+      if (druh && druh !== "text") vstup.type = druh;
+      vstup.value = hodnota == null ? "" : hodnota;
+      vstup.addEventListener("change", function () { zapis(vstup.value); });
+      l.appendChild(vstup);
+      karta.appendChild(l);
+      return vstup;
+    }
+
+    (stav.projekty || []).forEach(function (p, i) {
+      var karta = prvek("article", "admin-karta" + (p.skryty ? " admin-karta--skryta" : ""));
+
+      var hlava = prvek("div", "admin-radek");
+      hlava.appendChild(prvek("strong", "", p.nazev || "(bez názvu)"));
+      var ovladani = prvek("div", "admin-ovladani");
+      [["↑", -1], ["↓", 1]].forEach(function (d) {
+        var b = prvek("button", "admin-mini", d[0]);
+        b.title = d[1] < 0 ? "Posunout nahoru" : "Posunout dolů";
+        b.disabled = (d[1] < 0 && i === 0) || (d[1] > 0 && i === stav.projekty.length - 1);
+        b.addEventListener("click", function () { stav = A.presunProjekt(stav, p.slug, d[1]); uloz(); });
+        ovladani.appendChild(b);
+      });
+      var schovat = prvek("button", "admin-mini", p.skryty ? "Zobrazit" : "Skrýt");
+      schovat.addEventListener("click", function () {
+        stav = A.upravProjekt(stav, p.slug, { skryty: !p.skryty }); uloz();
+      });
+      ovladani.appendChild(schovat);
+      var smazat = prvek("button", "admin-mini", "Smazat");
+      smazat.addEventListener("click", function () {
+        if (p.vlastni) stav = A.smazProjekt(stav, p.slug);
+        else stav = A.upravProjekt(stav, p.slug, { smazano: true });
+        uloz();
+      });
+      ovladani.appendChild(smazat);
+      hlava.appendChild(ovladani);
+      karta.appendChild(hlava);
+
+      pole(karta, "Název", p.nazev, function (v) { stav = A.upravProjekt(stav, p.slug, { nazev: v }); uloz(); });
+      var radek = prvek("div", "admin-dvojice");
+      karta.appendChild(radek);
+      pole(radek, "Místo", p.misto, function (v) { stav = A.upravProjekt(stav, p.slug, { misto: v }); uloz(); });
+      pole(radek, "Rok", p.rok, function (v) { stav = A.upravProjekt(stav, p.slug, { rok: Number(v) || v }); uloz(); }, "number");
+
+      var skupina = prvek("label", "admin-pole");
+      skupina.appendChild(prvek("span", "admin-pole-popis", "Skupina"));
+      var vyber = document.createElement("select");
+      skupiny.forEach(function (s) {
+        var o = document.createElement("option");
+        o.value = s.id; o.textContent = s.nazev;
+        if (s.id === p.typ) o.selected = true;
+        vyber.appendChild(o);
+      });
+      vyber.addEventListener("change", function () {
+        stav = A.upravProjekt(stav, p.slug, { typ: vyber.value }); uloz();
+      });
+      skupina.appendChild(vyber);
+      karta.appendChild(skupina);
+
+      pole(karta, "Úvodní věta", p.anotace, function (v) {
+        stav = A.upravProjekt(stav, p.slug, { anotace: v }); uloz();
+      }, "text");
+      (p.text || []).forEach(function (odstavec, j) {
+        pole(karta, "Odstavec " + (j + 1), odstavec, function (v) {
+          var novy = (p.text || []).slice();
+          novy[j] = v;
+          stav = A.upravProjekt(stav, p.slug, { text: novy }); uloz();
+        }, "text");
+      });
+      var pridatOdstavec = prvek("button", "admin-mini", "+ odstavec");
+      pridatOdstavec.addEventListener("click", function () {
+        stav = A.upravProjekt(stav, p.slug, { text: (p.text || []).concat([""]) }); uloz();
+      });
+      karta.appendChild(pridatOdstavec);
+
+      /* skici projektu */
+      var skiciPole = prvek("div", "admin-pole");
+      skiciPole.appendChild(prvek("span", "admin-pole-popis", "Skici projektu"));
+      var seznam = prvek("div", "admin-volby");
+      vsechnySkici.forEach(function (s) {
+        var l = prvek("label", "admin-volba");
+        var z = document.createElement("input");
+        z.type = "checkbox";
+        z.checked = (p.skici || []).indexOf(s.slug) >= 0;
+        z.addEventListener("change", function () {
+          var vybrane = (p.skici || []).filter(function (x) { return x !== s.slug; });
+          if (z.checked) vybrane.push(s.slug);
+          stav = A.upravProjekt(stav, p.slug, { skici: vybrane }); uloz();
+        });
+        l.appendChild(z);
+        l.appendChild(prvek("span", "", s.nazev));
+        seznam.appendChild(l);
+      });
+      skiciPole.appendChild(seznam);
+      karta.appendChild(skiciPole);
+
+      /* fotografie */
+      var fotky = prvek("div", "admin-pole");
+      fotky.appendChild(prvek("span", "admin-pole-popis", "Fotografie"));
+      var rada = prvek("div", "admin-fotky");
+      (p.fotky || []).forEach(function (id) {
+        var box = prvek("figure", "admin-fotka");
+        if (id.indexOf("nahrane-") === 0) box.appendChild(nahled(id));
+        else {
+          var obraz = document.createElement("img");
+          obraz.className = "admin-nahled";
+          obraz.src = D.korenAdmin + "obrazky/" + id + "-520.jpg";
+          obraz.alt = "";
+          box.appendChild(obraz);
+        }
+        var pryc = prvek("button", "admin-mini", "×");
+        pryc.title = "Odebrat fotografii";
+        pryc.addEventListener("click", function () {
+          stav = A.upravProjekt(stav, p.slug, {
+            fotky: (p.fotky || []).filter(function (x) { return x !== id; }),
+          });
+          if (id.indexOf("nahrane-") === 0) OBRAZKY.smaz(id);
+          uloz();
+        });
+        box.appendChild(pryc);
+        rada.appendChild(box);
+      });
+      rada.appendChild(nahravani("+ Nahrát fotografii", function (id) {
+        stav = A.upravProjekt(stav, p.slug, { fotky: (p.fotky || []).concat([id]) });
+        uloz();
+      }));
+      fotky.appendChild(rada);
+      karta.appendChild(fotky);
+
+      kam.appendChild(karta);
+    });
+
+    var pridat = prvek("button", "tlacitko lehke", "+ Nový projekt");
+    pridat.addEventListener("click", function () {
+      stav = A.pridejProjekt(stav, {
+        nazev: "Nový projekt", misto: "", rok: new Date().getFullYear(),
+        typ: (D.site.skupiny[0] || {}).id || "", anotace: "", text: [""],
+        skici: [], fotky: [], vlastni: true,
+      });
+      uloz();
+    });
+    kam.appendChild(pridat);
   }
 
   /* ----------------------------------------------------------------- poptávky */
@@ -340,6 +621,7 @@
       vykresliSadu($("#admin-pole").dataset.sada);
     }
     if (stranka === "skici") vykresliSkici();
+    if (stranka === "projekty") vykresliProjekty();
     if (stranka === "poptavky") vykresliPoptavky();
     if (stranka === "kontakt") vykresliKontakt();
   }

@@ -472,6 +472,131 @@
     });
   }
 
+  /* ------------------------------------------- obrázky nahrané administrací */
+  /* Nahrané soubory bydlí v IndexedDB (do localStorage by se nevešly).
+     Web o nich ví jen tolik, že má id — obrázek si k němu došahá sám. */
+  function nahranyObrazek(id) {
+    return new Promise(function (hotovo) {
+      var zadost = indexedDB.open("idej-obrazky", 1);
+      zadost.onupgradeneeded = function () {
+        if (!zadost.result.objectStoreNames.contains("soubory")) {
+          zadost.result.createObjectStore("soubory", { keyPath: "id" });
+        }
+      };
+      zadost.onerror = function () { hotovo(null); };
+      zadost.onsuccess = function () {
+        var db = zadost.result;
+        if (!db.objectStoreNames.contains("soubory")) return hotovo(null);
+        var r = db.transaction("soubory").objectStore("soubory").get(id);
+        r.onsuccess = function () { hotovo(r.result || null); };
+        r.onerror = function () { hotovo(null); };
+      };
+    });
+  }
+
+  function nastavObrazek(obraz, id, koren) {
+    // Obrázek doplněný skriptem nesmí zůstat `lazy`: prohlížeč u něj už
+    // jednou rozhodl, že se načítat nebude, a nová adresa ho neprobudí.
+    obraz.removeAttribute("loading");
+    if (String(id).indexOf("nahrane-") !== 0) {
+      obraz.removeAttribute("srcset");
+      obraz.src = koren + "obrazky/" + id + "-1040.jpg";
+      return;
+    }
+    obraz.removeAttribute("srcset");
+    nahranyObrazek(id).then(function (zaznam) {
+      if (!zaznam) return;
+      obraz.src = URL.createObjectURL(zaznam.blob);
+      obraz.width = zaznam.sirka;
+      obraz.height = zaznam.vyska;
+    });
+  }
+
+  /* ---------------------------------- co se změnilo na projektech a skicách */
+  function prepisProjekty(stav) {
+    if (!Array.isArray(stav.projekty)) return;
+    var koren = location.pathname.indexOf("/prace/") >= 0 ? "../" : "";
+    var podle = {};
+    stav.projekty.forEach(function (p) { if (p && p.slug) podle[p.slug] = p; });
+
+    $$("[data-projekt]").forEach(function (uzel) {
+      var p = podle[uzel.dataset.projekt];
+      if (!p) return;
+
+      var pole = uzel.hasAttribute("data-pole") ? [uzel] : $$("[data-pole]", uzel);
+      pole.forEach(function (el) {
+        var klic = el.dataset.pole;
+        if (klic === "text") {
+          if (!Array.isArray(p.text)) return;
+          el.innerHTML = "";
+          p.text.forEach(function (odstavec) {
+            var o = document.createElement("p");
+            o.textContent = odstavec;
+            el.appendChild(o);
+          });
+        } else if (typeof p[klic] === "string" || typeof p[klic] === "number") {
+          el.textContent = p[klic];
+        }
+      });
+
+      var rada = $("[data-fotky]", uzel);
+      if (rada && Array.isArray(p.fotky)) {
+        var vzor = $("figure", rada);
+        rada.innerHTML = "";
+        p.fotky.forEach(function (id) {
+          var box = vzor ? vzor.cloneNode(true) : document.createElement("figure");
+          if (!vzor) box.className = "fotka";
+          var obraz = $("img", box) || box.appendChild(document.createElement("img"));
+          obraz.removeAttribute("data-lightbox");
+          nastavObrazek(obraz, id, koren);
+          rada.appendChild(box);
+        });
+        rada.parentElement.hidden = p.fotky.length === 0;
+      }
+    });
+  }
+
+  /** Čísla u filtrů se počítají při sestavení. Když administrace skicu přidá
+      nebo skryje, musí se přepočítat, jinak filtr tvrdí něco jiného, než je vidět. */
+  function prepocitejFiltry(mrizka) {
+    var karty = $$(".skica-list", mrizka).filter(function (k) { return !k.hidden; });
+    $$(".filtr").forEach(function (tlacitko) {
+      var typ = tlacitko.dataset.filtr;
+      var pocet = typ === "vse" ? karty.length
+        : karty.filter(function (k) { return k.dataset.typ === typ; }).length;
+      var cislo = $(".filtr-pocet", tlacitko);
+      if (cislo) cislo.textContent = String(pocet);
+      tlacitko.hidden = typ !== "vse" && pocet === 0;
+    });
+  }
+
+  /** Skica nahraná administrací — do mřížky se doplní jako nová dlaždice. */
+  function doplnNahraneSkici(stav) {
+    var mrizka = $("[data-prace]");
+    if (!mrizka || !Array.isArray(stav.prace)) return;
+    var vzor = $(".skica-list", mrizka);
+    if (!vzor) return;
+
+    stav.prace.forEach(function (p) {
+      if (!p || !p.obrazek || $('[data-slug="' + p.slug + '"]', mrizka)) return;
+      var karta = vzor.cloneNode(true);
+      karta.dataset.slug = p.slug;
+      karta.dataset.typ = p.typ || "";
+      karta.hidden = !!p.skryta;
+      var odkaz = $("a.skica-odkaz", karta);
+      if (odkaz) odkaz.replaceWith.apply(odkaz, odkaz.childNodes.length ? [].slice.call(odkaz.childNodes) : []);
+      var obraz = $("img", karta);
+      if (obraz) {
+        obraz.removeAttribute("data-lightbox");
+        nastavObrazek(obraz, p.obrazek, "");
+        obraz.alt = "Skica — " + (p.nazev || "");
+      }
+      var popis = $(".skica-popis", karta);
+      if (popis) popis.textContent = p.nazev || "";
+      mrizka.appendChild(karta);
+    });
+  }
+
   /* ------------------------------------------------------------- lightbox */
   function svetelnyStul() {
     var fotky = $$("[data-lightbox]");
@@ -530,6 +655,9 @@
       });
     }
 
+    prepisProjekty(stav);
+    doplnNahraneSkici(stav);
+
     var mrizka = $("[data-prace]");
     if (mrizka && Array.isArray(stav.prace)) {
       var zive = {};
@@ -547,7 +675,7 @@
         var uhel = ((Number(p.otoceni) || 0) % 360 + 360) % 360;
         karta.dataset.otoceni = String(uhel);
         karta.style.setProperty("--uhel", uhel + "deg");
-        var nazev = $('[data-pole="nazev"]', karta);
+        var nazev = $('[data-pole="nazev"]:not([data-projekt])', karta);
         if (nazev && p.nazev) nazev.textContent = p.nazev;
         var anotace = $('[data-pole="anotace"]', karta);
         if (anotace && typeof p.anotace === "string") anotace.textContent = p.anotace;
@@ -563,6 +691,7 @@
           if (karta) mrizka.appendChild(karta);
         });
       }
+      prepocitejFiltry(mrizka);
     }
   }
 

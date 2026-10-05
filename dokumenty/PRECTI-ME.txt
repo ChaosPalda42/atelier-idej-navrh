@@ -54,8 +54,11 @@ Co si na ukázce projít
  - formulář v kontaktu ..... vyzkoušejte ho i prázdný, hlídá si chyby
  - administrace.html ....... demo administrace. Není to jedna dlouhá stránka:
                              má vlastní list na texty, na skupiny práce,
-                             na postup, na skici, na poptávky, na kontakt
-                             a na zálohu. Co kde změníte, objeví se na webu.
+                             na postup, na skici, na PROJEKTY, na poptávky,
+                             na kontakt a na zálohu. Na listu Skici se dá
+                             nahrát nová skica, na listu Projekty se mění
+                             texty projektů, vybírají jejich skici a nahrávají
+                             fotografie. Co kde změníte, objeví se na webu.
                              Odeslaná poptávka se objeví v Poptávkách.
 
 Značka
@@ -110,6 +113,12 @@ Dál: názvy a popisy čtyř skupin práce, texty na jejich listech, kroky postu
 popisky u jednotlivých skic, pořadí a názvy skic (i jejich otočení a skrytí),
 kontaktní údaje a došlé poptávky.
 Celý obsah se dá vyvézt do souboru a zase načíst.
+
+Nahrávání obrázků: v ukázce se nahrané soubory ukládají do vašeho prohlížeče,
+takže je uvidíte jen vy a jen na tomhle počítači. Na ostrém webu je po uložení
+zpracuje server stejně jako stávajících jedenáct skic — vybělí papír, udělá
+průhlednost a tři velikosti pro telefon i velkou obrazovku. Úplně nový projekt
+dostane vlastní list taky až tam.
 
 Technicky
 ---------

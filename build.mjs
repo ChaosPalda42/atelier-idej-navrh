@@ -6,7 +6,6 @@ import path from "node:path";
 import { fileURLToPath } from "node:url";
 
 import { index, detail, projekt, chyba404, presmerovani } from "./src/templates/stranky.mjs";
-import { spravaNastaveni, spravaStranka } from "./src/templates/sprava.mjs";
 import { administrace } from "./src/templates/administrace.mjs";
 import { znacka } from "./src/templates/znacka.mjs";
 import { nastavOtisk } from "./src/templates/layout.mjs";
@@ -109,15 +108,6 @@ async function main() {
   }
   await writeFile(path.join(VEN, "404.html"), chyba404(site, t));
 
-  // správa webu přes git (Decap/Sveltia) — schéma se skládá z dat
-  await mkdir(path.join(VEN, "sprava"), { recursive: true });
-  await writeFile(path.join(VEN, "sprava", "index.html"), spravaStranka());
-  await writeFile(path.join(VEN, "sprava", "config.yml"),
-    spravaNastaveni(site, t, {
-      repo: process.env.SPRAVA_REPO || "ChaosPalda42/atelier-idej-navrh",
-      vetev: process.env.SPRAVA_VETEV || "main",
-      most: process.env.SPRAVA_MOST || "",
-    }));
 
   // adresy z dřívější verze ukázky (vymyšlené zakázky) — ať nekončí na 404
   const stareAdresy = {

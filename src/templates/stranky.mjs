@@ -50,9 +50,9 @@ function karta(s, projekt, k = "") {
     : obraz;
   return `<figure class="skica-list" data-slug="${esc(s.zaklad)}" data-typ="${esc(s.skupina)}">
 ${vnitrek}
-<figcaption class="skica-popis" data-pole="nazev">${projekt
-    ? `<a class="skica-odkaz" href="${k}prace/${esc(projekt.slug)}.html">${esc(projekt.nazev)}</a>`
-    : esc(s.popis)}</figcaption>
+<figcaption class="skica-popis">${projekt
+    ? `<a class="skica-odkaz" href="${k}prace/${esc(projekt.slug)}.html" data-projekt="${esc(projekt.slug)}" data-pole="nazev">${esc(projekt.nazev)}</a>`
+    : `<span data-pole="nazev">${esc(s.popis)}</span>`}</figcaption>
 </figure>`;
 }
 
@@ -286,26 +286,24 @@ export function projekt(site, t, p, skici = [], ukazky = []) {
   const mojeSkici = podle(skici, p.skici);
   const mojeFotky = podle(ukazky, p.fotky);
   const okolo = sousedi(site.projekty, p.slug);
-  const i = site.projekty.indexOf(p);
-  const stav = (t.projekt.stavy || {})[p.stav] || p.stav;
 
-  const telo = `<article class="list sekce projekt" data-psat>
+  const telo = `<article class="list sekce projekt" data-psat data-projekt="${esc(p.slug)}">
 <div class="sekce-hlava">
 <span class="sekce-cislo">${esc(String(p.rok))}</span>
 <p class="stitek"><a href="../index.html#prace" data-text="projekt.zpet">${esc(t.projekt.zpet)}</a></p>
 <p class="poznamka pise" data-text="projekt.zastupne">${esc(t.projekt.zastupne)}</p>
 </div>
 <div class="sekce-telo">
-<h1 class="nadpis rukou" data-text="site.projekty.${i}.nazev">${esc(p.nazev)}</h1>
-<p class="projekt-udaje"><span data-text="site.projekty.${i}.misto">${esc(p.misto)}</span> · ${esc(stav)}</p>
-<p class="vedouci" data-text="site.projekty.${i}.anotace">${esc(p.anotace)}</p>
-${p.text.map((o, j) => `<p data-text="site.projekty.${i}.text.${j}">${esc(o)}</p>`).join("\n")}
+<h1 class="nadpis rukou" data-pole="nazev">${esc(p.nazev)}</h1>
+<p class="projekt-udaje"><span data-pole="misto">${esc(p.misto)}</span> · <span data-pole="rok">${esc(String(p.rok))}</span></p>
+<p class="vedouci" data-pole="anotace">${esc(p.anotace)}</p>
+<div data-pole="text">${p.text.map((o) => `<p>${esc(o)}</p>`).join("\n")}</div>
 </div>
 </article>
 
-${mojeFotky.length ? `<section class="list projekt-fotky" data-psat>
+${mojeFotky.length ? `<section class="list projekt-fotky" data-psat data-projekt="${esc(p.slug)}">
 <h2 class="nadpis rukou" data-text="projekt.fotky">${esc(t.projekt.fotky)}</h2>
-<div class="fotky-rada">${mojeFotky.map((u) => fotka(u, "../", p.nazev)).join("\n")}</div>
+<div class="fotky-rada" data-fotky>${mojeFotky.map((u) => fotka(u, "../", p.nazev)).join("\n")}</div>
 </section>` : ""}
 
 ${mojeSkici.length ? `<section class="list projekt-skici" data-psat>
