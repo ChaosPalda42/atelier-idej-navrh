@@ -179,12 +179,17 @@ RAZITKO = KOREN / "podklady" / "razitko"
 
 
 def zpracuj_razitko() -> str:
-    """Razítko ateliéru projde stejnou cestou jako skici — zbude jen tuš."""
+    """Razítko ateliéru projde stejnou cestou jako skici — zbude jen tuš.
+
+    Otisk je na podkladu otočený o čtvrt otáčky doleva, proto se rovná
+    o 90° po směru hodinových ručiček.
+    """
     zdroje = sorted(RAZITKO.glob("*.jp*g")) + sorted(RAZITKO.glob("*.png")) if RAZITKO.exists() else []
     if not zdroje:
         return ""
     with Image.open(zdroje[0]) as nactene:
         rovne = ImageOps.exif_transpose(nactene).convert("RGB")
+    rovne = rovne.rotate(-90, expand=True)
     kresba = pruhledne(vybel_papir(rovne))
     VEN.mkdir(parents=True, exist_ok=True)
     zmensene = zmensi(kresba, min(600, kresba.size[0]))

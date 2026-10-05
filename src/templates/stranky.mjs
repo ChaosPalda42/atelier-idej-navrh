@@ -163,7 +163,7 @@ ${t.oMne.bloky.map((b, i) => `<div class="o-nas-blok">
 <p class="vedouci" id="poptavka-hotovo" data-text="kontakt.hotovo" hidden>${esc(t.kontakt.hotovo)}</p>
 <div class="podpis-rada">
 <p class="podpis pise">${esc(firma.architekt.replace("Ing. arch. ", ""))}<small data-text="kontakt.podpis">${esc(t.kontakt.podpis)}</small></p>
-${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" alt="Razítko ateliéru" width="300" height="337" loading="lazy">` : ""}
+${razitkoAtelieru ? `<img class="razitko-ruka" src="obrazky/${razitkoAtelieru}" alt="Razítko ateliéru" width="411" height="366" loading="lazy">` : ""}
 </div>
 <div class="kontakt-udaje">
 <p class="stitek">Nebo rovnou</p>
