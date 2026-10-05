@@ -38,7 +38,7 @@ function obrazekSkici(s, { k = "", trida = "", velikosti = "100vw", lupa = true,
 /** Karta skici v mřížce vybraných prací. Filtr (C-003) ji najde přes data-typ. */
 function karta(s, k = "") {
   return `<figure class="skica-list" data-slug="${esc(s.zaklad)}" data-typ="${esc(s.skupina)}">
-${obrazekSkici(s, { k, trida: "skica-obraz", velikosti: "(max-width: 560px) 88vw, (max-width: 920px) 44vw, 23vw" })}
+${obrazekSkici(s, { k, trida: "skica-obraz", velikosti: "(max-width: 560px) 44vw, 22vw" })}
 <figcaption class="skica-popis" data-pole="nazev">${esc(s.popis)}</figcaption>
 </figure>`;
 }

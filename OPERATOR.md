@@ -389,3 +389,24 @@ zmizel už v třináctém kole). `exponat()` zůstává jen pro listy sbírek, t
 na nich dál funguje zvýraznění pod myší i zvětšení. V administraci se skupina
 „Popisky u skic" scvrkla na „Skicák" — popisky k jednotlivým rozmístěním
 už nejsou k čemu.
+
+## Doladění (5. 10. 2026): čtvercový formát a vazba na prvním listu
+Architekt: *„Vybrané práce dej k těm obrázkům jednotný čtvercový formát,
+já si pak k jednotlivým ukázkám skicnu novou skicu"* a *„takhle ve třech
+sloupcích bomba"*.
+
+- Mřížka přešla ze `columns` na **grid napevno 3 sloupce** (2 pod 920 px,
+  1 pod 560). Pružný `auto-fill` by na širokém okně udělal pět sloupců,
+  a on chválil právě ty tři.
+- Pole je **čtverec** (`aspect-ratio: 1`) a skica v něm sedí `object-fit:
+  contain`, tedy **nikdy se neořízne** — výšky jsou od 582 po 3212 px
+  a `cover` by z vysokých udělal výsek. Prázdné místo kolem je papír listu,
+  skici mají průhledné pozadí. Natočení karet zrušeno, „jednotný formát"
+  znamená srovnané.
+- **Vazba prvního listu výš.** Nešla posunout uvnitř listu: `.uvod` má
+  `overflow: hidden` kvůli kruhu, který z něj vyčuhuje vpravo, takže drát
+  přetékající nahoru uřízl. Vazba prvního listu se proto kreslí **před**
+  listem v obalu `.vazba-vrch` (výška 0, `z-index: 5`) a přehýbá se přes
+  horní hranu bloku ven na stůl jako u ostatních listů. Pozor: tím přestal
+  platit `.blok > .list:first-child`, od kterého se odvíjel horní stín —
+  první list má teď třídu `list--prvni`.

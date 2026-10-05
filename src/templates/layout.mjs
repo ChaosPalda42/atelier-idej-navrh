@@ -135,6 +135,14 @@ function oblecListy(telo) {
     (cely, znacka, tridy, zbytek) => {
       poradi += 1;
       const pauzak = poradi % 2 === 0 ? " list--pauzak" : "";
+      /* Vazba prvního listu se kreslí PŘED ním, ne v něm: drát se přehýbá
+         přes horní hranu bloku ven na stůl a uvnitř listu by ho uřízl
+         `overflow: hidden`, kterým si úvodní list ořezává vyčuhující kruh. */
+      if (poradi === 1) {
+        return `<div class="vazba-vrch">${vazba(1)}</div>`
+          + `<${znacka} class="list list--prvni ${tridy}"${zbytek}>`
+          + `<span class="hrana" aria-hidden="true"></span>`;
+      }
       return `<${znacka} class="list ${tridy}${pauzak}"${zbytek}>`
         + `<span class="hrana" aria-hidden="true"></span>${vazba(poradi)}`;
     });

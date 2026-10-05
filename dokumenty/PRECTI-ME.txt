@@ -32,9 +32,10 @@ Co si na ukázce projít
 ----------------------
  - index.html .............. celá jednostránka (úvod, co dělám, skicák,
                              postup, o mně, kontakt)
- - Vybrané práce ........... list se všemi skicami pohromadě, s filtrem podle
-                             skupiny. Kliknutím se skica ukáže ve velkém
-                             i s původním papírem
+ - Vybrané práce ........... list se všemi skicami pohromadě ve třech
+                             sloupcích, každá v poli stejné čtvercové
+                             velikosti; filtr podle skupiny. Kliknutím se
+                             skica ukáže ve velkém i s původním papírem
  - skupiny ................. Rodinné domy, Bytové domy, Interiéry, Garáže —
                              každá má vlastní list, na něm jsou skici té
                              skupiny ve velkém

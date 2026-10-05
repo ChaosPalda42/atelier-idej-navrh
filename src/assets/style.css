@@ -133,7 +133,7 @@ button { font: inherit; color: inherit; }
 .list > * { position: relative; z-index: 1; }
 
 /* první a poslední list mají stín i nahoru a dolů — blok leží na stole */
-.blok > .list:first-child {
+.list--prvni {
   box-shadow:
     -20px 0 36px -30px rgba(52, 40, 24, 0.55),
     20px 0 36px -30px rgba(52, 40, 24, 0.55),
@@ -482,30 +482,28 @@ p:last-child { margin-bottom: 0; }
 .sluzba:hover .sluzba-obraz { transform: translateY(-3px) scale(1.03); }
 
 /* ----------------------------------------------- mřížka vybraných prací */
-/* Sloupce, ne mřížka: skici mají od výšky 582 po 3212 px a v mřížce by
-   kolem nízkých zůstaly díry. Ve sloupcích se poskládají jako na nástěnce. */
+/* Jednotný čtvercový formát: každá skica dostane stejně velké pole a sedí
+   v něm `contain`, takže se NIKDY neořízne — skici mají od 582 po 3212 px
+   výšky a oříznutí by z vysokých udělalo výsek. Prázdné místo kolem kresby
+   je papír listu, skici mají průhledné pozadí. */
 .skicak {
-  columns: 3;
-  column-gap: clamp(16px, 2.2vw, 30px);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: clamp(22px, 2.6vw, 36px) clamp(16px, 2.2vw, 30px);
   margin-top: 2.2em;
 }
-.skica-list {
-  break-inside: avoid;
-  margin: 0 0 clamp(18px, 2.4vw, 32px);
-  --natoceni: 0deg;
-  transform: rotate(var(--natoceni));
-}
-.skica-list:nth-child(3n + 1) { --natoceni: -0.6deg; }
-.skica-list:nth-child(3n + 2) { --natoceni: 0.45deg; }
-.skica-list:nth-child(5n) { --natoceni: 0.9deg; }
+.skica-list { margin: 0; }
 
 .skica-obraz {
   width: 100%;
   height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  object-position: center bottom;
   cursor: zoom-in;
   transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.3, 1), filter 0.45s ease;
 }
-.skica-list:hover .skica-obraz { transform: translateY(-3px) scale(1.015); filter: contrast(1.05); }
+.skica-list:hover .skica-obraz { transform: translateY(-3px) scale(1.03); filter: contrast(1.05); }
 
 .skica-popis {
   font-family: var(--rukou);
@@ -514,8 +512,8 @@ p:last-child { margin-bottom: 0; }
   margin-top: 4px;
 }
 
-@media (max-width: 920px) { .skicak { columns: 2; } }
-@media (max-width: 560px) { .skicak { columns: 1; } }
+@media (max-width: 920px) { .skicak { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 560px) { .skicak { grid-template-columns: 1fr; } }
 
 /* ----------------------------------------------------------------- práce */
 .filtry { display: flex; flex-wrap: wrap; gap: 8px; margin: 2.4em 0 32px; }
@@ -1246,10 +1244,14 @@ body.exponat-aktivni .setmeni { opacity: 1; }
   stroke-linecap: round;
 }
 
-/* První list je vršek bloku: nad ním není co překrývat, tak vazba sjede
-   dolů a drát leží na něm. */
-.blok > .list:first-child .vazba { margin-top: 0.3%; }
-.blok > .list:first-child .hrana { display: none; }
+/* Vazba prvního listu visí nad blokem, aby se drát přehnul přes horní hranu
+   ven na stůl — uvnitř listu by ho uřízl jeho vlastní `overflow: hidden`. */
+.vazba-vrch {
+  position: relative;
+  height: 0;
+  z-index: 5;
+}
+.list--prvni .hrana { display: none; }
 
 /* Na pauzáku je materiál tenčí a chladnější — stín i perforace s ním. */
 .list--pauzak .vazba > g {
