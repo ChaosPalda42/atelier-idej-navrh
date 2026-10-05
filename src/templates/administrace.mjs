@@ -55,6 +55,7 @@ const POPISKY = {
   "paticka.ukazka": "Patička — věta o ukázce",
   "web.titulek": "Titulek stránky (v záložce prohlížeče a ve vyhledávání)",
   "vystavka.odkazy": "Věta nad odkazy na skupiny",
+  "vystavka.popisek": "Pobídka ke zvětšení skici",
   "web.popis": "Popis stránky pro vyhledávače",
 };
 
@@ -63,7 +64,6 @@ const DLOUHE = /perex|text|popis|poznamka|hotovo|napoveda|souhlas|claim|titulek|
 const VZORY = [
   [/^oMne\.bloky\.\d+\.nadpis$/, "Nadpis bloku"],
   [/^oMne\.bloky\.\d+\.text$/, "Text bloku"],
-  [/^site\.vystavka\.\d+\.poznamka$/, "Popisek u skici"],
 ];
 
 function poleTextu(klic, popisek) {
@@ -93,10 +93,7 @@ export function schema(site, t, skici) {
         "kontakt.podpis", "kontakt.hotovo"]),
       skupinaTextu("Formulář", ["kontakt.jmeno", "kontakt.email", "kontakt.telefon", "kontakt.zprava",
         "kontakt.zpravaNapoveda", "kontakt.prilohy", "kontakt.prilohyNapoveda", "kontakt.souhlas", "kontakt.odeslat"]),
-      skupinaTextu("Popisky u skic", [
-        "vystavka.odkazy",
-        ...site.vystavka.map((_, i) => `site.vystavka.${i}.poznamka`),
-      ]),
+      skupinaTextu("Skicák", ["vystavka.odkazy", "vystavka.popisek"]),
       skupinaTextu("Navigace", ["navigace.sluzby", "navigace.prace", "navigace.postup",
         "navigace.oMne", "navigace.kontakt"]),
       skupinaTextu("Patička a hlava stránky", ["paticka.ukazka", "web.titulek", "web.popis"]),
@@ -132,7 +129,7 @@ function adminList({ site, t, skici, aktivni, telo, k }) {
   const list = LISTY.find((l) => l.id === aktivni);
   const data = {
     firma: site.firma,
-    site: { sluzby: site.sluzby, postup: site.postup, skupiny: site.skupiny, vystavka: site.vystavka },
+    site: { sluzby: site.sluzby, postup: site.postup, skupiny: site.skupiny },
     skici: skici.map((s) => ({ slug: s.zaklad, nazev: s.popis, typ: s.skupina })),
     texty: t,
     schema: schema(site, t, skici),

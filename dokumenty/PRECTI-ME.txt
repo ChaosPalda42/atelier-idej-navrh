@@ -35,13 +35,9 @@ Co si na ukázce projít
  - Vybrané práce ........... list se všemi skicami pohromadě, s filtrem podle
                              skupiny. Kliknutím se skica ukáže ve velkém
                              i s původním papírem
- - skici v textu ........... šest skic je navíc roztroušeno po ostatních
-                             listech jako exponáty v muzeu — v okraji nebo
-                             přes hranu listu. Mají odstraněný papír, takže
-                             jsou součástí stránky; teprve pod myší se zvýrazní
-                             — ztmavne okolí a kresba zůstane nasvícená
  - skupiny ................. Rodinné domy, Bytové domy, Interiéry, Garáže —
-                             každá má vlastní list
+                             každá má vlastní list, na něm jsou skici té
+                             skupiny ve velkém
  - formulář v kontaktu ..... vyzkoušejte ho i prázdný, hlídá si chyby
  - administrace.html ....... demo administrace. Není to jedna dlouhá stránka:
                              má vlastní list na texty, na skupiny práce,
@@ -65,8 +61,8 @@ CO JE SKUTEČNÉ A CO NE
 Skutečné (od vás):
  - všechny texty na webu — úvodní věta, představení ateliéru, čtyři skupiny
    práce, pět kroků postupu, celé „O nás" i text u kontaktu,
- - všech 11 skic — v přehledu Vybraných prací, u čtyř skupin práce,
-   na listu představení i roztroušené po textu. Odstranil se jim papír
+ - všech 11 skic — v přehledu Vybraných prací, u čtyř skupin práce
+   a na listu představení. Odstranil se jim papír
    (zůstal jen inkoust i s barvou) a srovnalo se otočení z fotoaparátu;
    původní sken se ukáže po kliknutí,
  - razítko u podpisu,

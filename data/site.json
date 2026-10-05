@@ -103,53 +103,5 @@
    ]
   }
  ],
- "vystavka": [
-  {
-   "zaklad": "10-rodinne-domy",
-   "kam": "predstaveni",
-   "styl": "presah",
-   "poznamka": "tužkou a červenou — hledání tvaru",
-   "kde": "30%",
-   "natoceni": "2.2deg"
-  },
-  {
-   "zaklad": "01-bytove-domy",
-   "kam": "co-delam",
-   "styl": "presah",
-   "poznamka": "řez úzkým domem",
-   "kde": "52%",
-   "natoceni": "-1.6deg"
-  },
-  {
-   "zaklad": "09-interiery",
-   "kam": "postup",
-   "styl": "okraj",
-   "poznamka": "stěna koupelny, rozvržení",
-   "natoceni": "-0.8deg"
-  },
-  {
-   "zaklad": "04-bytove-domy",
-   "kam": "postup",
-   "styl": "presah",
-   "poznamka": "zkouška barev a materiálů",
-   "kde": "26%",
-   "natoceni": "1.4deg"
-  },
-  {
-   "zaklad": "07-rodinne-domy",
-   "kam": "o-mne",
-   "styl": "presah",
-   "poznamka": "dům v řadě, pohled z ulice",
-   "kde": "40%",
-   "natoceni": "-2.4deg"
-  },
-  {
-   "zaklad": "06-bytove-domy",
-   "kam": "kontakt",
-   "styl": "okraj",
-   "poznamka": "fasáda, dvě varianty pod sebou",
-   "natoceni": "2.1deg"
-  }
- ],
  "hero": "03-bytove-domy"
 }

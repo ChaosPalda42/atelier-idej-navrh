@@ -1127,8 +1127,6 @@ h3.rukou {
 }
 .exponat:hover,
 .exponat:focus-within { position: relative; z-index: 60; }
-.presahy .exponat:hover,
-.presahy .exponat:focus-within { position: absolute; z-index: 60; }
 .exponat:hover .exponat-ram,
 .exponat:focus-within .exponat-ram {
   transform: rotate(calc(var(--natoceni) * 0.3)) translateY(-2px) scale(1.015);
@@ -1170,77 +1168,14 @@ body.exponat-aktivni .setmeni { opacity: 1; }
   transition: opacity 0.25s ease;
 }
 
-/* v okraji listu, vedle nadpisu sekce */
-.exponat--okraj { margin-top: 2.6em; --natoceni: -1.4deg; }
-
-/* přes pravou hranu listu — jako by tam ležela odložená */
-/* obálka, která uřízne, co přesahuje přes okraj listu */
-.presahy {
-  position: absolute;
-  inset: 0;
-  overflow: hidden;
-  pointer-events: none;
-  z-index: 2;
-}
-.presahy .exponat { pointer-events: auto; }
-
-.exponat--presah {
-  position: absolute;
-  right: -9%;
-  top: var(--kde, 36%);
-  width: min(320px, 28%);
-  --natoceni: 1.8deg;
-}
-
-/* text se přesahu vyhne, ať mu skica neleží na řádcích */
-@media (min-width: 1101px) {
-  .sekce--s-presahem .sekce-telo { padding-right: 16%; }
-}
-
-/* vlastní list jen pro jednu skicu */
-.vystava {
-  padding: calc(var(--hrana-vyska) + 6px) clamp(22px, 5vw, 60px) clamp(38px, 5vw, 66px);
-  display: grid;
-  grid-template-columns: var(--okraj) minmax(0, 1fr);
-  gap: 0 clamp(26px, 4vw, 54px);
-  align-items: center;
-}
-.vystava-telo { grid-column: 2; }
-.vystava-poznamka { grid-column: 1; grid-row: 1; max-width: 22ch; }
-.vystava .exponat--vystava { --natoceni: -0.7deg; }
-/* na výstavním listu popisek nese poznámka v okraji, dvakrát ho tam netřeba */
-.vystava .exponat-popis { display: none; }
+/* skica na listu sbírky */
+.exponat--vystava { --natoceni: -0.7deg; }
 
 /* sbírka na listu skupiny */
 .vystava-rada {
   display: grid;
   gap: clamp(40px, 6vw, 80px);
   padding: 0 clamp(22px, 5vw, 60px) var(--mezera);
-}
-
-/* na užších oknech se přesah zařadí do textu — ale rozumně velký a až na konec */
-@media (max-width: 1100px) {
-  .presahy {
-    position: static;
-    overflow: visible;
-    grid-column: 1 / -1;
-    order: 2;
-    display: flex;
-    flex-wrap: wrap;
-    gap: clamp(22px, 4vw, 40px);
-  }
-  .exponat--presah {
-    position: static;
-    width: min(100%, 360px);
-    margin: 2.2em 0 0;
-  }
-  .presahy .exponat:hover,
-  .presahy .exponat:focus-within { position: relative; }
-}
-@media (max-width: 920px) {
-  .vystava { grid-template-columns: minmax(0, 1fr); }
-  .vystava-telo, .vystava-poznamka { grid-column: 1; }
-  .vystava-poznamka { grid-row: auto; margin-top: 1.4em; }
 }
 
 /* ------------------------------------------------- přechod mezi listy */
@@ -1375,7 +1310,6 @@ body.exponat-aktivni .setmeni { opacity: 1; }
              rotate(calc(var(--natoceni) * 0.3));
 }
 /* zvětšená kresba se nesmí oříznout hranou listu */
-.presahy.nad-setmenim { overflow: visible; }
 
 /* ------------------------------------------------- dotyk místo myši */
 @media (hover: none) {

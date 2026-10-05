@@ -376,3 +376,16 @@ v PDF říká, že texty chce přepisovat sám, takže na tom záleží.
 **Review u C-012 se mýlila.** Verdikt „fix: u neplatného vstupu házej výjimku"
 jde proti kontraktu i akceptačnímu testu, které prázdné pole vyžadují. Modul
 zůstal, jak je. (Viz poučení z příručky: správná akce pod špatným verdiktem.)
+
+## Oprava (5. 10. 2026): skici jen tam, kam patří
+Michael: *„odstraňme ty jeho skici, co jsou random po webu — použijeme je jen
+tam, kde to chtěl."* Rozesetí po listech (nápad z osmého kola) tím končí.
+Skici jsou teď na čtyřech místech, a všechna si vyžádal architekt: přehled
+**Vybraných prací**, **karty čtyř služeb**, **list představení** a **listy
+sbírek**. Pryč šlo pole `vystavka` ze `site.json`, `rozmisti()`, parametr
+`exponaty` u `sekce()`, obálka `.presahy` i styly `.exponat--okraj`,
+`.exponat--presah`, `.sekce--s-presahem` a mrtvý `.vystava` (vitrínový list
+zmizel už v třináctém kole). `exponat()` zůstává jen pro listy sbírek, takže
+na nich dál funguje zvýraznění pod myší i zvětšení. V administraci se skupina
+„Popisky u skic" scvrkla na „Skicák" — popisky k jednotlivým rozmístěním
+už nejsou k čemu.
