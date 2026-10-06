@@ -12,6 +12,9 @@ declare(strict_types=1);
 const PRIJEMCE = "info@atelieridej.cz";
 const ODESILATEL = "web@atelieridej.cz";
 
+const LIMIT_POCET = 5;      // počet poptávek z jedné adresy za okno
+const LIMIT_OKNO = 3600;    // délka okna v sekundách
+
 /**
  * Z textu určeného do hlavičky mailu vyhodí \r, \n a \0 (tudy se podstrkují
  * cizí příjemci) a ořízne na 200 znaků. Nic jiného nemění.
@@ -116,7 +119,7 @@ function sestav_mail(array $data, array $prilohy): array
         $telo = $text;
     } else {
         $hranice = "----hranice" . md5(uniqid((string) mt_rand(), true));
-        $hlavicky[] = "Content-Type: multipart/mixed; boundary=\"" . $hranice . "\"";
+        $hlavicky[] = "Content-Type: multipart/mixed; boundary=\"$hranice\"";
 
         $casti = [];
         $casti[] = "--" . $hranice . "\r\n"
@@ -127,9 +130,9 @@ function sestav_mail(array $data, array $prilohy): array
             $nazev = ocisti_hlavicku((string) $priloha["nazev"]);
             $typ = ocisti_hlavicku((string) $priloha["typ"]);
             $casti[] = "--" . $hranice . "\r\n"
-                . "Content-Type: " . $typ . "; name=\"" . $nazev . "\"\r\n"
+                . "Content-Type: " . $typ . "; name=\"$nazev\"\r\n"
                 . "Content-Transfer-Encoding: base64\r\n"
-                . "Content-Disposition: attachment; filename=\"" . $nazev . "\"\r\n\r\n"
+                . "Content-Disposition: attachment; filename=\"$nazev\"\r\n\r\n"
                 . chunk_split(base64_encode((string) $priloha["obsah"])) . "\r\n";
         }
         $casti[] = "--" . $hranice . "--";
@@ -146,12 +149,26 @@ function sestav_mail(array $data, array $prilohy): array
 /**
  * Z $_FILES udělá pole pro sestav_mail().
  *
+ * Typ přílohy se určuje podle přípony z pevné tabulky, nikdy z
+ * $_FILES["type"] — ten posílá prohlížeč a dá se podvrhnout.
+ *
  * @param array $soubory
  * @return array<array{nazev: string, typ: string, obsah: string}>
  */
 function nacti_prilohy(array $soubory): array
 {
-    $pripustene = ["pdf", "jpg", "jpeg", "png", "dwg", "dxf", "doc", "docx", "xls", "xlsx"];
+    static $typy = [
+        "pdf" => "application/pdf",
+        "jpg" => "image/jpeg",
+        "jpeg" => "image/jpeg",
+        "png" => "image/png",
+        "dwg" => "image/vnd.dwg",
+        "dxf" => "image/vnd.dxf",
+        "doc" => "application/msword",
+        "docx" => "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        "xls" => "application/vnd.ms-excel",
+        "xlsx" => "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    ];
     $limit_souboru = 10 * 1024 * 1024;
     $limit_cely = 10 * 1024 * 1024;
 
@@ -161,7 +178,6 @@ function nacti_prilohy(array $soubory): array
         for ($i = 0; $i < $pocet; $i++) {
             $polozky[] = [
                 "name" => (string) ($soubory["name"][$i] ?? ""),
-                "type" => (string) ($soubory["type"][$i] ?? ""),
                 "tmp_name" => (string) ($soubory["tmp_name"][$i] ?? ""),
                 "error" => (int) ($soubory["error"][$i] ?? UPLOAD_ERR_NO_FILE),
                 "size" => (int) ($soubory["size"][$i] ?? 0),
@@ -170,7 +186,6 @@ function nacti_prilohy(array $soubory): array
     } elseif (isset($soubory["name"])) {
         $polozky[] = [
             "name" => (string) $soubory["name"],
-            "type" => (string) ($soubory["type"] ?? ""),
             "tmp_name" => (string) ($soubory["tmp_name"] ?? ""),
             "error" => (int) ($soubory["error"] ?? UPLOAD_ERR_NO_FILE),
             "size" => (int) ($soubory["size"] ?? 0),
@@ -188,7 +203,7 @@ function nacti_prilohy(array $soubory): array
             continue;
         }
         $priloha = strtolower(pathinfo($nazev, PATHINFO_EXTENSION));
-        if (!in_array($priloha, $pripustene, true)) {
+        if (!isset($typy[$priloha])) {
             continue;
         }
         if ($polozka["size"] <= 0 || $polozka["size"] > $limit_souboru) {
@@ -207,12 +222,52 @@ function nacti_prilohy(array $soubory): array
         $soucet += $polozka["size"];
         $prilohy[] = [
             "nazev" => $nazev,
-            "typ" => $polozka["type"] !== "" ? $polozka["type"] : "application/octet-stream",
+            "typ" => $typy[$priloha],
             "obsah" => $obsah,
         ];
     }
 
     return $prilohy;
+}
+
+/**
+ * Hlídá, aby z jedné adresy nešlo vysypat schránku.
+ *
+ * Počty drží v souboru ve `slozka`, pojmenovaném podle hashu adresy —
+ * IP se nikam neukládá čitelně. Vrací true, když už je adresa přes
+ * LIMIT_POCET za posledních LIMIT_OKNO sekund; jinak false a pokus si
+ * započítá. Nejde-li soubor přečíst ani zapsat, vrátí false.
+ */
+function prilis_casto(string $ip, string $slozka, int $nyni): bool
+{
+    $soubor = $slozka . "/" . hash("sha256", $ip);
+
+    $zaznamy = [];
+    if (is_file($soubor)) {
+        $obsah = @file_get_contents($soubor);
+        if ($obsah !== false) {
+            $dekodovano = json_decode($obsah, true);
+            if (is_array($dekodovano)) {
+                foreach ($dekodovano as $cas) {
+                    if (is_int($cas) && $cas > $nyni - LIMIT_OKNO) {
+                        $zaznamy[] = $cas;
+                    }
+                }
+            }
+        }
+    }
+
+    if (count($zaznamy) >= LIMIT_POCET) {
+        return true;
+    }
+
+    $zaznamy[] = $nyni;
+    if (@file_put_contents($soubor, json_encode($zaznamy), LOCK_EX) === false) {
+        // Raději poptávku pustit než ji kvůli plnému disku zahodit.
+        return false;
+    }
+
+    return false;
 }
 
 /**
@@ -248,6 +303,12 @@ if (PHP_SAPI !== "cli") {
     }
 
     header("Content-Type: application/json; charset=utf-8");
+
+    if (prilis_casto((string) ($_SERVER["REMOTE_ADDR"] ?? ""), sys_get_temp_dir(), time())) {
+        http_response_code(429);
+        echo json_encode(["ok" => false, "chyba" => "Zkuste to prosím za chvíli."], JSON_UNESCAPED_UNICODE);
+        exit;
+    }
 
     $vysledek = zkontroluj($_POST);
     if ($vysledek["robot"]) {
