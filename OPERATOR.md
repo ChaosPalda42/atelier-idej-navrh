@@ -714,3 +714,16 @@ jít dovnitř existujícího textu, ne vedle něj. Kvůli tomu jsem taky zbyteč
 přestavěl odkaz z `inline-flex` na `inline` — ověřeno, že na posunu nezáleží
 (0,1 px v obou), tak je struktura zpátky; `inline-flex` drží svislé odsazení
 dotykového cíle na mobilu.
+
+## Oprava (6. 10. 2026): odezva podpisu nesahá na logo
+Session s logy našla ve stylopisu `opacity: 0.82` na logotypu. Byl to jen stav
+**při najetí myší**, ne trvalé ztlumení — v klidu bylo logo plné. Jejich pravidlo
+ale platí i na odezvu: průhlednost míchá tmavou značky s papírem a zašedí
+čtyřbarevnou tečku, což je na té značce jediné, co musí zůstat plné.
+
+Odezva se proto přesunula z loga na **plochu odkazu** (oranžové podbarvení 9 %,
+stejně jako u filtrů), a rovnou i na `:focus-visible` — dřív to bylo jen pro myš.
+
+Pozn. k otisku: měnil se jen stylopis, takže se změnil i `?v=` v adrese a
+prohlížeče si nové CSS vyzvednou samy. Sousední session si toho napoprvé
+nevšimla a měřila na starém souboru z cache.

@@ -1934,7 +1934,6 @@ body.admin .obsah-list { display: none !important; }
   padding: 4px 6px;
   margin-left: 2px;
 }
-.autor-webu a:hover { border-bottom: 0; }
 .autor-logo {
   width: 112px;
   height: auto;
@@ -1945,7 +1944,15 @@ body.admin .obsah-list { display: none !important; }
      drží to při jakékoli velikosti loga i okolního písma. */
   transform: translateY(30.8%);
 }
-.autor-webu a:hover .autor-logo { opacity: 0.82; }
+/* Odezva na najetí myší nesmí sáhnout na samotné logo: průhlednost by
+   smíchala jeho tmavou s papírem a hlavně zašedla čtyřbarevnou tečku.
+   Podbarví se proto plocha odkazu, ne značka. */
+.autor-webu a:hover,
+.autor-webu a:focus-visible {
+  border-bottom: 0;
+  background: rgba(255, 128, 0, 0.09);
+  border-radius: 5px;
+}
 
 @media (max-width: 700px) {
   .autor-webu { padding-top: 14px; font-size: 0.8rem; }
