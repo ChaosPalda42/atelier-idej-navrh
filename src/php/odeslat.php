@@ -94,14 +94,10 @@ function sestav_mail(array $data, array $prilohy): array
     $telefon = (string) ($data["telefon"] ?? "");
     $zprava = (string) ($data["zprava"] ?? "");
 
-    // VŠECHNO, co přišlo z formuláře, projde htmlspecialchars() — do pošty
-    // se nesmí dostat cizí značky. Rovněž se vynechá "=", aby se z utísného
-    // textu nedal složit atribut (onerror=...); pro čtenáře je to neviditelné.
-    $h = static fn(string $s): string => str_replace(
-        "=",
-        "",
-        htmlspecialchars($s, ENT_QUOTES, "UTF-8")
-    );
+    // VŠECHNO, co přišlo z formuláře, projde htmlspecialchars() s ENT_QUOTES —
+    // do pošty se nesmí dostat cizí značky. Nic dalšího se neodstraňuje:
+    // escapování stačí a mazání znaků (třeba "=") komolí běžné věty.
+    $h = static fn(string $s): string => htmlspecialchars($s, ENT_QUOTES, "UTF-8");
 
     $predmet = ocisti_hlavicku("Poptávka z webu: " . $jmeno);
 
@@ -147,7 +143,7 @@ function sestav_mail(array $data, array $prilohy): array
         . "<tr><td style=\"padding:6px 0; font-size:14px; color:$tlumena; vertical-align:top;\">Telefon</td>"
         . "<td style=\"padding:6px 0; font-size:14px; color:$tust;\">" . ($telefon !== "" ? "<a href=\"tel:" . $h($telefon) . "\" style=\"color:$oranzova;\">" . $h($telefon) . "</a>" : "") . "</td></tr>"
         . "<tr><td style=\"padding:6px 0; font-size:14px; color:$tlumena; vertical-align:top;\">Zpráva</td>"
-        . "<td style=\"padding:6px 0; font-size:14px; color:$tust; white-space:pre-line;\">" . $h($zprava) . "</td></tr>";
+        . "<td style=\"padding:6px 0; font-size:14px; color:$tust;\">" . nl2br($h($zprava)) . "</td></tr>";
 
     if ($prilohy !== []) {
         $seznam = "";
@@ -299,6 +295,20 @@ function nacti_prilohy(array $soubory): array
 }
 
 /**
+ * Kde bydlí počítadla poptávek. JEDNA společná cesta pro celý web — nikdy
+ * ne podle getmypid() ani jinak podle procesu, protože každý požadavek
+ * obsluhuje jiný proces PHP a limit by pak nelimitoval nic.
+ */
+function slozka_pocitadla(): string
+{
+    $slozka = sys_get_temp_dir() . "/idej-poptavky";
+    if (!is_dir($slozka) && !@mkdir($slozka, 0700, true)) {
+        return sys_get_temp_dir();
+    }
+    return $slozka;
+}
+
+/**
  * Hlídá, aby z jedné adresy nešlo vysypat schránku.
  *
  * Počty drží v souboru ve `slozka`, pojmenovaném podle hashu adresy —
@@ -372,14 +382,8 @@ if (PHP_SAPI !== "cli") {
 
     header("Content-Type: application/json; charset=utf-8");
 
-    // Počítadla držíme v podadresě dočasné složky pojmenované podle
-    // PID: každá instance PHP má vlastní počítadlo, takže se stav
-    // neshromažďuje napříč restarty a běhy.
-    $slozka = sys_get_temp_dir() . "/poptavky-" . getmypid();
-    if (!is_dir($slozka) && !@mkdir($slozka, 0700, true)) {
-        $slozka = sys_get_temp_dir();
-    }
-    if (prilis_casto((string) ($_SERVER["REMOTE_ADDR"] ?? ""), $slozka, time())) {
+    // Počítadla držíme v jedné společné složce pro celý web.
+    if (prilis_casto((string) ($_SERVER["REMOTE_ADDR"] ?? ""), slozka_pocitadla(), time())) {
         http_response_code(429);
         echo json_encode(["ok" => false, "chyba" => "Zkuste to prosím za chvíli."], JSON_UNESCAPED_UNICODE);
         exit;
