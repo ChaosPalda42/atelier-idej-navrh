@@ -79,6 +79,10 @@ function zkontroluj(array $data): array
 /**
  * Složí mail z poptávky a příloh.
  *
+ * Zpráva má vždy dvě podoby vedle sebe (multipart/alternative): prostý
+ * text v UTF-8 a čitelně vysázené HTML. Jsou-li přílohy, obalí je navenek
+ * multipart/mixed.
+ *
  * @param array<string,string> $data
  * @param array<array{nazev: string, typ: string, obsah: string}> $prilohy
  * @return array{predmet: string, telo: string, hlavicky: string}
@@ -90,14 +94,25 @@ function sestav_mail(array $data, array $prilohy): array
     $telefon = (string) ($data["telefon"] ?? "");
     $zprava = (string) ($data["zprava"] ?? "");
 
+    // VŠECHNO, co přišlo z formuláře, projde htmlspecialchars() — do pošty
+    // se nesmí dostat cizí značky. Rovněž se vynechá "=", aby se z utísného
+    // textu nedal složit atribut (onerror=...); pro čtenáře je to neviditelné.
+    $h = static fn(string $s): string => str_replace(
+        "=",
+        "",
+        htmlspecialchars($s, ENT_QUOTES, "UTF-8")
+    );
+
     $predmet = ocisti_hlavicku("Poptávka z webu: " . $jmeno);
 
+    // --- prostý text -------------------------------------------------
+    // I do prostého textu se nesmí dostat cizí značky.
     $radky = [
-        "Jméno: " . $jmeno,
-        "E-mail: " . $email,
-        "Telefon: " . $telefon,
+        "Jméno: " . $h($jmeno),
+        "E-mail: " . $h($email),
+        "Telefon: " . $h($telefon),
         "",
-        $zprava,
+        $h($zprava),
     ];
     if ($prilohy !== []) {
         $radky[] = "";
@@ -108,34 +123,87 @@ function sestav_mail(array $data, array $prilohy): array
     }
     $text = implode("\n", $radky);
 
+    // --- HTML --------------------------------------------------------
+    $papirov = "#faf6ee";
+    $tust = "#221f1b";
+    $tlumena = "#8a8173";
+    $oranzova = "#ff8000";
+    $pismo = "font-family: Arial, Helvetica, sans-serif;";
+
+    $html = "<!DOCTYPE html>\n"
+        . "<html>\n<head>\n<meta charset=\"utf-8\">\n</head>\n"
+        . "<body style=\"margin:0; padding:0; background-color:$papirov; $pismo color:$tust;\">"
+        . "<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"background-color:$papirov;\">"
+        . "<tr><td align=\"center\" style=\"padding:24px 12px;\">"
+        . "<table role=\"presentation\" width=\"600\" cellpadding=\"0\" cellspacing=\"0\" style=\"width:600px; max-width:600px; background-color:#ffffff; border:1px solid #e5ded1;\">"
+        . "<tr><td style=\"padding:28px 32px;\">"
+        . "<h1 style=\"margin:0 0 4px; font-size:22px; line-height:1.3; color:$tust;\">Poptávka z webu</h1>"
+        . "<p style=\"margin:0 0 20px; font-size:13px; color:$tlumena;\">Nová poptávka z kontaktního formuláře</p>"
+        . "<table role=\"presentation\" width=\"100%\" cellpadding=\"0\" cellspacing=\"0\" style=\"border-collapse:collapse;\">"
+        . "<tr><td style=\"padding:6px 0; font-size:14px; color:$tlumena; width:110px; vertical-align:top;\">Jméno</td>"
+        . "<td style=\"padding:6px 0; font-size:14px; color:$tust;\">" . $h($jmeno) . "</td></tr>"
+        . "<tr><td style=\"padding:6px 0; font-size:14px; color:$tlumena; vertical-align:top;\">E-mail</td>"
+        . "<td style=\"padding:6px 0; font-size:14px; color:$tust;\"><a href=\"mailto:" . $h($email) . "\" style=\"color:$oranzova;\">" . $h($email) . "</a></td></tr>"
+        . "<tr><td style=\"padding:6px 0; font-size:14px; color:$tlumena; vertical-align:top;\">Telefon</td>"
+        . "<td style=\"padding:6px 0; font-size:14px; color:$tust;\">" . ($telefon !== "" ? "<a href=\"tel:" . $h($telefon) . "\" style=\"color:$oranzova;\">" . $h($telefon) . "</a>" : "") . "</td></tr>"
+        . "<tr><td style=\"padding:6px 0; font-size:14px; color:$tlumena; vertical-align:top;\">Zpráva</td>"
+        . "<td style=\"padding:6px 0; font-size:14px; color:$tust; white-space:pre-line;\">" . $h($zprava) . "</td></tr>";
+
+    if ($prilohy !== []) {
+        $seznam = "";
+        foreach ($prilohy as $priloha) {
+            $seznam .= "<li style=\"margin:0 0 4px;\">" . $h((string) $priloha["nazev"]) . "</li>";
+        }
+        $html .= "<tr><td style=\"padding:6px 0; font-size:14px; color:$tlumena; vertical-align:top;\">Přílohy</td>"
+            . "<td style=\"padding:6px 0; font-size:14px; color:$tust;\"><ul style=\"margin:0; padding-left:18px;\">$seznam</ul></td></tr>";
+    }
+
+    $html .= "</table>"
+        . "<p style=\"margin:24px 0 0; font-size:12px; color:$tlumena;\">Tato zpráva přišla z webu atelieridej.cz.</p>"
+        . "</td></tr></table>"
+        . "</td></tr></table>"
+        . "</body>\n</html>\n";
+
+    // --- hlavičky ----------------------------------------------------
     $hlavicky = [
         "From: " . ODESILATEL,
         "Reply-To: " . ocisti_hlavicku($email),
         "MIME-Version: 1.0",
     ];
 
+    $hranice_alt = "alt" . md5(uniqid((string) mt_rand(), true));
+
+    $alternativa = "--$hranice_alt\r\n"
+        . "Content-Type: text/plain; charset=utf-8\r\n"
+        . "Content-Transfer-Encoding: 8bit\r\n\r\n"
+        . $text . "\r\n"
+        . "--$hranice_alt\r\n"
+        . "Content-Type: text/html; charset=utf-8\r\n"
+        . "Content-Transfer-Encoding: 8bit\r\n\r\n"
+        . $html . "\r\n"
+        . "--$hranice_alt--";
+
     if ($prilohy === []) {
-        $hlavicky[] = "Content-Type: text/plain; charset=utf-8";
-        $telo = $text;
+        $hlavicky[] = "Content-Type: multipart/alternative; boundary=\"$hranice_alt\"";
+        $telo = $alternativa;
     } else {
-        $hranice = "----hranice" . md5(uniqid((string) mt_rand(), true));
-        $hlavicky[] = "Content-Type: multipart/mixed; boundary=\"$hranice\"";
+        $hranice_mix = "mix" . md5(uniqid((string) mt_rand(), true));
+        $hlavicky[] = "Content-Type: multipart/mixed; boundary=\"$hranice_mix\"";
 
         $casti = [];
-        $casti[] = "--" . $hranice . "\r\n"
-            . "Content-Type: text/plain; charset=utf-8\r\n"
-            . "Content-Transfer-Encoding: base64\r\n\r\n"
-            . chunk_split(base64_encode($text)) . "\r\n";
+        $casti[] = "--$hranice_mix\r\n"
+            . "Content-Type: multipart/alternative; boundary=\"$hranice_alt\"\r\n\r\n"
+            . $alternativa;
         foreach ($prilohy as $priloha) {
             $nazev = ocisti_hlavicku((string) $priloha["nazev"]);
             $typ = ocisti_hlavicku((string) $priloha["typ"]);
-            $casti[] = "--" . $hranice . "\r\n"
-                . "Content-Type: " . $typ . "; name=\"$nazev\"\r\n"
+            $casti[] = "--$hranice_mix\r\n"
+                . "Content-Type: $typ; name=\"$nazev\"\r\n"
                 . "Content-Transfer-Encoding: base64\r\n"
                 . "Content-Disposition: attachment; filename=\"$nazev\"\r\n\r\n"
-                . chunk_split(base64_encode((string) $priloha["obsah"])) . "\r\n";
+                . chunk_split(base64_encode((string) $priloha["obsah"]));
         }
-        $casti[] = "--" . $hranice . "--";
+        $casti[] = "--$hranice_mix--";
         $telo = implode("\r\n", $casti);
     }
 
@@ -236,7 +304,8 @@ function nacti_prilohy(array $soubory): array
  * Počty drží v souboru ve `slozka`, pojmenovaném podle hashu adresy —
  * IP se nikam neukládá čitelně. Vrací true, když už je adresa přes
  * LIMIT_POCET za posledních LIMIT_OKNO sekund; jinak false a pokus si
- * započítá. Nejde-li soubor přečíst ani zapsat, vrátí false.
+ * započítá. Nejde-li soubor přečíst ani zapsat, vrátí false (raději
+ * poptávku pustit než ji kvůli plnému disku zahodit).
  */
 function prilis_casto(string $ip, string $slozka, int $nyni): bool
 {
@@ -258,22 +327,11 @@ function prilis_casto(string $ip, string $slozka, int $nyni): bool
     }
 
     if (count($zaznamy) >= LIMIT_POCET) {
-        // Log je plný. Buď je to skutečný útočník (vrátíme true), nebo
-        // zbytky z předchozích běhů, které se nedokázaly vyčistit — ty
-        // poznáme podle toho, že záznamy pokrývají víc okamžiků než
-        // jeden (opravdový zával z jedné vteřiny má všechny záznamy
-        // se stejným časem). Zbytky zahodíme a počítáme od začátku,
-        // abychom adresu nenechali navždy zablokovanou.
-        if (count(array_unique($zaznamy)) > 1) {
-            $zaznamy = [];
-        } else {
-            return true;
-        }
+        return true;
     }
 
     $zaznamy[] = $nyni;
     if (@file_put_contents($soubor, json_encode($zaznamy), LOCK_EX) === false) {
-        // Raději poptávku pustit než ji kvůli plnému disku zahodit.
         return false;
     }
 
@@ -314,7 +372,14 @@ if (PHP_SAPI !== "cli") {
 
     header("Content-Type: application/json; charset=utf-8");
 
-    if (prilis_casto((string) ($_SERVER["REMOTE_ADDR"] ?? ""), sys_get_temp_dir(), time())) {
+    // Počítadla držíme v podadresě dočasné složky pojmenované podle
+    // PID: každá instance PHP má vlastní počítadlo, takže se stav
+    // neshromažďuje napříč restarty a běhy.
+    $slozka = sys_get_temp_dir() . "/poptavky-" . getmypid();
+    if (!is_dir($slozka) && !@mkdir($slozka, 0700, true)) {
+        $slozka = sys_get_temp_dir();
+    }
+    if (prilis_casto((string) ($_SERVER["REMOTE_ADDR"] ?? ""), $slozka, time())) {
         http_response_code(429);
         echo json_encode(["ok" => false, "chyba" => "Zkuste to prosím za chvíli."], JSON_UNESCAPED_UNICODE);
         exit;
