@@ -694,3 +694,23 @@ páté — to limiter neruší).
 Logotyp i pravidla dodala session „Loga a animované titulky“. **Před logo nepatří
 sloveso:** „byPalda" je „by Palda", takže „vytvořil byPalda" říká totéž dvakrát.
 Značka se nepřebarvuje, tečka zůstává čtyřbarevná, šířka 100–120 px.
+
+## Oprava (6. 10. 2026): logotyp na účaří
+Session „Loga a animované titulky" naměřila, že logotyp v patičce plave
+**7,6 px nad účařím** věty. Potvrzeno a opraveno.
+
+Proč: vložené SVG stojí na účaří **spodní hranou svého rámečku**, jenže účaří
+logotypu je uvnitř viewBoxu na 90,5 ze 130 jednotek (69 % výšky) — zbytek dole
+je dotažnice „y" a „p". Chybí tedy posun o zbylých ~30,8 % výšky loga. Procento
+z vlastní výšky, ne `em`: drží to při jakékoli velikosti loga i okolního písma.
+
+Naměřeno na stejné stránce: bez posunu −10,3 px, můj původní `0.22em` −7,4 px
+(jejich −7,6 sedí), `translateY(30.8%)` **+0,1 px**.
+
+**Poučení o měření, ne o sazbě.** Napoprvé mi vycházelo, že oprava nepomohla.
+Chyba byla v měřicí značce: `.autor-webu` je flexbox, takže vložený `<span>`
+se stal **flex položkou** a jeho spodní hrana nebyla účaří textu. Značka musí
+jít dovnitř existujícího textu, ne vedle něj. Kvůli tomu jsem taky zbytečně
+přestavěl odkaz z `inline-flex` na `inline` — ověřeno, že na posunu nezáleží
+(0,1 px v obou), tak je struktura zpátky; `inline-flex` drží svislé odsazení
+dotykového cíle na mobilu.

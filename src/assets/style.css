@@ -1939,8 +1939,11 @@ body.admin .obsah-list { display: none !important; }
   width: 112px;
   height: auto;
   display: block;
-  /* tečka sedí u verzálkové výšky, text se zarovnává na účaří písmen */
-  transform: translateY(0.22em);
+  /* Vložené SVG stojí na účaří spodní hranou svého rámečku, jenže účaří
+     logotypu je uvnitř na 69 % výšky — zbytek dole je dotažnice „y" a „p".
+     Chybějících 30,8 % výšky se proto dorovná posunem. Procento, ne em:
+     drží to při jakékoli velikosti loga i okolního písma. */
+  transform: translateY(30.8%);
 }
 .autor-webu a:hover .autor-logo { opacity: 0.82; }
 
