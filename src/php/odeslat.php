@@ -301,6 +301,11 @@ function nacti_prilohy(array $soubory): array
  */
 function slozka_pocitadla(): string
 {
+    // Proměnná prostředí umožní počítadlo odklonit jinam (testy, uklízení).
+    $prepsano = getenv("IDEJ_POCITADLO");
+    if (is_string($prepsano) && $prepsano !== "") {
+        return $prepsano;
+    }
     $slozka = sys_get_temp_dir() . "/idej-poptavky";
     if (!is_dir($slozka) && !@mkdir($slozka, 0700, true)) {
         return sys_get_temp_dir();
