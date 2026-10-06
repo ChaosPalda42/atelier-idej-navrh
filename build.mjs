@@ -8,7 +8,7 @@ import { fileURLToPath } from "node:url";
 import { index, detail, projekt, chyba404, presmerovani } from "./src/templates/stranky.mjs";
 import { administrace } from "./src/templates/administrace.mjs";
 import { znacka } from "./src/templates/znacka.mjs";
-import { nastavOtisk } from "./src/templates/layout.mjs";
+import { nastavOstry, nastavOtisk } from "./src/templates/layout.mjs";
 
 const KOREN = path.dirname(fileURLToPath(import.meta.url));
 const VEN = path.join(KOREN, "out");
@@ -35,12 +35,13 @@ async function svazekKnihoven() {
   return `(function (global) {\n"use strict";\nvar IDEJ = global.IDEJ = global.IDEJ || {};\n${kusy.join("\n")}\n})(typeof window !== "undefined" ? window : globalThis);\n`;
 }
 
-async function zkopirujStrom(odkud, kam) {
+async function zkopirujStrom(odkud, kam, vynech = null) {
   await mkdir(kam, { recursive: true });
   for (const polozka of await readdir(odkud, { withFileTypes: true })) {
+    if (vynech && vynech.test(polozka.name)) continue;
     const z = path.join(odkud, polozka.name);
     const do_ = path.join(kam, polozka.name);
-    if (polozka.isDirectory()) await zkopirujStrom(z, do_);
+    if (polozka.isDirectory()) await zkopirujStrom(z, do_, vynech);
     else await copyFile(z, do_);
   }
 }
@@ -52,6 +53,15 @@ async function existuje(cesta) {
 async function main() {
   const site = JSON.parse(await readFile(path.join(KOREN, "data/site.json"), "utf8"));
   const t = JSON.parse(await readFile(path.join(KOREN, "data/texty.json"), "utf8"));
+
+  /* Ostrý provoz: bez ukázkových projektů, bez hlášek o návrhu.
+     Zapíná se proměnnou OSTRY=1 (viz tools/nasad.sh). */
+  const ostry = process.env.OSTRY === "1";
+  nastavOstry(ostry);
+  if (ostry) {
+    site.projekty = [];
+    t.paticka.ukazka = "";
+  }
 
   // skici architekta (tools/skici.py)
   const seznamSkic = path.join(KOREN, "data", "obrazky", "seznam.json");
@@ -84,9 +94,11 @@ async function main() {
       .replace(/var\(--oranz, (#\w+)\)/g, "$1"));
 
   // fotky a skici, pokud už dorazily podklady
+  // v ostrém provozu se zástupné plotny nevozí s sebou, nikdo je nezobrazí
+  const vynech = ostry ? /^ukaz(ka-|ky\.)/ : null;
   for (const slozka of ["fotky", "skici", "obrazky"]) {
     const zdroj = path.join(KOREN, "data", slozka);
-    if (await existuje(zdroj)) await zkopirujStrom(zdroj, path.join(VEN, slozka));
+    if (await existuje(zdroj)) await zkopirujStrom(zdroj, path.join(VEN, slozka), vynech);
   }
 
   // otisk statiky -> adresy stylů a skriptů
@@ -98,7 +110,7 @@ async function main() {
 
   // stránky
   const razitko = (await existuje(path.join(KOREN, "data", "obrazky", "razitko.png"))) ? "razitko.png" : "";
-  await writeFile(path.join(VEN, "index.html"), index(site, t, skici, razitko));
+  await writeFile(path.join(VEN, "index.html"), index(site, t, skici, razitko, ostry));
   for (const skupina of site.skupiny) {
     if (!skici.some((s) => s.skupina === skupina.id)) continue;
     await writeFile(path.join(VEN, "prace", `${skupina.id}.html`), detail(site, t, skupina.id, kresby, skici));
@@ -107,6 +119,12 @@ async function main() {
     await writeFile(path.join(VEN, "prace", `${p.slug}.html`), projekt(site, t, p, skici, ukazky));
   }
   await writeFile(path.join(VEN, "404.html"), chyba404(site, t));
+
+  /* Příjem poptávky běží jen tam, kde je PHP. Na GitHub Pages by soubor
+     ležel jako text ke stažení, tak se tam nekopíruje. */
+  if (ostry) {
+    await copyFile(path.join(KOREN, "src/php/odeslat.php"), path.join(VEN, "odeslat.php"));
+  }
 
 
   // adresy z dřívější verze ukázky (vymyšlené zakázky) — ať nekončí na 404

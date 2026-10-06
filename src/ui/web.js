@@ -451,6 +451,14 @@
         if (prvni) prvni.focus();
         return;
       }
+      /* Na ostrém webu se poptávka opravdu odešle; teprve podle odpovědi
+         serveru se poděkuje. Na náhledu `action` není a jede se demem. */
+      var akce = form.getAttribute("action");
+      if (akce) {
+        odesliNaServer(form, akce, data);
+        return;
+      }
+
       var hotovo = $("#poptavka-hotovo");
       form.hidden = true;
       if (hotovo) {
@@ -687,6 +695,73 @@
       pole.addEventListener("focus", function () { document.body.classList.add("pise-se"); });
       pole.addEventListener("blur", function () { document.body.classList.remove("pise-se"); });
     });
+  }
+
+  /** Odeslání poptávky na server. Chyby z PHP se ukážou u polí stejně
+      jako ty z prohlížeče, ať je to pro člověka jedna věc. */
+  function odesliNaServer(form, akce, data) {
+    var tlacitko = $("button[type=submit]", form);
+    if (tlacitko) { tlacitko.disabled = true; tlacitko.dataset.puvodni = tlacitko.textContent; tlacitko.textContent = "Odesílám…"; }
+
+    fetch(akce, { method: "POST", body: new FormData(form) })
+      .then(function (odpoved) {
+        return odpoved.json().catch(function () { return { ok: odpoved.ok }; });
+      })
+      .then(function (v) {
+        if (!v || !v.ok) {
+          ukazChyby(form, (v && v.chyby) || {});
+          if (!v || !v.chyby) ukazSelhani(form);
+          return;
+        }
+        podekuj(form);
+        ulozDoPrehledu(data);
+      })
+      .catch(function () { ukazSelhani(form); })
+      .then(function () {
+        if (tlacitko) { tlacitko.disabled = false; tlacitko.textContent = tlacitko.dataset.puvodni || "Odeslat poptávku"; }
+      });
+  }
+
+  function ukazChyby(form, chyby) {
+    $$(".pole", form).forEach(function (pole) {
+      var zprava = chyby[pole.dataset.pole];
+      pole.classList.toggle("chyba", !!zprava);
+      var misto = $(".pole-chyba", pole);
+      if (misto) misto.textContent = zprava || "";
+    });
+    var prvni = $(".pole.chyba input, .pole.chyba textarea", form);
+    if (prvni) prvni.focus();
+  }
+
+  function ukazSelhani(form) {
+    var misto = $(".pole[data-pole=souhlas] .pole-chyba", form) || $(".pole-chyba", form);
+    if (misto) {
+      misto.textContent = "Odeslání se nepovedlo. Napište prosím rovnou na info@atelieridej.cz.";
+      misto.closest(".pole").classList.add("chyba");
+    }
+  }
+
+  function podekuj(form) {
+    var hotovo = $("#poptavka-hotovo");
+    form.hidden = true;
+    if (!hotovo) return;
+    hotovo.hidden = false;
+    rozdel(hotovo);
+    hotovo.classList.add("pise");
+    $$(".s", hotovo).forEach(function (s, i) {
+      setTimeout(function () { s.classList.add("napsano"); }, i * 42);
+    });
+  }
+
+  function ulozDoPrehledu(data) {
+    try {
+      var ulozene = JSON.parse(localStorage.getItem("idej-poptavky") || "[]");
+      ulozene.unshift({
+        jmeno: data.jmeno, email: data.email, telefon: data.telefon,
+        zprava: data.zprava, kdy: new Date().toISOString()
+      });
+      localStorage.setItem("idej-poptavky", JSON.stringify(ulozene.slice(0, 50)));
+    } catch (e) { /* soukromé okno */ }
   }
 
   /* ------------------------------------------------------------- lightbox */

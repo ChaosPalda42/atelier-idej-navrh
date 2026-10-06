@@ -47,12 +47,12 @@
     },
     "C-006": {
       "status": "green",
-      "attempts": 3,
+      "attempts": 4,
       "iterations": 6,
-      "commit": "754318e",
+      "commit": "28d52b3",
       "last_finding": "",
       "packet": "",
-      "updated_at": "2026-10-05T14:12:34+00:00"
+      "updated_at": "2026-10-06T09:02:03+00:00"
     },
     "C-007": {
       "status": "green",
@@ -116,6 +116,15 @@
       "last_finding": "",
       "packet": "",
       "updated_at": "2026-10-05T11:26:55+00:00"
+    },
+    "C-014": {
+      "status": "green",
+      "attempts": 3,
+      "iterations": 19,
+      "commit": "ad55b7e",
+      "last_finding": "",
+      "packet": "",
+      "updated_at": "2026-10-06T09:29:10+00:00"
     }
   },
   "runs": [
@@ -188,6 +197,56 @@
       "red": 0,
       "escalated": 0,
       "note": "test_command passed (121 tests)"
+    },
+    {
+      "started_at": "2026-10-06T09:02:00+00:00",
+      "finished_at": "2026-10-06T09:08:07+00:00",
+      "outcome": "green",
+      "iterations": 6,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "test_command passed (126 tests)"
+    },
+    {
+      "started_at": "2026-10-06T09:09:46+00:00",
+      "finished_at": "2026-10-06T09:09:57+00:00",
+      "outcome": "failed",
+      "iterations": 0,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "full suite failed (3 failed) after all contracts were green"
+    },
+    {
+      "started_at": "2026-10-06T09:10:38+00:00",
+      "finished_at": "2026-10-06T09:10:49+00:00",
+      "outcome": "failed",
+      "iterations": 0,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "full suite failed (3 failed) after all contracts were green"
+    },
+    {
+      "started_at": "2026-10-06T09:11:12+00:00",
+      "finished_at": "2026-10-06T09:16:32+00:00",
+      "outcome": "green",
+      "iterations": 4,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "test_command passed (130 tests)"
+    },
+    {
+      "started_at": "2026-10-06T09:19:17+00:00",
+      "finished_at": "2026-10-06T09:29:24+00:00",
+      "outcome": "green",
+      "iterations": 9,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "test_command passed (134 tests)"
     }
   ],
   "open_packets": []

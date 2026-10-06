@@ -3,7 +3,8 @@
 Klikací ukázka nového webu pro **Ateliér Idej s.r.o.** (Ing. arch. Martin Jirásko, Praha 5).
 Není to ostrý provoz, je to návrh k rozhodnutí.
 
-**Živá ukázka:** https://chaospalda42.github.io/atelier-idej-navrh/
+**Ostrý web:** https://atelieridej.cz/ (Český hosting, nasazení `./tools/nasad.sh`)
+**Náhled s ukázkami:** https://chaospalda42.github.io/atelier-idej-navrh/
 
 ## Koncept
 Blok papírů v drátěné vazbě. Každá sekce je vlastní list; na horní hraně má kroužky,
@@ -11,6 +12,15 @@ proražené díry a mikroperforaci, a každý druhý list je pauzák. Co je psan
 to se před očima opravdu píše. Obrázky na webu jsou skutečné skici architekta —
 dopsané kresby zůstaly jen jako bledé vodoznaky na pozadí listů. Značka je vytažená
 ze zadaného PDF — při otevření se objede a pak se pomalu otáčí.
+
+## Nasazení
+`./tools/nasad.sh` sestaví ostrou verzi (`OSTRY=1`: bez ukázkových projektů a hlášek
+o návrhu), zkontroluje ji a pošle obsah `out/` jako větev `nasazeni` do Git archivu
+domény; hosting si podle ní web sám aktualizuje. Přístup přes klíč
+`~/.ssh/atelier-idej-nasazeni`, heslo se nikam nepíše.
+
+Poptávky odesílá `src/php/odeslat.php` (C-014) na info@atelieridej.cz — kopíruje se
+jen do ostré verze, GitHub Pages PHP neumí.
 
 ## Mobil
 Navigaci na telefonu dělá `.palec` (Obsah / Kontakt) + list obsahu, úvodní list
@@ -21,7 +31,7 @@ a instance ji berou přes `<use>`; opsaná dělala polovinu HTML.
 ## Jak to postavit
     uv sync
     node build.mjs                       # -> out/
-    uv run pytest -q                     # 121 akceptačních testů
+    uv run pytest -q                     # 134 akceptačních testů
     uv run python -m tools.kontrola_webu out
     ./tools/pack.sh                      # balíček pro klienta
 

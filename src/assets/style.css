@@ -1910,3 +1910,52 @@ body.admin .obsah-list { display: none !important; }
   .list--pauzak { background-color: rgba(238, 240, 235, 0.95); }
   .list--pauzak::before { opacity: 0.4; }
 }
+
+/* ------------------------------------------------------- podpis autora */
+/* Kdo web postavil. Je to kredit, ne reklama: drží se dole, v tónu papíru,
+   a odkaz nese jen jméno. Logotyp se nepřebarvuje — je to cizí značka. */
+.autor-webu {
+  grid-column: 1 / -1;
+  margin: 10px 0 0;
+  padding-top: 16px;
+  border-top: 1px solid var(--linka);
+  display: flex;
+  align-items: baseline;
+  flex-wrap: wrap;
+  gap: 4px 10px;
+  font-size: 0.82rem;
+  color: var(--tuha-3);
+}
+.autor-webu a {
+  display: inline-flex;
+  align-items: baseline;
+  border-bottom: 0;
+  /* volno kolem loga aspoň o výšce „P" */
+  padding: 4px 6px;
+  margin-left: 2px;
+}
+.autor-webu a:hover { border-bottom: 0; }
+.autor-logo {
+  width: 112px;
+  height: auto;
+  display: block;
+  /* tečka sedí u verzálkové výšky, text se zarovnává na účaří písmen */
+  transform: translateY(0.22em);
+}
+.autor-webu a:hover .autor-logo { opacity: 0.82; }
+
+@media (max-width: 700px) {
+  .autor-webu { padding-top: 14px; font-size: 0.8rem; }
+  .autor-webu a { padding: 8px 6px; }
+}
+
+
+/* Past na roboty: pole, které člověk nevidí a nevyplní. `display: none`
+   schválně NE — část robotů skrytá pole přeskakuje. */
+.past {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}

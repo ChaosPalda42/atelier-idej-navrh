@@ -76,7 +76,7 @@ function exponat(s, misto = {}, { k = "", klid = false } = {}) {
 </figure>`;
 }
 
-export function index(site, t, skici = [], razitkoAtelieru = "") {
+export function index(site, t, skici = [], razitkoAtelieru = "", ostryWeb = false) {
   const { firma, sluzby, postup } = site;
   const p = pocty(skici.map((s) => ({ typ: s.skupina })));
   const podleZakladu = Object.fromEntries(skici.map((s) => [s.zaklad, s]));
@@ -149,7 +149,14 @@ ${t.oMne.bloky.map((b, i) => `<div class="o-nas-blok">
 </div>`).join("\n")}
 <p class="o-nas-zaver" data-text="oMne.zaver">${esc(t.oMne.zaver)}</p>`;
 
-  const kontaktTelo = `<form class="formular" id="poptavka" novalidate>
+  /* Na ostrém webu formulář opravdu odesílá: míří na PHP vedle stránky.
+     Na náhledu (GitHub Pages) akci nemá a zůstává u demo chování. */
+  const kontaktTelo = `<form class="formular" id="poptavka" novalidate${ostryWeb
+    ? ' action="odeslat.php" method="post" enctype="multipart/form-data"' : ""}>
+<div class="past" aria-hidden="true">
+<label for="vzkaz">Tohle pole nevyplňujte</label>
+<input id="vzkaz" name="vzkaz" type="text" tabindex="-1" autocomplete="off">
+</div>
 <div class="pole" data-pole="jmeno">
 <label for="jmeno" data-text="kontakt.jmeno">${esc(t.kontakt.jmeno)}</label>
 <input id="jmeno" name="jmeno" type="text" autocomplete="name">

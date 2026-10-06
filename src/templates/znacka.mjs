@@ -103,7 +103,7 @@ ${kruh({ kresli })}
 }
 
 /** Rohové razítko do patičky — jako na výkrese. */
-export function razitko(firma) {
+export function razitko(firma, ostry = false) {
   const mer = 0.2;
   const posunX = 10 - K[0] * mer;
   const posunY = 14 - K[1] * mer;
@@ -125,7 +125,7 @@ export function razitko(firma) {
 <text x="6" y="86">LIST 1/1</text>
 <text x="62" y="86">MĚŘÍTKO 1:1</text>
 <text x="128" y="86">PRAHA</text>
-<text x="6" y="104">NÁVRH WEBU · UKÁZKA · NEOSTRÁ DATA</text>
+<text x="6" y="104">${ostry ? "ATELIERIDEJ.CZ" : "NÁVRH WEBU · UKÁZKA · NEOSTRÁ DATA"}</text>
 </g>
 </svg>`;
 }

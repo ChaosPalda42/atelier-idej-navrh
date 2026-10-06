@@ -639,3 +639,58 @@ pod 700 px hustší (0,95 místo 0,76).
 Administrace na telefonu: devět karet rozcestníku pod sebou zabralo půl
 obrazovky, než začal obsah — teď je to řádek, který se posouvá do strany.
 Plovoucí lišta webu se v administraci schová, mířila by na cizí sekce.
+
+## Dvacáté první kolo (6. 10. 2026) — ostrý provoz na atelieridej.cz
+Architekt si web nasadil k Českému hostingu. Michael požádal o nastavení
+v jejich administraci; udělal jsem všechno kromě toho, co dělat nemám.
+
+**Co jsem nedělal a proč:** platbu (856,68 Kč) ani zakládání hesel — Git archiv
+si založil Michael. Nasazovací klíč je ed25519 jen na tomhle stroji
+(`~/.ssh/atelier-idej-nasazeni`), do administrace šla jen veřejná část.
+
+**Nasazení** je `./tools/nasad.sh`: sestaví **ostrou** verzi, zkontroluje ji
+a pošle obsah `out/` jako větev `nasazeni` do Git archivu domény. Hosting si
+podle té větve sám aktualizuje web. Pozor: do archivu jde **výsledek**, ne
+zdrojáky — pracovní kopie `_nasazeni/` má v kořeni to, co má být v kořeni webu.
+
+**Ostrý provoz (`OSTRY=1`)** je samostatný režim sestavení: bez šesti ukázkových
+projektů, bez zástupných ploten (nekopírují se vůbec), bez hlášky „Tohle je
+návrh webu" i bez odkazu na demo administraci, a razítko má místo „NÁVRH WEBU ·
+UKÁZKA" doménu. Administrace na webu zůstává, jen na ni nikde nevede odkaz —
+tak to Michael chtěl. Náhled na GitHub Pages se nemění.
+
+Zapnuto v administraci hostingu: Let's Encrypt (platí do 4. 1. 2027, obnovuje se
+sám), přesměrování http → https a www → bez www.
+
+**Past na rozklikávací seznamy v jejich administraci:** nastavení `<select>`
+přes DOM se neuložilo — stránka bere až skutečnou interakci. Funguje kliknout,
+Escape a napsat první písmeno volby.
+
+### Poptávky chodí mailem (C-014)
+`src/php/odeslat.php` na hostingu s PHP 8.4 posílá poptávky na
+info@atelieridej.cz. Formulář má `action` jen v ostré verzi; na náhledu zůstává
+demo chování. Proti zneužití past na roboty (skryté pole `vzkaz`, robot dostane
+poděkování a nic se nepošle) a omezení pěti poptávek z adresy za hodinu.
+
+**Tři poučení, všechna moje:**
+- **Akceptace testovala jen čisté funkce, ne obsluhu požadavku.** Kontrakt ji
+  popisoval, test ne — a přesně tam byla chyba, která se projevila až na ostrém
+  webu. Doplněn test přes `php -S`, který posílá skutečný POST.
+- **Ta chyba byla v mém testu.** Napsal jsem `assert v["chyby"] == {}`, takže
+  worker musel vracet prázdný **objekt**; v PHP pak `$chyby !== []` platilo
+  vždycky a formulář odmítal i bezchybné poptávky se 422 a prázdným seznamem.
+  Pravidlo: u prázdné mapy testovat pravdivostní hodnotu, ne tvar.
+- **Zelený kontrakt se nepřepočítá sám.** Po rozšíření akceptace Factory C-014
+  dál hlásila zelenou a běh jen spadl na plné sadě. Shodit stav na `red`
+  v `state.json` ji donutí běžet znovu.
+
+**Co jsem z revize nevzal:** CSRF token (formulář nic nepřihlašuje ani nemění,
+útočník by cizíma rukama poslal majiteli mail, který může poslat i sám) a závod
+dvou souběžných požadavků v počítadle (v nejhorším projde šestá poptávka místo
+páté — to limiter neruší).
+
+### Podpis autora v patičce
+„Web atelieridej.cz" + logotyp byPalda, odkaz na https://www.bypalda.cz/.
+Logotyp i pravidla dodala session „Loga a animované titulky“. **Před logo nepatří
+sloveso:** „byPalda" je „by Palda", takže „vytvořil byPalda" říká totéž dvakrát.
+Značka se nepřebarvuje, tečka zůstává čtyřbarevná, šířka 100–120 px.
