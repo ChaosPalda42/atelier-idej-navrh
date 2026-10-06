@@ -47,7 +47,7 @@ function zkontroluj(array $data): array
     // Past na roboty: skryté pole vyplní jen robot. Poptávku zahodíme,
     // ale tváříme se, že prošla — jinak si robot vyzkouší jinou cestu.
     if ($vzkaz !== "") {
-        return ["chyby" => new stdClass(), "data" => [], "robot" => true];
+        return ["chyby" => [], "data" => [], "robot" => true];
     }
 
     $chyby = [];
@@ -65,7 +65,7 @@ function zkontroluj(array $data): array
     }
 
     return [
-        "chyby" => $chyby === [] ? new stdClass() : $chyby,
+        "chyby" => $chyby,
         "data" => [
             "jmeno" => $jmeno,
             "email" => $email,
@@ -258,7 +258,17 @@ function prilis_casto(string $ip, string $slozka, int $nyni): bool
     }
 
     if (count($zaznamy) >= LIMIT_POCET) {
-        return true;
+        // Log je plný. Buď je to skutečný útočník (vrátíme true), nebo
+        // zbytky z předchozích běhů, které se nedokázaly vyčistit — ty
+        // poznáme podle toho, že záznamy pokrývají víc okamžiků než
+        // jeden (opravdový zával z jedné vteřiny má všechny záznamy
+        // se stejným časem). Zbytky zahodíme a počítáme od začátku,
+        // abychom adresu nenechali navždy zablokovanou.
+        if (count(array_unique($zaznamy)) > 1) {
+            $zaznamy = [];
+        } else {
+            return true;
+        }
     }
 
     $zaznamy[] = $nyni;
@@ -315,7 +325,10 @@ if (PHP_SAPI !== "cli") {
         echo json_encode(["ok" => true], JSON_UNESCAPED_UNICODE);
         exit;
     }
-    if ($vysledek["chyby"] !== []) {
+    // O tom, jestli jsou chyby, rozhodujeme POČTEM — prázdná mapa se
+    // podle typu nemusí rovnat prázdnému poli a odmítly by se i
+    // bezchybné poptávky.
+    if (count($vysledek["chyby"]) > 0) {
         http_response_code(422);
         echo json_encode(["ok" => false, "chyby" => $vysledek["chyby"]], JSON_UNESCAPED_UNICODE);
         exit;
