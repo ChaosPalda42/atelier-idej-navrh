@@ -225,6 +225,8 @@ export function stranka({ titulek, popis, telo, trida = "", t, firma, k = "", ak
 <meta property="og:description" content="${popis}">
 <meta property="og:type" content="website">
 <link rel="icon" href="${k}assets/favicon.svg" type="image/svg+xml">
+<link rel="icon" href="${k}assets/ikona-512.png" type="image/png" sizes="512x512">
+<link rel="apple-touch-icon" href="${k}assets/ikona-180.png">
 <link rel="stylesheet" href="${k}assets/style.css${otisk}">
 <link rel="preload" href="${k}assets/fonts/inter-cs.woff2" as="font" type="font/woff2" crossorigin>
 </head>

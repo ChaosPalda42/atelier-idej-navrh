@@ -7,7 +7,7 @@ import { fileURLToPath } from "node:url";
 
 import { index, detail, projekt, chyba404, presmerovani } from "./src/templates/stranky.mjs";
 import { administrace } from "./src/templates/administrace.mjs";
-import { znacka } from "./src/templates/znacka.mjs";
+import { znacka, ikona } from "./src/templates/znacka.mjs";
 import { nastavOstry, nastavOtisk } from "./src/templates/layout.mjs";
 
 const KOREN = path.dirname(fileURLToPath(import.meta.url));
@@ -89,9 +89,7 @@ async function main() {
   await copyFile(path.join(KOREN, "src/ui/web.js"), path.join(VEN, "assets/web.js"));
   await copyFile(path.join(KOREN, "src/ui/admin.js"), path.join(VEN, "assets/admin.js"));
   await writeFile(path.join(VEN, "assets/lib.js"), await svazekKnihoven());
-  await writeFile(path.join(VEN, "assets/favicon.svg"),
-    znacka({ varianta: "samotna" }).replace("<svg ", '<svg xmlns="http://www.w3.org/2000/svg" ')
-      .replace(/var\(--oranz, (#\w+)\)/g, "$1"));
+  await writeFile(path.join(VEN, "assets/favicon.svg"), ikona());
 
   // fotky a skici, pokud už dorazily podklady
   // v ostrém provozu se zástupné plotny nevozí s sebou, nikdo je nezobrazí

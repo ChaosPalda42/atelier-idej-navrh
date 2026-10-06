@@ -170,15 +170,18 @@ def test_omezeni_neuklada_adresu_v_citelne_podobe(tmp_path):
 # jednotlivé funkce.
 
 @pytest.fixture(scope="module")
-def server():
-    import socket, time
+def server(tmp_path_factory):
+    """Vlastní složka počítadla, ať testy nenarazí do limitu od minula
+    a navzájem si do něj nelezou."""
+    import os, socket, time
     from contextlib import closing
+    prostredi = dict(os.environ, IDEJ_POCITADLO=str(tmp_path_factory.mktemp("pocitadlo")))
     with closing(socket.socket()) as s:
         s.bind(("127.0.0.1", 0))
         port = s.getsockname()[1]
     beh = subprocess.Popen(
         ["php", "-S", f"127.0.0.1:{port}", "-t", str(SKRIPT.parent)],
-        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, env=prostredi)
     for _ in range(50):
         try:
             with closing(socket.create_connection(("127.0.0.1", port), 0.2)):
@@ -237,3 +240,84 @@ def test_robot_dostane_podekovani_ale_nic_se_nepole(server):
     })
     assert stav == 200
     assert telo == {"ok": True}
+
+
+# ------------------------------------------- hezký mail (C-014/4)
+
+def test_mail_ma_textovou_i_html_verzi():
+    """Bez příloh je zpráva multipart/alternative: kdo HTML nechce nebo
+    neumí, přečte si prostý text."""
+    v = php('vrat(sestav_mail($A, []));', jmeno="Jan Novák", email="jan@example.com",
+            telefon="777111222", zprava="Pozemek v Říčanech, parc. č. 123/4.")
+    assert "multipart/alternative" in v["hlavicky"].lower()
+    telo = v["telo"]
+    assert "text/plain" in telo.lower()
+    assert "text/html" in telo.lower()
+    assert "<html" in telo.lower()
+
+
+def test_html_cast_nese_vsechny_udaje():
+    v = php('vrat(sestav_mail($A, []));', jmeno="Jan Novák", email="jan@example.com",
+            telefon="777111222", zprava="Pozemek v Říčanech.")
+    for kus in ("Jan Novák", "jan@example.com", "777111222", "Pozemek v Říčanech."):
+        assert kus in v["telo"], kus
+    # na e-mail i telefon se dá v poště rovnou kliknout
+    assert "mailto:jan@example.com" in v["telo"]
+    assert "tel:777111222" in v["telo"]
+
+
+def test_html_se_neda_podvrhnout():
+    """Co přijde z formuláře, se do HTML vkládá jako text, ne jako značky."""
+    v = php('vrat(sestav_mail($A, []));', jmeno='<script>zle()</script>',
+            email="jan@example.com", telefon="",
+            zprava='<img src=x onerror="zle()"> a <b>tučně</b>')
+    assert "<script>" not in v["telo"], "značka se nesmí vložit"
+    assert "<img" not in v["telo"]
+    assert 'onerror="' not in v["telo"], "nesmí vzniknout skutečný atribut"
+    # text se ale zachová celý, jen jako text
+    assert "&lt;script&gt;" in v["telo"]
+    assert "&lt;b&gt;" in v["telo"]
+    assert "onerror" in v["telo"], "co člověk napsal, to má architekt vidět"
+
+
+def test_odradkovani_zpravy_zustane():
+    """Odstavce z formuláře se v HTML nesmí slít do jednoho bloku."""
+    v = php('vrat(sestav_mail($A, []));', jmeno="Jan Novák", email="jan@example.com",
+            telefon="", zprava="První řádek.\nDruhý řádek.")
+    html = v["telo"].lower()
+    assert "<br" in html or "</p>" in html
+
+
+def test_prilohy_obalí_alternativu():
+    """S přílohami je venku multipart/mixed a uvnitř pořád obě verze textu."""
+    v = php('vrat(sestav_mail($A, [["nazev" => "plan.pdf", "typ" => "application/pdf", "obsah" => "ABC"]]));',
+            jmeno="Jan Novák", email="jan@example.com", telefon="", zprava="Text zprávy, dost dlouhý.")
+    assert "multipart/mixed" in v["hlavicky"].lower()
+    telo = v["telo"].lower()
+    assert "multipart/alternative" in telo
+    assert "text/html" in telo
+    assert "plan.pdf" in v["telo"]
+
+
+
+def test_rovnitko_a_dalsi_znaky_v_textu_prezijou():
+    """Escapování nesmí komolit obsah. Architekt má číst, co mu kdo napsal."""
+    v = php('vrat(sestav_mail($A, []));', jmeno="Jan Novák", email="jan@example.com",
+            telefon="", zprava="Rozpětí = 5 m, výška = 3 m. Cena 1+1 = 2.")
+    assert "Rozpětí = 5 m, výška = 3 m. Cena 1+1 = 2." in v["telo"]
+
+
+def test_slozka_pocitadla_jde_prepsat_prostredim(tmp_path, monkeypatch):
+    """Aby šlo počítadlo odklonit jinam — v testech i na serveru, kde se
+    dočasná složka uklízí."""
+    monkeypatch.setenv("IDEJ_POCITADLO", str(tmp_path))
+    assert php('vrat(slozka_pocitadla());') == str(tmp_path)
+
+
+def test_slozka_pocitadla_je_spolecna_pro_vsechny_procesy():
+    """Počítadlo musí sdílet celý web. Kdyby mělo každé spuštění PHP vlastní
+    složku, limit by nelimitoval vůbec nic."""
+    prvni = php('vrat(slozka_pocitadla());')
+    druhy = php('vrat(slozka_pocitadla());')     # jiný proces, jiný PID
+    assert prvni == druhy, "cesta se mezi procesy liší — limit by byl k ničemu"
+    assert prvni.strip() != ""

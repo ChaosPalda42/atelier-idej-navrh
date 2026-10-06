@@ -119,12 +119,12 @@
     },
     "C-014": {
       "status": "green",
-      "attempts": 3,
-      "iterations": 19,
-      "commit": "ad55b7e",
+      "attempts": 6,
+      "iterations": 33,
+      "commit": "3a24804",
       "last_finding": "",
       "packet": "",
-      "updated_at": "2026-10-06T09:29:10+00:00"
+      "updated_at": "2026-10-06T10:22:20+00:00"
     }
   },
   "runs": [
@@ -247,6 +247,36 @@
       "red": 0,
       "escalated": 0,
       "note": "test_command passed (134 tests)"
+    },
+    {
+      "started_at": "2026-10-06T09:58:25+00:00",
+      "finished_at": "2026-10-06T10:11:01+00:00",
+      "outcome": "green",
+      "iterations": 7,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "test_command passed (139 tests)"
+    },
+    {
+      "started_at": "2026-10-06T10:13:06+00:00",
+      "finished_at": "2026-10-06T10:17:37+00:00",
+      "outcome": "failed",
+      "iterations": 4,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "full suite failed (1 failed) after all contracts were green"
+    },
+    {
+      "started_at": "2026-10-06T10:18:46+00:00",
+      "finished_at": "2026-10-06T10:22:34+00:00",
+      "outcome": "green",
+      "iterations": 3,
+      "green": 14,
+      "red": 0,
+      "escalated": 0,
+      "note": "test_command passed (142 tests)"
     }
   ],
   "open_packets": []

@@ -727,3 +727,36 @@ stejně jako u filtrů), a rovnou i na `:focus-visible` — dřív to bylo jen p
 Pozn. k otisku: měnil se jen stylopis, takže se změnil i `?v=` v adrese a
 prohlížeče si nové CSS vyzvednou samy. Sousední session si toho napoprvé
 nevšimla a měřila na starém souboru z cache.
+
+## Dvacáté druhé kolo (6. 10. 2026) — hezký mail a favikona
+**Mail** chodil jako holý text. Teď je to `multipart/alternative`: prostý text
+i HTML vedle sebe, takže si každý klient vezme, co umí. HTML je tabulkové
+se styly v atributech, do 600 px, bez obrázků a bez čehokoli externího —
+jinak to pošta rozhází. Ladění podle webu, e-mail a telefon jsou odkazy.
+
+**Favikona byla prázdná a byla to moje chyba.** Když jsem kvůli velikosti HTML
+převedl značku na `<use href="#znacka-tahy">`, zdědil to i `favicon.svg` —
+jenže ten je samostatný soubor a žádné `<defs>` v něm nejsou. Ikona má proto
+vlastní funkci `ikona()`, která tahy vepíše znovu, ztloustne je (při 16 px by
+z tenkých čar zbyl flíček) a podloží papírem, ať je vidět i na tmavém panelu.
+Pro plochu telefonu přibyly PNG z `tools/ikona.py` — tahy jsou jen úsečky,
+takže je Pillow nakreslí přímo; ImageMagick ani rsvg to tady neumí.
+
+**Tři nálezy revize, dva platily.**
+- **Počítadlo poptávek bylo rozbité:** složka obsahovala `getmypid()`, takže
+  každý proces PHP měl vlastní počítadlo a limit nelimitoval nic. Worker si to
+  v komentáři ještě zdůvodnil. Teď je cesta společná a dá se odklonit proměnnou
+  `IDEJ_POCITADLO`.
+- **Mazání rovnítek komolilo text** („rozpětí = 5 m"). Zase moje vina: test
+  žádal, aby ve zprávě nebyl řetězec `onerror=`, jenže ten se po escapování
+  objeví jako neškodný text. Worker to vyřešil mazáním znaku. Test teď hlídá,
+  co opravdu vadí (`<img`, `onerror="`), a navíc že se text **nezkomolí**.
+- **Neplatil** nález o chybějícím mazání starých záznamů — filtr tam je.
+
+**A poučení o testech, potřetí stejné:** akceptační test, který popisuje tvar
+výstupu místo chování, donutí worker udělat nesmysl. `chyby == {}` vyrobilo
+prázdný objekt, `"onerror=" not in telo` vyrobilo mazání rovnítek. Testovat,
+co má platit pro uživatele, ne jak to má vypadat uvnitř.
+
+**Testy samy nesmí být závislé na stavu stroje.** Serverové testy narazily do
+limitu z předchozích běhů; proto to odklonění počítadla do dočasné složky testu.

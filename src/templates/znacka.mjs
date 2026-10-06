@@ -102,6 +102,26 @@ ${kruh({ kresli })}
   return `${otevri(`${x} ${y} ${w} ${h}`)}${kruh({ kresli })}${logotyp}</svg>`;
 }
 
+/** Ikona do záložky prohlížeče. Musí být SAMOSTATNÁ — tahy se do ní vepíšou
+    znovu, protože `<use href="#znacka-tahy">` míří do <defs> stránky, a ty
+    v odděleném souboru nejsou (favikona by byla prázdná).
+    Kruh je ztloustlý a vyplní celou plochu: při 16 px by z tenkých tahů
+    zbyl šedý flíček. Pod ním je papír, ať je značka vidět i na tmavém
+    panelu prohlížeče. */
+export function ikona() {
+  const r = 8;                      // odsazení kresby od okraje
+  const tahy = ZNACKA.kruh.tahy
+    .map((t) => `<path d="${t.d}" stroke="${t.barva}" stroke-width="${(t.sirka * 2.6).toFixed(2)}"/>`)
+    .join("");
+  const v = Math.max(K[2], K[3]) + r * 2;
+  const x = STRED[0] - v / 2;
+  const y = STRED[1] - v / 2;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${x.toFixed(1)} ${y.toFixed(1)} ${v.toFixed(1)} ${v.toFixed(1)}" role="img" aria-label="ateliér IDEJ">
+<rect x="${x.toFixed(1)}" y="${y.toFixed(1)}" width="${v.toFixed(1)}" height="${v.toFixed(1)}" rx="${(v * 0.17).toFixed(1)}" fill="#faf6ee"/>
+<g fill="none" stroke-linecap="round" stroke-linejoin="round">${tahy}</g>
+</svg>`;
+}
+
 /** Rohové razítko do patičky — jako na výkrese. */
 export function razitko(firma, ostry = false) {
   const mer = 0.2;
